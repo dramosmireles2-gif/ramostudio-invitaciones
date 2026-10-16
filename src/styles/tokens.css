@@ -1,17 +1,71 @@
 /*
- * Tokens del design system de RamoStudio.
- * PROVISIONAL: se reemplaza con los tokens que lleguen de Claude Design.
- * Las variables --evento-* las escribe src/lib/theme.js con el tema de cada evento.
+ * Tokens del design system de RamoStudio (Claude Design, ramostudio-design-system).
+ * Dos capas:
+ *  - MARCA (fija, --rs-*): panel de novios, sitio y redes.
+ *  - EVENTO (variable, --ev-*): sobre e invitación. :root trae el tema por
+ *    defecto (marca); src/lib/theme.js escribe encima el tema de cada evento.
+ * Las fuentes se declaran con @font-face en base.css (autoalojadas).
  */
-:root {
-  --fuente-titulo: var(--evento-fuente-titulo, "Playfair Display"), Georgia, serif;
-  --fuente-texto: var(--evento-fuente-texto, "Montserrat"), system-ui, sans-serif;
-  --fuente-script: var(--evento-fuente-script, "Great Vibes"), cursive;
 
-  --color-fondo: var(--evento-fondo, #f7f3ee);
-  --color-superficie: var(--evento-superficie, #ffffff);
-  --color-texto: var(--evento-texto, #2e2a26);
-  --color-acento: var(--evento-acento, #9c7a4d);
-  --color-acento-suave: var(--evento-acento-suave, #e8dccb);
-  --color-sello: var(--evento-sello, #7a2e2e);
+/* Color */
+:root {
+  --rs-pizarra: #3E5266; --rs-crema: #F4EFE9; --rs-tinta: #2B2A28; --rs-dorado: #B79A6B; --rs-polvo: #8CA3B0;
+  --rs-pizarra-hondo: #33455A; --rs-crema-papel: #FAF7F2; --rs-crema-sombra: #EAE3D9; --rs-polvo-velo: #DCE3E6; --rs-dorado-velo: #E9DFCD;
+  --rs-vino: #7A3B34; --rs-vino-velo: #EFDCD6; --rs-salvia: #3F5E4A; --rs-salvia-velo: #DDE6DC;
+
+  --text-strong: var(--rs-tinta); --text-body: var(--rs-pizarra); --text-on-dark: var(--rs-crema); --text-accent-on-dark: var(--rs-dorado);
+  --surface-page: var(--rs-crema); --surface-card: var(--rs-crema-papel); --surface-sunk: var(--rs-crema-sombra); --surface-dark: var(--rs-pizarra); --surface-veil: var(--rs-polvo-velo);
+  --line-gold: var(--rs-dorado); --line-hair: rgba(62, 82, 102, .18); --line-paper: rgba(62, 82, 102, .14); --line-field: rgba(62, 82, 102, .35); --line-strong: var(--rs-pizarra);
+  --status-si-fg: var(--rs-salvia); --status-si-bg: var(--rs-salvia-velo);
+  --status-no-fg: var(--rs-vino); --status-no-bg: var(--rs-vino-velo);
+  --status-pend-fg: var(--rs-pizarra); --status-pend-bg: var(--rs-polvo-velo);
+  --focus-ring: var(--rs-dorado);
+}
+
+/* Tipografía */
+:root {
+  --font-serif: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-sans: "Montserrat", "Helvetica Neue", Arial, sans-serif;
+  --font-script: "Great Vibes", cursive;
+  --fs-display: 56px; --fs-h1: 40px; --fs-h2: 30px; --fs-h3: 24px; --fs-number: 48px;
+  --fs-body: 17px; --fs-body-lg: 18px; --fs-small: 15px; --fs-label: 13px; --fs-micro: 12px;
+  --lh-tight: 1.1; --lh-snug: 1.25; --lh-body: 1.55;
+  --ls-label: .18em; --ls-wordmark: .32em;
+  --fw-regular: 400; --fw-medium: 500; --fw-semibold: 600;
+}
+
+/* Espacio, radios y movimiento */
+:root {
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 24px; --sp-6: 32px; --sp-7: 48px; --sp-8: 64px; --sp-9: 96px;
+  --radius-sm: 6px; --radius-md: 10px; --radius-lg: 16px; --radius-pill: 999px; --radius-arch: 999px 999px 16px 16px;
+  --hairline: 1px; --rule-gold: 1px solid var(--rs-dorado); --rule-hair: 1px solid rgba(62, 82, 102, .18);
+  --paper-layer: 0 0 0 1px rgba(62, 82, 102, .10), 4px 4px 0 0 #EAE3D9, 4px 4px 0 1px rgba(62, 82, 102, .10);
+  --tap-min: 48px; --page-mobile: 375px; --gutter-mobile: 24px;
+  --ease-paper: cubic-bezier(.22, .61, .36, 1);
+  --dur-quick: 180ms; --dur-open: 2400ms;
+}
+
+/* Capa EVENTO: tema por defecto (marca RamoStudio). */
+:root {
+  --ev-bg: #F4EFE9; --ev-surface: #FAF7F2; --ev-surface-2: #DCE3E6; --ev-line: rgba(62, 82, 102, .22);
+  --ev-text: #2B2A28; --ev-text-2: #3E5266;
+  --ev-accent: #B79A6B; --ev-action: #3E5266; --ev-on-action: #F4EFE9;
+  --ev-band: #3E5266; --ev-on-band: #F4EFE9;
+  --ev-envelope: #FAF7F2; --ev-liner: #3E5266; --ev-liner-2: #B79A6B;
+  --ev-seal: #3E5266; --ev-on-seal: #F4EFE9;
+  --ev-card: #FDFBF7; --ev-shadow: #2E3D4D; --ev-edge: rgba(255, 255, 255, .75);
+  --ev-font-title: "Playfair Display", Georgia, serif;
+  --ev-title-style: normal;
+  --ev-font-script: "Great Vibes", cursive;
+  --ev-font-data: "Montserrat", "Helvetica Neue", Arial, sans-serif;
+  --ev-photo-focus: 50% 30%;
+  --ev-photo-focus-h: 50% 40%;
+}
+
+/* Dentro de la invitación, los componentes toman los colores del evento. */
+[data-ev-theme] {
+  --btn-bg: var(--ev-action); --btn-fg: var(--ev-on-action); --btn-bg-press: var(--ev-action); --btn-ring: var(--ev-accent);
+  --btn-line: var(--ev-text-2); --btn-press-2: var(--ev-surface-2);
+  --field-bg: var(--ev-surface); --field-fg: var(--ev-text); --field-label: var(--ev-text-2); --field-line: var(--ev-line);
+  --rule-color: var(--ev-accent);
 }

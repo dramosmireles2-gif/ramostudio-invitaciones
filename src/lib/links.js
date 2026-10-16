@@ -10,6 +10,21 @@ export function enlaceFamilia(slug, codigo) {
   return url.toString();
 }
 
+// Ruta relativa de la invitación de un evento (sin familia), para abrirla
+// desde el panel en el mismo sitio donde corre la demo.
+export function rutaInvitacion(slug) {
+  return `/invitacion/?e=${encodeURIComponent(slug)}`;
+}
+
+// Abre WhatsApp con el mensaje ya escrito; los novios eligen el chat y lo
+// mandan ellos. Con teléfono (10 dígitos de México) abre ese chat directo.
+export function enlaceWhatsApp(texto, telefono = '') {
+  const digitos = String(telefono).replace(/\D/g, '');
+  const numero = digitos.length === 10 ? `52${digitos}` : digitos;
+  // encodeURIComponent y no searchParams: WhatsApp no convierte "+" en espacio.
+  return `https://wa.me/${numero}?text=${encodeURIComponent(texto)}`;
+}
+
 // Para mostrar en textos de ayuda del panel.
 export const FORMATO_ENLACE = `${INVITE_BASE_URL}/invitacion/?e=<evento>&f=<código>`;
 

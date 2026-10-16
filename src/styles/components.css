@@ -1,1 +1,176 @@
-/* Componentes del design system de RamoStudio (pendiente: llega de Claude Design). */
+/*
+ * Componentes del design system de RamoStudio (Claude Design), traducidos de
+ * JSX a clases CSS. El marcado se arma con los helpers de src/lib/ui.js.
+ * Dentro de [data-ev-theme] toman los colores del evento (ver tokens.css).
+ */
+
+/* Texto ------------------------------------------------------------------ */
+.label {
+  font-family: var(--font-sans); font-size: var(--fs-micro); font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--rs-pizarra);
+}
+.t-h1 { font-family: var(--font-serif); font-size: 26px; font-weight: 400; line-height: 1.15; color: var(--rs-tinta); margin: 0; }
+.t-h2 { font-family: var(--font-serif); font-size: 22px; font-weight: 400; line-height: var(--lh-snug); color: var(--rs-tinta); margin: 0; }
+.t-h3 { font-family: var(--font-serif); font-size: 19px; font-weight: 400; line-height: var(--lh-snug); color: var(--rs-tinta); margin: 0; }
+.t-body { font-family: var(--font-sans); font-size: var(--fs-body); line-height: 1.5; color: var(--rs-pizarra); margin: 0; }
+.t-meta { font-family: var(--font-sans); font-size: var(--fs-small); line-height: 1.4; color: var(--rs-pizarra); margin: 0; }
+.t-strong { color: var(--rs-tinta); }
+.t-script { font-family: var(--font-script); font-weight: 400; color: var(--rs-tinta); line-height: 1.1; }
+.t-numero { font-family: var(--font-serif); font-size: var(--fs-display); line-height: 1.1; color: var(--rs-tinta); }
+
+/* Hoja de papel: tarjeta con capa trasera desplazada, sin sombra difusa. */
+.sheet {
+  background: var(--rs-crema-papel);
+  border: 1px solid var(--line-paper);
+  border-radius: var(--radius-lg);
+  box-shadow: 4px 4px 0 0 var(--rs-crema-sombra);
+  padding: 20px;
+  min-width: 0;
+}
+
+/* Button ----------------------------------------------------------------- */
+.btn {
+  min-height: 48px; padding: 0 24px; border-radius: var(--radius-md);
+  font-family: var(--font-sans); font-weight: var(--fw-semibold); font-size: 15px; letter-spacing: .04em;
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  max-width: 100%; text-align: center; text-decoration: none; cursor: pointer;
+  transition: transform var(--dur-quick) var(--ease-paper), background-color var(--dur-quick);
+  /* primary: pizarra con filete interior del acento */
+  background: var(--btn-bg, var(--rs-pizarra));
+  color: var(--btn-fg, var(--rs-crema));
+  border: 1px solid var(--btn-bg, var(--rs-pizarra));
+  box-shadow: inset 0 0 0 3px var(--btn-bg, var(--rs-pizarra)), inset 0 0 0 4px var(--btn-ring, rgba(183, 154, 107, .7));
+}
+.btn:hover { color: var(--btn-fg, var(--rs-crema)); }
+.btn:active:not(:disabled) { transform: translateY(1px); background: var(--btn-bg-press, var(--rs-pizarra-hondo)); }
+.btn:disabled { cursor: not-allowed; opacity: .45; }
+.btn--lg { min-height: 56px; font-size: 16px; }
+.btn--full { width: 100%; }
+
+.btn--secondary, .btn--quiet {
+  background: transparent; color: var(--btn-line, var(--rs-pizarra)); box-shadow: none;
+  border: 1px solid var(--btn-line, var(--rs-pizarra));
+}
+.btn--quiet {
+  border-color: transparent;
+  text-decoration: underline; text-decoration-color: var(--rule-color, var(--rs-dorado)); text-underline-offset: 4px;
+}
+.btn--secondary:hover, .btn--quiet:hover { color: var(--rs-tinta); }
+.btn--secondary:active:not(:disabled), .btn--quiet:active:not(:disabled) { background: var(--btn-press-2, var(--rs-crema-sombra)); }
+.btn--flush { padding: 0; }
+
+/* Field ------------------------------------------------------------------ */
+.field { display: flex; flex-direction: column; gap: 8px; }
+.field__label {
+  font-family: var(--font-sans); font-size: var(--fs-label); font-weight: var(--fw-semibold);
+  letter-spacing: .14em; text-transform: uppercase; color: var(--field-label, var(--rs-pizarra));
+}
+.field__control {
+  width: 100%; min-height: 52px; padding: 14px 16px;
+  font-family: var(--font-sans); font-size: 17px;
+  color: var(--field-fg, var(--rs-tinta)); background: var(--field-bg, var(--rs-crema-papel));
+  border: 1px solid var(--field-line, var(--line-field)); border-radius: var(--radius-md);
+  outline: none; appearance: none;
+}
+.field__control:focus { border-color: var(--rule-color, var(--rs-dorado)); box-shadow: 0 0 0 2px var(--rule-color, var(--rs-dorado)); }
+.field__control[aria-invalid="true"] { border-color: var(--rs-vino); }
+.field__hint { font-family: var(--font-sans); font-size: 14px; color: var(--field-label, var(--rs-pizarra)); }
+.field__hint--error { color: var(--rs-vino); }
+
+/* StatCard --------------------------------------------------------------- */
+.stat-card {
+  position: relative; display: flex; flex-direction: column; gap: 10px; min-width: 0;
+  padding: 20px 20px 18px; border-radius: var(--radius-lg);
+  background: var(--rs-crema-papel); border: 1px solid var(--line-paper);
+  box-shadow: 4px 4px 0 0 var(--rs-crema-sombra);
+  color: var(--rs-pizarra);
+}
+.stat-card__label {
+  font-family: var(--font-sans); font-size: 12px; font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-label); text-transform: uppercase;
+}
+.stat-card__rule { width: 28px; border-top: 1px solid var(--rs-dorado); }
+.stat-card__value {
+  font-family: var(--font-serif); font-size: var(--fs-number); line-height: 1; font-weight: var(--fw-medium);
+  color: var(--rs-tinta); font-variant-numeric: lining-nums;
+}
+.stat-card__note { font-family: var(--font-sans); font-size: 14px; }
+.stat-card--dark { background: var(--rs-pizarra); border-color: var(--rs-pizarra); box-shadow: none; color: var(--rs-crema); }
+.stat-card--dark .stat-card__value { color: var(--rs-crema); }
+
+/* StatusTag: el estado se distingue por texto y por la forma del punto. ---- */
+.status-tag {
+  --tag-fg: var(--status-pend-fg); --tag-bg: var(--status-pend-bg);
+  display: inline-flex; align-items: center; gap: 8px; height: 28px; padding: 0 12px;
+  border-radius: var(--radius-pill); background: var(--tag-bg); color: var(--tag-fg);
+  font-family: var(--font-sans); font-size: 13px; font-weight: var(--fw-semibold); letter-spacing: .04em; white-space: nowrap;
+}
+.status-tag::before {
+  content: ""; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--tag-fg); border: 1.5px solid var(--tag-fg);
+}
+.status-tag--confirmado { --tag-fg: var(--status-si-fg); --tag-bg: var(--status-si-bg); }
+.status-tag--no { --tag-fg: var(--status-no-fg); --tag-bg: var(--status-no-bg); }
+.status-tag--no::before { border-radius: 0; transform: rotate(45deg); }
+.status-tag--vio { --tag-fg: var(--rs-pizarra); --tag-bg: var(--rs-dorado-velo); }
+.status-tag--pendiente::before, .status-tag--sinabrir::before { background: transparent; }
+.status-tag--sinabrir::before { border-style: dotted; }
+
+/* GoldRule --------------------------------------------------------------- */
+.gold-rule { width: 100%; margin: 0 auto; border-top: 1px solid var(--rule-color, var(--rs-dorado)); }
+.gold-rule--double { height: 3px; border-bottom: 1px solid var(--rule-color, var(--rs-dorado)); }
+.gold-rule--ornament { display: flex; align-items: center; gap: 12px; border: 0; }
+.gold-rule--ornament::before, .gold-rule--ornament::after { content: ""; flex: 1; border-top: 1px solid var(--rule-color, var(--rs-dorado)); }
+.gold-rule__rombo { width: 6px; height: 6px; transform: rotate(45deg); border: 1px solid var(--rule-color, var(--rs-dorado)); }
+
+/* WaxSeal: sello de lacre del evento con el monograma. -------------------- */
+.wax-seal {
+  --seal-size: 88px;
+  --c: var(--seal-color, var(--ev-seal));
+  position: relative; flex: none;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: var(--seal-size); height: var(--seal-size);
+  background: var(--c);
+  border-radius: 49% 51% 47% 53% / 52% 47% 53% 48%;
+  box-shadow: inset 0 0 0 calc(var(--seal-size) * .06) color-mix(in oklch, var(--c) 82%, black);
+}
+.wax-seal::before {
+  content: ""; position: absolute; inset: calc(var(--seal-size) * .14);
+  border-radius: 50%; border: 1px solid var(--seal-ink, var(--ev-on-seal)); opacity: .7;
+}
+.wax-seal__iniciales {
+  font-family: var(--ev-font-title, var(--font-serif)); font-style: italic;
+  font-size: calc(var(--seal-size) * .3); line-height: 1; letter-spacing: .02em;
+  color: var(--seal-ink, var(--ev-on-seal));
+}
+
+/* Wordmark --------------------------------------------------------------- */
+.wordmark { display: block; height: auto; }
+
+/* BottomSheet y Confirm --------------------------------------------------- */
+.overlay {
+  position: fixed; inset: 0; z-index: 30;
+  display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
+}
+.overlay__velo { position: absolute; inset: 0; background: rgba(43, 42, 40, .42); border: 0; padding: 0; cursor: default; }
+.bottom-sheet {
+  position: relative; width: 100%; max-width: 560px; max-height: 90%;
+  overflow: hidden auto; display: flex; flex-direction: column; gap: 16px;
+  background: var(--rs-crema); border-radius: 20px 20px 0 0; border-top: 1px solid var(--rule-color, var(--rs-dorado));
+  padding: 10px 24px calc(28px + env(safe-area-inset-bottom, 0px));
+  animation: subir var(--dur-quick) var(--ease-paper);
+}
+.bottom-sheet__asa { align-self: center; width: 40px; height: 4px; border-radius: 2px; background: rgba(62, 82, 102, .25); flex: none; }
+.bottom-sheet__cabeza { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.bottom-sheet__cabeza .btn { padding: 0 4px; flex: none; }
+@keyframes subir { from { transform: translateY(24px); opacity: 0; } }
+
+/* Toast ------------------------------------------------------------------ */
+.toast {
+  position: fixed; left: 24px; right: 24px; bottom: calc(76px + env(safe-area-inset-bottom, 0px)); z-index: 40;
+  max-width: 512px; margin: 0 auto;
+  background: var(--rs-pizarra); color: var(--rs-crema);
+  font-family: var(--font-sans); font-size: 15px; font-weight: var(--fw-semibold); line-height: 1.4; text-align: center;
+  padding: 14px 18px; border-radius: 12px;
+  box-shadow: inset 0 0 0 3px var(--rs-pizarra), inset 0 0 0 4px var(--rule-color, var(--rs-dorado));
+}

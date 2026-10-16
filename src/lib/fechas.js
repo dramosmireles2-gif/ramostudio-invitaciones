@@ -7,10 +7,33 @@ export function fechaLarga(iso, zona = 'America/Mexico_City') {
   }).format(new Date(iso));
 }
 
+// "7:00 p. m." (con el espacio de la ortografía mexicana, no "p.m.").
 export function hora(iso, zona = 'America/Mexico_City') {
   return new Intl.DateTimeFormat(LOCALE, {
     hour: 'numeric', minute: '2-digit', timeZone: zona,
+  }).format(new Date(iso))
+    .replace(/\s/g, ' ')
+    .replace(/([ap])\.\s?m\./i, (_, l) => `${l.toLowerCase()}. m.`);
+}
+
+// "12/12/2026", o "12/12/26" con { corta: true }.
+export function fechaNumerica(iso, { corta = false, zona = 'America/Mexico_City' } = {}) {
+  return new Intl.DateTimeFormat(LOCALE, {
+    day: '2-digit', month: '2-digit', year: corta ? '2-digit' : 'numeric', timeZone: zona,
   }).format(new Date(iso));
+}
+
+// "Hoy", "Ayer" o "14/10/2026", para agrupar la actividad por día.
+export function diaRelativo(iso, ahora = new Date(), zona = 'America/Mexico_City') {
+  const dia = (d) => fechaNumerica(d, { zona });
+  if (dia(iso) === dia(ahora)) return 'Hoy';
+  if (dia(iso) === dia(new Date(ahora.getTime() - 86400000))) return 'Ayer';
+  return dia(iso);
+}
+
+export function saludo(ahora = new Date()) {
+  const h = ahora.getHours();
+  return h < 12 ? 'Buenos días' : h < 19 ? 'Buenas tardes' : 'Buenas noches';
 }
 
 // { dias, horas, minutos, segundos } hasta la fecha; todo en 0 si ya pasó.

@@ -5,7 +5,7 @@ import seed from './seed/mariana-diego.json';
 import { DEMO_LOGIN_CODE } from '../config.js';
 import { generarCodigo, normalizarCodigo } from './codigos.js';
 
-const STORAGE_KEY = 'ramostudio:demo:v1';
+const STORAGE_KEY = 'ramostudio:demo:v2'; // Subir la versión cuando cambie la forma del seed.
 const SESION_KEY = 'ramostudio:demo:sesion';
 const HORA = 60 * 60 * 1000;
 const DIA = 24 * HORA;
@@ -52,6 +52,8 @@ function hidratarSeed() {
   for (const f of s.familias) {
     f.rsvp.fecha = haceHorasAIso(f.rsvp.haceHoras);
     delete f.rsvp.haceHoras;
+    f.abrioFecha = haceHorasAIso(f.abrioHaceHoras);
+    delete f.abrioHaceHoras;
   }
   for (const lista of [s.mensajes, s.actividad]) {
     for (const item of lista) {
@@ -155,7 +157,7 @@ export async function getEventoPorId(eventoId) {
 }
 
 const CAMPOS_EVENTO = [
-  'titulo', 'anfitriones', 'hora', 'frase', 'padres', 'padrinos', 'sedes',
+  'titulo', 'anfitriones', 'ciudad', 'hora', 'frase', 'padres', 'padrinos', 'sedes',
   'itinerario', 'vestimenta', 'musica', 'tema', 'fechaLimiteRsvpDiasAntes',
 ];
 
@@ -190,17 +192,19 @@ function codigosExistentes() {
   return new Set(estado().familias.map((f) => f.codigo));
 }
 
-export async function crearFamilia(eventoId, { nombre, pasesAsignados = 1, telefono = '' }) {
+export async function crearFamilia(eventoId, { nombre, pasesAsignados = 1, telefono = '', grupo = '' }) {
   eventoPorId(eventoId);
   if (!String(nombre ?? '').trim()) throw new DataError('nombre_requerido', 'Escribe el nombre de la familia.');
   const f = {
     id: nuevoId('fam'),
     eventoId,
     nombre: nombre.trim(),
+    grupo,
     telefono,
     codigo: generarCodigo(codigosExistentes()),
     pasesAsignados: Math.max(1, Number(pasesAsignados) || 1),
     mesaId: null,
+    abrioFecha: null,
     rsvp: { estado: 'pendiente', pasesConfirmados: 0, nota: '', fecha: null },
   };
   estado().familias.push(f);
@@ -213,6 +217,7 @@ export async function actualizarFamilia(familiaId, cambios) {
   const f = familiaPorId(familiaId);
   if ('nombre' in cambios) f.nombre = String(cambios.nombre).trim() || f.nombre;
   if ('telefono' in cambios) f.telefono = cambios.telefono;
+  if ('grupo' in cambios) f.grupo = cambios.grupo;
   if ('pasesAsignados' in cambios) {
     f.pasesAsignados = Math.max(1, Number(cambios.pasesAsignados) || 1);
     f.rsvp.pasesConfirmados = Math.min(f.rsvp.pasesConfirmados, f.pasesAsignados);
@@ -255,12 +260,14 @@ export async function confirmarAsistencia(eventoId, codigo, { asiste, pasesConfi
   };
   if (!asiste) f.mesaId = null;
 
+  f.abrioFecha ??= f.rsvp.fecha;
+
   const texto = asiste
     ? pases === f.pasesAsignados
-      ? `${f.nombre} confirmó ${plural(pases, 'pase', 'pases')}`
-      : `${f.nombre} confirmó ${pases} de ${plural(f.pasesAsignados, 'pase', 'pases')}`
-    : `${f.nombre} no podrá asistir`;
-  registrarActividad(eventoId, 'rsvp', texto, f.id);
+      ? `${f.nombre} confirmó ${plural(pases, 'persona', 'personas')}.`
+      : `${f.nombre} confirmó ${pases} de ${plural(f.pasesAsignados, 'pase', 'pases')}.`
+    : `${f.nombre} respondió que no podrá ir.`;
+  registrarActividad(eventoId, asiste ? 'confirmacion' : 'no_asiste', texto, f.id);
   guardar();
   return copia(f);
 }
@@ -269,8 +276,9 @@ export async function confirmarAsistencia(eventoId, codigo, { asiste, pasesConfi
 export async function registrarApertura(eventoId, codigo) {
   const c = normalizarCodigo(codigo);
   const f = estado().familias.find((x) => x.eventoId === eventoId && x.codigo === c);
-  if (!f) return;
-  registrarActividad(eventoId, 'apertura', `${f.nombre} abrió la invitación`, f.id);
+  if (!f || f.abrioFecha) return; // Solo cuenta la primera vez.
+  f.abrioFecha = new Date().toISOString();
+  registrarActividad(eventoId, 'apertura', `${f.nombre} abrió su invitación.`, f.id);
   guardar();
 }
 
@@ -369,7 +377,7 @@ export async function enviarMensaje(eventoId, { codigo = null, autor, texto }) {
     fecha: new Date().toISOString(),
   };
   estado().mensajes.push(m);
-  registrarActividad(eventoId, 'mensaje', `${m.autor} dejó un mensaje`, m.familiaId);
+  registrarActividad(eventoId, 'mensaje', `${m.autor} les dejó un mensaje.`, m.familiaId);
   guardar();
   return copia(m);
 }
@@ -384,6 +392,13 @@ export async function getActividad(eventoId, { limite = 50 } = {}) {
     .slice(0, limite);
 }
 
+// Familias que no han respondido, para los recordatorios por WhatsApp.
+// Primero las que ya abrieron su invitación, luego las que no la han abierto.
+export async function getFamiliasPendientes(eventoId) {
+  const pendientes = estado().familias.filter((f) => f.eventoId === eventoId && f.rsvp.estado === 'pendiente');
+  return copia([...pendientes.filter((f) => f.abrioFecha), ...pendientes.filter((f) => !f.abrioFecha)]);
+}
+
 // ---------------------------------------------------------------------------
 // Resumen para el panel
 // ---------------------------------------------------------------------------
@@ -394,20 +409,25 @@ export async function getResumen(eventoId) {
   const por = (estadoRsvp) => familias.filter((f) => f.rsvp.estado === estadoRsvp);
   const confirmadas = por('confirmado');
   const pendientes = por('pendiente');
+  const noAsisten = por('no_asiste');
   const suma = (lista, fn) => lista.reduce((n, f) => n + fn(f), 0);
 
   return {
     diasRestantes: diasDeCalendario(evento.fecha),
+    diasParaFechaLimite: evento.fechaLimiteRsvp ? diasDeCalendario(evento.fechaLimiteRsvp) : null,
     familias: {
       total: familias.length,
       confirmadas: confirmadas.length,
-      noAsisten: por('no_asiste').length,
+      noAsisten: noAsisten.length,
       pendientes: pendientes.length,
+      sinAbrir: pendientes.filter((f) => !f.abrioFecha).length,
     },
+    // En el panel, "personas" son pases: confirmados, por responder y liberados.
     pases: {
       asignados: suma(familias, (f) => f.pasesAsignados),
       confirmados: suma(confirmadas, (f) => f.rsvp.pasesConfirmados),
       pendientes: suma(pendientes, (f) => f.pasesAsignados),
+      noAsisten: suma(noAsisten, (f) => f.pasesAsignados),
     },
     mesas: {
       familiasSinMesa: familias.filter((f) => !f.mesaId && f.rsvp.estado !== 'no_asiste').length,
