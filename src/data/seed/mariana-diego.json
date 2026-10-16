@@ -1,0 +1,117 @@
+{
+  "_nota": "DATOS FICTICIOS DE DEMO. Ningún nombre, teléfono o dirección es real. Las fechas son relativas: fechaRelativaDias = días desde hoy; haceHoras = horas antes de hoy.",
+  "eventos": [
+    {
+      "id": "evt_demo_md",
+      "slug": "mariana-diego",
+      "tipo": "boda",
+      "anfitriones": ["Mariana", "Diego"],
+      "titulo": "Mariana & Diego",
+      "fechaRelativaDias": 58,
+      "hora": "17:00",
+      "zonaHoraria": "America/Mexico_City",
+      "fechaLimiteRsvpDiasAntes": 21,
+      "frase": "Y en medio de todo, nos encontramos.",
+      "padres": {
+        "novia": ["Laura Fernández", "Ricardo Solís"],
+        "novio": ["Patricia Ibarra", "Jorge Medina"]
+      },
+      "padrinos": ["Andrea y Tomás", "Sofía y Emilio"],
+      "sedes": [
+        {
+          "id": "ceremonia",
+          "tipo": "Ceremonia religiosa",
+          "nombre": "Capilla del Rosario",
+          "direccion": "Calle Ejemplo 123, Col. Centro (dirección ficticia)",
+          "hora": "17:00",
+          "mapaUrl": null
+        },
+        {
+          "id": "recepcion",
+          "tipo": "Recepción",
+          "nombre": "Jardín Las Magnolias",
+          "direccion": "Av. Demostración 456 (dirección ficticia)",
+          "hora": "19:00",
+          "mapaUrl": null
+        }
+      ],
+      "itinerario": [
+        { "hora": "17:00", "titulo": "Ceremonia" },
+        { "hora": "19:00", "titulo": "Cóctel de bienvenida" },
+        { "hora": "20:30", "titulo": "Cena" },
+        { "hora": "22:00", "titulo": "Primer baile y fiesta" }
+      ],
+      "vestimenta": {
+        "codigo": "Formal",
+        "detalle": "Evitar el color blanco y tonos marfil."
+      },
+      "musica": {
+        "titulo": "Pista de demostración",
+        "src": null
+      },
+      "tema": {
+        "_nota": "Valores provisionales hasta recibir el design system de RamoStudio.",
+        "colores": {
+          "fondo": "#F7F3EE",
+          "superficie": "#FFFFFF",
+          "texto": "#2E2A26",
+          "acento": "#9C7A4D",
+          "acentoSuave": "#E8DCCB",
+          "sello": "#7A2E2E"
+        },
+        "fuentes": {
+          "titulo": "Playfair Display",
+          "texto": "Montserrat",
+          "script": "Great Vibes"
+        },
+        "monograma": "M&D"
+      }
+    }
+  ],
+  "familias": [
+    { "id": "fam_01", "eventoId": "evt_demo_md", "nombre": "Familia Herrera Campos", "codigo": "7H38HEW3", "pasesAsignados": 4, "mesaId": "mesa_01", "rsvp": { "estado": "confirmado", "pasesConfirmados": 4, "nota": "¡Ahí estaremos!", "haceHoras": 140 } },
+    { "id": "fam_02", "eventoId": "evt_demo_md", "nombre": "Familia Ortega Ruiz", "codigo": "TK934KQS", "pasesAsignados": 3, "mesaId": "mesa_01", "rsvp": { "estado": "confirmado", "pasesConfirmados": 2, "nota": "", "haceHoras": 96 } },
+    { "id": "fam_03", "eventoId": "evt_demo_md", "nombre": "Valeria Mendoza", "codigo": "FAC9EA", "pasesAsignados": 1, "mesaId": "mesa_02", "rsvp": { "estado": "confirmado", "pasesConfirmados": 1, "nota": "", "haceHoras": 72 } },
+    { "id": "fam_04", "eventoId": "evt_demo_md", "nombre": "Familia Castillo Navarro", "codigo": "MBUKSFQ", "pasesAsignados": 5, "mesaId": "mesa_02", "rsvp": { "estado": "confirmado", "pasesConfirmados": 5, "nota": "Los niños están emocionados", "haceHoras": 50 } },
+    { "id": "fam_05", "eventoId": "evt_demo_md", "nombre": "Familia Rangel Soto", "codigo": "UWZDJYX", "pasesAsignados": 2, "mesaId": null, "rsvp": { "estado": "no_asiste", "pasesConfirmados": 0, "nota": "Estaremos de viaje, ¡los queremos!", "haceHoras": 30 } },
+    { "id": "fam_06", "eventoId": "evt_demo_md", "nombre": "Andrés y Paola", "codigo": "WNQB4G", "pasesAsignados": 2, "mesaId": "mesa_03", "rsvp": { "estado": "confirmado", "pasesConfirmados": 2, "nota": "", "haceHoras": 20 } },
+    { "id": "fam_07", "eventoId": "evt_demo_md", "nombre": "Familia Vega Montes", "codigo": "78X9ETY", "pasesAsignados": 4, "mesaId": null, "rsvp": { "estado": "pendiente", "pasesConfirmados": 0, "nota": "", "haceHoras": null } },
+    { "id": "fam_08", "eventoId": "evt_demo_md", "nombre": "Familia Delgado Fuentes", "codigo": "2KJDWS", "pasesAsignados": 3, "mesaId": null, "rsvp": { "estado": "pendiente", "pasesConfirmados": 0, "nota": "", "haceHoras": null } },
+    { "id": "fam_09", "eventoId": "evt_demo_md", "nombre": "Familia Aguirre Peña", "codigo": "9GSDDX8", "pasesAsignados": 4, "mesaId": "mesa_03", "rsvp": { "estado": "confirmado", "pasesConfirmados": 3, "nota": "", "haceHoras": 8 } },
+    { "id": "fam_10", "eventoId": "evt_demo_md", "nombre": "Renata Salazar", "codigo": "PU92JTV", "pasesAsignados": 2, "mesaId": null, "rsvp": { "estado": "pendiente", "pasesConfirmados": 0, "nota": "", "haceHoras": null } },
+    { "id": "fam_11", "eventoId": "evt_demo_md", "nombre": "Familia Cervantes Luna", "codigo": "47H2SPK", "pasesAsignados": 5, "mesaId": null, "rsvp": { "estado": "pendiente", "pasesConfirmados": 0, "nota": "", "haceHoras": null } },
+    { "id": "fam_12", "eventoId": "evt_demo_md", "nombre": "Familia Rosales Garza", "codigo": "BU3975E", "pasesAsignados": 3, "mesaId": null, "rsvp": { "estado": "no_asiste", "pasesConfirmados": 0, "nota": "", "haceHoras": 3 } },
+    { "id": "fam_13", "eventoId": "evt_demo_md", "nombre": "Óscar y Daniela", "codigo": "TCRDMEE3", "pasesAsignados": 2, "mesaId": null, "rsvp": { "estado": "pendiente", "pasesConfirmados": 0, "nota": "", "haceHoras": null } },
+    { "id": "fam_14", "eventoId": "evt_demo_md", "nombre": "Familia Paredes Ibáñez", "codigo": "VBJGHW", "pasesAsignados": 4, "mesaId": null, "rsvp": { "estado": "pendiente", "pasesConfirmados": 0, "nota": "", "haceHoras": null } }
+  ],
+  "mesas": [
+    { "id": "mesa_01", "eventoId": "evt_demo_md", "nombre": "Mesa 1", "capacidad": 10 },
+    { "id": "mesa_02", "eventoId": "evt_demo_md", "nombre": "Mesa 2", "capacidad": 10 },
+    { "id": "mesa_03", "eventoId": "evt_demo_md", "nombre": "Mesa 3", "capacidad": 8 },
+    { "id": "mesa_04", "eventoId": "evt_demo_md", "nombre": "Mesa 4", "capacidad": 8 },
+    { "id": "mesa_05", "eventoId": "evt_demo_md", "nombre": "Mesa 5", "capacidad": 10 },
+    { "id": "mesa_06", "eventoId": "evt_demo_md", "nombre": "Mesa de honor", "capacidad": 12 }
+  ],
+  "mensajes": [
+    { "id": "msg_01", "eventoId": "evt_demo_md", "familiaId": "fam_01", "autor": "Familia Herrera Campos", "texto": "Les deseamos toda la felicidad del mundo. ¡Qué emoción!", "haceHoras": 139 },
+    { "id": "msg_02", "eventoId": "evt_demo_md", "familiaId": "fam_04", "autor": "Familia Castillo Navarro", "texto": "Gracias por invitarnos a compartir este día tan especial.", "haceHoras": 49 },
+    { "id": "msg_03", "eventoId": "evt_demo_md", "familiaId": "fam_05", "autor": "Familia Rangel Soto", "texto": "No podremos ir, pero los acompañamos con el corazón.", "haceHoras": 29 }
+  ],
+  "regalos": [
+    { "id": "reg_01", "eventoId": "evt_demo_md", "tipo": "mesa", "titulo": "Mesa de regalos", "detalle": "Tienda departamental · Evento n.º 00000000 (ficticio)", "url": null },
+    { "id": "reg_02", "eventoId": "evt_demo_md", "tipo": "transferencia", "titulo": "Transferencia", "detalle": "Datos bancarios de ejemplo (no reales)", "url": null },
+    { "id": "reg_03", "eventoId": "evt_demo_md", "tipo": "sobre", "titulo": "Lluvia de sobres", "detalle": "Habrá un buzón a la entrada de la recepción.", "url": null }
+  ],
+  "actividad": [
+    { "id": "act_01", "eventoId": "evt_demo_md", "tipo": "rsvp", "familiaId": "fam_01", "texto": "Familia Herrera Campos confirmó 4 pases", "haceHoras": 140 },
+    { "id": "act_02", "eventoId": "evt_demo_md", "tipo": "mensaje", "familiaId": "fam_01", "texto": "Familia Herrera Campos dejó un mensaje", "haceHoras": 139 },
+    { "id": "act_03", "eventoId": "evt_demo_md", "tipo": "rsvp", "familiaId": "fam_02", "texto": "Familia Ortega Ruiz confirmó 2 de 3 pases", "haceHoras": 96 },
+    { "id": "act_04", "eventoId": "evt_demo_md", "tipo": "rsvp", "familiaId": "fam_03", "texto": "Valeria Mendoza confirmó 1 pase", "haceHoras": 72 },
+    { "id": "act_05", "eventoId": "evt_demo_md", "tipo": "rsvp", "familiaId": "fam_04", "texto": "Familia Castillo Navarro confirmó 5 pases", "haceHoras": 50 },
+    { "id": "act_06", "eventoId": "evt_demo_md", "tipo": "rsvp", "familiaId": "fam_05", "texto": "Familia Rangel Soto no podrá asistir", "haceHoras": 30 },
+    { "id": "act_07", "eventoId": "evt_demo_md", "tipo": "rsvp", "familiaId": "fam_06", "texto": "Andrés y Paola confirmaron 2 pases", "haceHoras": 20 },
+    { "id": "act_08", "eventoId": "evt_demo_md", "tipo": "apertura", "familiaId": "fam_07", "texto": "Familia Vega Montes abrió la invitación", "haceHoras": 12 },
+    { "id": "act_09", "eventoId": "evt_demo_md", "tipo": "rsvp", "familiaId": "fam_09", "texto": "Familia Aguirre Peña confirmó 3 de 4 pases", "haceHoras": 8 },
+    { "id": "act_10", "eventoId": "evt_demo_md", "tipo": "rsvp", "familiaId": "fam_12", "texto": "Familia Rosales Garza no podrá asistir", "haceHoras": 3 }
+  ]
+}

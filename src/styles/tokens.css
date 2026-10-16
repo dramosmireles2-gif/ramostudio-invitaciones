@@ -1,0 +1,17 @@
+/*
+ * Tokens del design system de RamoStudio.
+ * PROVISIONAL: se reemplaza con los tokens que lleguen de Claude Design.
+ * Las variables --evento-* las escribe src/lib/theme.js con el tema de cada evento.
+ */
+:root {
+  --fuente-titulo: var(--evento-fuente-titulo, "Playfair Display"), Georgia, serif;
+  --fuente-texto: var(--evento-fuente-texto, "Montserrat"), system-ui, sans-serif;
+  --fuente-script: var(--evento-fuente-script, "Great Vibes"), cursive;
+
+  --color-fondo: var(--evento-fondo, #f7f3ee);
+  --color-superficie: var(--evento-superficie, #ffffff);
+  --color-texto: var(--evento-texto, #2e2a26);
+  --color-acento: var(--evento-acento, #9c7a4d);
+  --color-acento-suave: var(--evento-acento-suave, #e8dccb);
+  --color-sello: var(--evento-sello, #7a2e2e);
+}
