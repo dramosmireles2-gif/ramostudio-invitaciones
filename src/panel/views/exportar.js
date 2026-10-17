@@ -1,6 +1,8 @@
 // Subvista "Exportar lista a Excel" (Más): toda la lista, solo confirmados o
-// por mesa (para el salón y su coordinadora). Descarga un .xlsx real.
+// por mesa (para el salón y su coordinadora). Descarga un .xlsx real con una
+// hoja "Resumen" de totales; "Por mesa" agrega una hoja con cada mesa y sus invitados.
 import { enlaceFamilia } from '../../lib/links.js';
+import { fechaNumerica } from '../../lib/fechas.js';
 import { crearXlsx, descargar } from '../../lib/xlsx.js';
 import { html, crudo } from '../../lib/dom.js';
 import { toast, plural } from '../../lib/ui.js';
@@ -16,8 +18,8 @@ let elegida = 'todo';
 export async function montar(destino, ctx) {
   const { evento, data } = ctx;
   const el = subvista(destino, ctx);
-  const [familias, mesas, mensajes] = await Promise.all([
-    data.getFamilias(evento.id), data.getMesas(evento.id), data.getMensajes(evento.id),
+  const [familias, mesas, mensajes, totales] = await Promise.all([
+    data.getFamilias(evento.id), data.getMesas(evento.id), data.getMensajes(evento.id), data.getResumen(evento.id),
   ]);
   const confirmadas = familias.filter((f) => f.rsvp.estado === 'confirmado');
   const mesa = (f) => mesas.find((m) => m.id === f.mesaId)?.nombre ?? 'Sin mesa';
@@ -43,25 +45,73 @@ export async function montar(destino, ctx) {
       <button class="btn btn--full btn--lg" type="button" data-descargar${crudo(familias.length ? '' : ' disabled')}>Descargar Excel</button>`;
   };
 
-  function filas() {
+  const zona = { zona: evento.zonaHoraria };
+  const enlace = (f) => {
+    const url = enlaceFamilia(evento.slug, f.codigo);
+    return { texto: url, enlace: url };
+  };
+
+  // Hoja "Resumen": totales de la boda, en personas (pases) y familias.
+  function resumen() {
+    const r = totales;
+    return {
+      nombre: 'Resumen',
+      encabezado: false,
+      negritas: [0, 3, 8],
+      filas: [
+        [evento.titulo],
+        [`Boda: ${fechaNumerica(evento.fecha, zona)} · Lista descargada el ${fechaNumerica(new Date().toISOString(), zona)}`],
+        [],
+        ['', 'Personas', 'Familias'],
+        ['Confirmados', r.pases.confirmados, r.familias.confirmadas],
+        ['Pendientes', r.pases.pendientes, r.familias.pendientes],
+        ['No asisten', r.pases.noAsisten, r.familias.noAsisten],
+        [],
+        ['Pases asignados', r.pases.asignados, r.familias.total],
+      ],
+    };
+  }
+
+  // Hoja "Mesas": cada mesa con sus invitados y, al final, quienes no tienen mesa.
+  function mesasAgrupadas() {
+    const filas = [];
+    const negritas = [];
+    const bloque = (titulo, detalle, lista) => {
+      negritas.push(filas.length, filas.length + 1);
+      filas.push([titulo, detalle], ['Familia', 'Personas', 'Estado', 'Grupo']);
+      for (const f of lista) filas.push([f.nombre, lugares(f), ESTADO[f.rsvp.estado], f.grupo ?? '']);
+      if (!lista.length) filas.push(['Mesa libre']);
+      filas.push([]);
+    };
+    for (const m of mesas) {
+      const lista = familias.filter((f) => f.mesaId === m.id && f.rsvp.estado !== 'no_asiste')
+        .sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
+      bloque(m.nombre, `${m.ocupados} de ${m.capacidad} lugares`, lista);
+    }
+    const sinMesa = familias.filter((f) => !f.mesaId && f.rsvp.estado !== 'no_asiste');
+    if (sinMesa.length) bloque('Sin mesa', plural(sinMesa.reduce((n, f) => n + lugares(f), 0), 'persona', 'personas'), sinMesa);
+    return { nombre: 'Mesas', encabezado: false, negritas, filas };
+  }
+
+  function hojas() {
     if (elegida === 'mesa') {
       const orden = [...mesas.map((m) => m.id), null];
       const sentadas = familias
         .filter((f) => f.rsvp.estado !== 'no_asiste')
         .sort((a, b) => orden.indexOf(a.mesaId ?? null) - orden.indexOf(b.mesaId ?? null) || a.nombre.localeCompare(b.nombre, 'es'));
-      return {
+      return [resumen(), mesasAgrupadas(), {
+        nombre: 'Lista por mesa',
         filas: [['Mesa', 'Familia', 'Personas', 'Estado', 'Grupo'],
           ...sentadas.map((f) => [mesa(f), f.nombre, lugares(f), ESTADO[f.rsvp.estado], f.grupo ?? ''])],
-        anchos: [12, 32, 10, 14, 22],
-      };
+      }];
     }
     const lista = elegida === 'conf' ? confirmadas : familias;
-    return {
+    return [resumen(), {
+      nombre: elegida === 'conf' ? 'Confirmados' : 'Invitados',
       filas: [['Familia', 'Grupo', 'Estado', 'Pases', 'Confirmados', 'Mesa', 'WhatsApp', 'Enlace de invitación', 'Mensaje'],
         ...lista.map((f) => [f.nombre, f.grupo ?? '', ESTADO[f.rsvp.estado], f.pasesAsignados, f.rsvp.pasesConfirmados,
-          f.rsvp.estado === 'no_asiste' ? '' : mesa(f), f.telefono ?? '', enlaceFamilia(evento.slug, f.codigo), mensaje(f)])],
-      anchos: [32, 20, 14, 8, 12, 12, 16, 60, 60],
-    };
+          f.rsvp.estado === 'no_asiste' ? '' : mesa(f), f.telefono ?? '', enlace(f), mensaje(f)])],
+    }];
   }
 
   cuerpo.addEventListener('click', (e) => {
@@ -72,10 +122,9 @@ export async function montar(destino, ctx) {
       pintar();
       cuerpo.querySelector(`[data-opcion="${elegida}"]`).focus();
     } else if (b.hasAttribute('data-descargar')) {
-      const { filas: f, anchos } = filas();
       const sufijo = { todo: '', conf: '-confirmados', mesa: '-por-mesa' }[elegida];
       const archivo = `invitados-${evento.slug}${sufijo}.xlsx`;
-      descargar(crearXlsx({ hoja: 'Invitados', filas: f, anchos }), archivo);
+      descargar(crearXlsx({ hojas: hojas() }), archivo);
       toast(`Listo: descargamos ${archivo}.`);
     }
   });

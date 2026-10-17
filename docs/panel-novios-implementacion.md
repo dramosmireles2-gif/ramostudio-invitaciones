@@ -10,8 +10,8 @@ El diseño viene en JSX/React; aquí se traduce a JS plano.
 - **Resumen**: aprobado (celular y escritorio).
 - **Invitados**: aprobada (celular y escritorio).
 - **Mesas**: aprobada (celular y escritorio).
-- **Más** (Mensajes, Actividad, Mesa de regalos, Datos del evento, Exportar): Mesa de regalos aprobada; Mensajes, Actividad, Datos del evento y Exportar
-  revisados, con ajustes de mapas, horas y fechas (en revisión).
+- **Más** (Mensajes, Actividad, Mesa de regalos, Datos del evento, Exportar): Mesa de regalos y Exportar aprobados; Mensajes, Actividad y Datos del evento
+  con ajustes de mapas, horas y fechas (en revisión).
 - Cada pantalla se muestra en el navegador (celular y escritorio) y se espera aprobación antes de
   pasar a la siguiente.
 
@@ -96,8 +96,12 @@ El diseño viene en JSX/React; aquí se traduce a JS plano.
   de ahora y antes de las 8:30 a. m. toda la demo se recorre un día. Los textos llevan `{familia}` y
   los mensajes toman el autor de la familia: siempre el nombre actual del seed. Grupos: «Hoy», «Ayer»
   y luego «Miércoles 14 de octubre» (`diaRelativo`).
-- **Exportar**: `src/lib/xlsx.js` genera un .xlsx real sin librerías (ZIP sin compresión): toda la
-  lista, solo confirmados o por mesa (sin quienes no asisten). Encabezado en negritas y fijo.
+- **Exportar** (aprobado): `src/lib/xlsx.js` genera un .xlsx real sin librerías (ZIP sin compresión)
+  con varias hojas. Toda descarga trae «Resumen» (confirmados, pendientes, no asisten y pases, en
+  personas y familias). «Toda la lista» y «Solo confirmados» agregan la lista; «Por mesa» agrega
+  «Mesas» (cada mesa con sus invitados y al final «Sin mesa») y «Lista por mesa». Las hojas de lista
+  tienen encabezado fijo y filtros; los anchos salen del contenido (la columna de enlaces no se
+  corta) y los enlaces de invitación son clicables.
 - `STORAGE_KEY` subió a v5 por los cambios del seed.
 
 ## Datos
