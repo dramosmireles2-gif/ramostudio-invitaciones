@@ -1,5 +1,5 @@
 {
-  "_nota": "DATOS DE DEMO. Ningún nombre ni teléfono es real; el mapa apunta a un lugar público (Plaza Principal de Reynosa). Fechas relativas: fechaRelativaDias = días desde hoy; cuando = { dias atrás, hora } en la zona del evento.",
+  "_nota": "DATOS DE DEMO. Ningún nombre (familias y personas) ni teléfono es real; el mapa apunta a un lugar público (Plaza Principal de Reynosa). Fechas relativas: fechaRelativaDias = días desde hoy; cuando = { dias atrás, hora } en la zona del evento.",
   "eventos": [
     {
       "id": "evt_demo_md",
@@ -123,7 +123,28 @@
       "telefono": "",
       "codigo": "EYD7WSF",
       "pasesAsignados": 4,
-      "mesaId": "mesa_01",
+      "personas": [
+        {
+          "id": "per_01_1",
+          "nombre": "Jorge García",
+          "mesaId": "mesa_01"
+        },
+        {
+          "id": "per_01_2",
+          "nombre": "Lucía Pérez",
+          "mesaId": "mesa_01"
+        },
+        {
+          "id": "per_01_3",
+          "nombre": "Arturo García Pérez",
+          "mesaId": "mesa_01"
+        },
+        {
+          "id": "per_01_4",
+          "nombre": "Gabriela García Pérez",
+          "mesaId": "mesa_01"
+        }
+      ],
       "abrioCuando": {
         "dias": 2,
         "hora": "19:20"
@@ -146,7 +167,23 @@
       "telefono": "",
       "codigo": "WB3REKRT",
       "pasesAsignados": 3,
-      "mesaId": "mesa_01",
+      "personas": [
+        {
+          "id": "per_02_1",
+          "nombre": "Mateo Ramos",
+          "mesaId": "mesa_01"
+        },
+        {
+          "id": "per_02_2",
+          "nombre": "Valentina Ramos",
+          "mesaId": "mesa_01"
+        },
+        {
+          "id": "per_02_3",
+          "nombre": "Santiago Ramos",
+          "mesaId": "mesa_01"
+        }
+      ],
       "abrioCuando": {
         "dias": 8,
         "hora": "12:27"
@@ -169,7 +206,18 @@
       "telefono": "",
       "codigo": "ASGEUA3",
       "pasesAsignados": 2,
-      "mesaId": "mesa_01",
+      "personas": [
+        {
+          "id": "per_03_1",
+          "nombre": "Ana López",
+          "mesaId": "mesa_01"
+        },
+        {
+          "id": "per_03_2",
+          "nombre": "Luis López",
+          "mesaId": "mesa_01"
+        }
+      ],
       "abrioCuando": {
         "dias": 4,
         "hora": "19:04"
@@ -192,7 +240,23 @@
       "telefono": "",
       "codigo": "DAQWBB",
       "pasesAsignados": 3,
-      "mesaId": "mesa_02",
+      "personas": [
+        {
+          "id": "per_04_1",
+          "nombre": "Emiliano Hernández",
+          "mesaId": "mesa_02"
+        },
+        {
+          "id": "per_04_2",
+          "nombre": "Camila Hernández",
+          "mesaId": "mesa_02"
+        },
+        {
+          "id": "per_04_3",
+          "nombre": "Ricardo Hernández",
+          "mesaId": "mesa_02"
+        }
+      ],
       "abrioCuando": {
         "dias": 9,
         "hora": "10:11"
@@ -215,7 +279,28 @@
       "telefono": "",
       "codigo": "GDATSW",
       "pasesAsignados": 4,
-      "mesaId": "mesa_02",
+      "personas": [
+        {
+          "id": "per_05_1",
+          "nombre": "Héctor Gutiérrez",
+          "mesaId": "mesa_02"
+        },
+        {
+          "id": "per_05_2",
+          "nombre": "Isabela Gutiérrez",
+          "mesaId": "mesa_02"
+        },
+        {
+          "id": "per_05_3",
+          "nombre": "Joaquín Gutiérrez",
+          "mesaId": "mesa_02"
+        },
+        {
+          "id": "per_05_4",
+          "nombre": "Lorena Gutiérrez",
+          "mesaId": "mesa_02"
+        }
+      ],
       "abrioCuando": {
         "dias": 7,
         "hora": "19:18"
@@ -238,7 +323,18 @@
       "telefono": "",
       "codigo": "J55YWM",
       "pasesAsignados": 2,
-      "mesaId": "mesa_02",
+      "personas": [
+        {
+          "id": "per_06_1",
+          "nombre": "Patricia Morales",
+          "mesaId": "mesa_02"
+        },
+        {
+          "id": "per_06_2",
+          "nombre": "Rodrigo Morales",
+          "mesaId": "mesa_02"
+        }
+      ],
       "abrioCuando": {
         "dias": 10,
         "hora": "16:25"
@@ -261,7 +357,28 @@
       "telefono": "",
       "codigo": "F835XKD",
       "pasesAsignados": 4,
-      "mesaId": "mesa_03",
+      "personas": [
+        {
+          "id": "per_07_1",
+          "nombre": "Gerardo Martínez",
+          "mesaId": "mesa_03"
+        },
+        {
+          "id": "per_07_2",
+          "nombre": "Gloria Martínez",
+          "mesaId": "mesa_03"
+        },
+        {
+          "id": "per_07_3",
+          "nombre": "Sebastián Martínez",
+          "mesaId": "mesa_03"
+        },
+        {
+          "id": "per_07_4",
+          "nombre": "Mariela Martínez",
+          "mesaId": "mesa_03"
+        }
+      ],
       "abrioCuando": {
         "dias": 0,
         "hora": "20:32"
@@ -281,7 +398,18 @@
       "telefono": "",
       "codigo": "SXEY9WQ",
       "pasesAsignados": 2,
-      "mesaId": "mesa_03",
+      "personas": [
+        {
+          "id": "per_08_1",
+          "nombre": "Leonardo Castillo",
+          "mesaId": "mesa_03"
+        },
+        {
+          "id": "per_08_2",
+          "nombre": "Silvia Castillo",
+          "mesaId": "mesa_03"
+        }
+      ],
       "abrioCuando": {
         "dias": 2,
         "hora": "18:39"
@@ -301,7 +429,28 @@
       "telefono": "",
       "codigo": "WNQKKCHU",
       "pasesAsignados": 4,
-      "mesaId": "mesa_03",
+      "personas": [
+        {
+          "id": "per_09_1",
+          "nombre": "Alonso Treviño",
+          "mesaId": "mesa_03"
+        },
+        {
+          "id": "per_09_2",
+          "nombre": "Adriana Garza",
+          "mesaId": "mesa_03"
+        },
+        {
+          "id": "per_09_3",
+          "nombre": "Marcos Treviño Garza",
+          "mesaId": "mesa_03"
+        },
+        {
+          "id": "per_09_4",
+          "nombre": "Fernanda Treviño Garza",
+          "mesaId": "mesa_03"
+        }
+      ],
       "abrioCuando": {
         "dias": 11,
         "hora": "13:16"
@@ -324,7 +473,33 @@
       "telefono": "",
       "codigo": "R2MV5RYK",
       "pasesAsignados": 5,
-      "mesaId": "mesa_04",
+      "personas": [
+        {
+          "id": "per_10_1",
+          "nombre": "Esteban Jiménez",
+          "mesaId": "mesa_04"
+        },
+        {
+          "id": "per_10_2",
+          "nombre": "Victoria Ruiz",
+          "mesaId": "mesa_04"
+        },
+        {
+          "id": "per_10_3",
+          "nombre": "Julián Jiménez Ruiz",
+          "mesaId": "mesa_04"
+        },
+        {
+          "id": "per_10_4",
+          "nombre": "Paulina Jiménez Ruiz",
+          "mesaId": "mesa_04"
+        },
+        {
+          "id": "per_10_5",
+          "nombre": "Adrián Jiménez Ruiz",
+          "mesaId": "mesa_04"
+        }
+      ],
       "abrioCuando": {
         "dias": 11,
         "hora": "12:20"
@@ -347,7 +522,28 @@
       "telefono": "",
       "codigo": "MVE7WDCC",
       "pasesAsignados": 4,
-      "mesaId": "mesa_04",
+      "personas": [
+        {
+          "id": "per_11_1",
+          "nombre": "Manuel Flores",
+          "mesaId": "mesa_04"
+        },
+        {
+          "id": "per_11_2",
+          "nombre": "Jimena Flores",
+          "mesaId": "mesa_04"
+        },
+        {
+          "id": "per_11_3",
+          "nombre": "Nicolás Flores",
+          "mesaId": "mesa_04"
+        },
+        {
+          "id": "per_11_4",
+          "nombre": "Elisa Flores",
+          "mesaId": "mesa_04"
+        }
+      ],
       "abrioCuando": {
         "dias": 2,
         "hora": "09:27"
@@ -370,7 +566,23 @@
       "telefono": "",
       "codigo": "QF4VFC9X",
       "pasesAsignados": 3,
-      "mesaId": "mesa_04",
+      "personas": [
+        {
+          "id": "per_12_1",
+          "nombre": "Ing. Felipe Luna",
+          "mesaId": "mesa_04"
+        },
+        {
+          "id": "per_12_2",
+          "nombre": "Mariana Luna",
+          "mesaId": "mesa_04"
+        },
+        {
+          "id": "per_12_3",
+          "nombre": "Jorge Luna",
+          "mesaId": "mesa_04"
+        }
+      ],
       "abrioCuando": null,
       "rsvp": {
         "estado": "pendiente",
@@ -387,7 +599,18 @@
       "telefono": "",
       "codigo": "TH34MG4",
       "pasesAsignados": 2,
-      "mesaId": "mesa_05",
+      "personas": [
+        {
+          "id": "per_13_1",
+          "nombre": "Roberto Medina",
+          "mesaId": "mesa_05"
+        },
+        {
+          "id": "per_13_2",
+          "nombre": "Sofía Medina",
+          "mesaId": "mesa_05"
+        }
+      ],
       "abrioCuando": null,
       "rsvp": {
         "estado": "pendiente",
@@ -404,7 +627,33 @@
       "telefono": "",
       "codigo": "47G7MF",
       "pasesAsignados": 5,
-      "mesaId": "mesa_05",
+      "personas": [
+        {
+          "id": "per_14_1",
+          "nombre": "Arturo Villarreal",
+          "mesaId": "mesa_05"
+        },
+        {
+          "id": "per_14_2",
+          "nombre": "Teresa Villarreal",
+          "mesaId": "mesa_05"
+        },
+        {
+          "id": "per_14_3",
+          "nombre": "Mateo Villarreal",
+          "mesaId": "mesa_05"
+        },
+        {
+          "id": "per_14_4",
+          "nombre": "Alicia Villarreal",
+          "mesaId": "mesa_12"
+        },
+        {
+          "id": "per_14_5",
+          "nombre": "Santiago Villarreal",
+          "mesaId": "mesa_12"
+        }
+      ],
       "abrioCuando": {
         "dias": 13,
         "hora": "16:18"
@@ -427,7 +676,13 @@
       "telefono": "",
       "codigo": "334GEQ33",
       "pasesAsignados": 1,
-      "mesaId": "mesa_05",
+      "personas": [
+        {
+          "id": "per_15_1",
+          "nombre": "Ing. Rafael Cantú",
+          "mesaId": "mesa_05"
+        }
+      ],
       "abrioCuando": {
         "dias": 0,
         "hora": "19:25"
@@ -447,7 +702,13 @@
       "telefono": "",
       "codigo": "YT53EHZ",
       "pasesAsignados": 1,
-      "mesaId": "mesa_05",
+      "personas": [
+        {
+          "id": "per_16_1",
+          "nombre": "Mtra. Elena Garza",
+          "mesaId": "mesa_05"
+        }
+      ],
       "abrioCuando": null,
       "rsvp": {
         "estado": "pendiente",
@@ -464,7 +725,28 @@
       "telefono": "",
       "codigo": "YG5TJGB",
       "pasesAsignados": 4,
-      "mesaId": "mesa_06",
+      "personas": [
+        {
+          "id": "per_17_1",
+          "nombre": "Emiliano Elizondo",
+          "mesaId": "mesa_06"
+        },
+        {
+          "id": "per_17_2",
+          "nombre": "Rebeca Elizondo",
+          "mesaId": "mesa_06"
+        },
+        {
+          "id": "per_17_3",
+          "nombre": "Ricardo Elizondo",
+          "mesaId": "mesa_06"
+        },
+        {
+          "id": "per_17_4",
+          "nombre": "Daniela Elizondo",
+          "mesaId": "mesa_06"
+        }
+      ],
       "abrioCuando": {
         "dias": 14,
         "hora": "13:09"
@@ -487,7 +769,23 @@
       "telefono": "",
       "codigo": "XVNHRU",
       "pasesAsignados": 3,
-      "mesaId": "mesa_06",
+      "personas": [
+        {
+          "id": "per_18_1",
+          "nombre": "Héctor Peña",
+          "mesaId": "mesa_06"
+        },
+        {
+          "id": "per_18_2",
+          "nombre": "Lucía Peña",
+          "mesaId": "mesa_06"
+        },
+        {
+          "id": "per_18_3",
+          "nombre": "Joaquín Peña",
+          "mesaId": "mesa_06"
+        }
+      ],
       "abrioCuando": {
         "dias": 14,
         "hora": "12:16"
@@ -510,7 +808,13 @@
       "telefono": "",
       "codigo": "BBSWZZQY",
       "pasesAsignados": 1,
-      "mesaId": "mesa_06",
+      "personas": [
+        {
+          "id": "per_19_1",
+          "nombre": "Sr. Tomás Leal",
+          "mesaId": "mesa_06"
+        }
+      ],
       "abrioCuando": null,
       "rsvp": {
         "estado": "pendiente",
@@ -527,7 +831,13 @@
       "telefono": "",
       "codigo": "BVGJRU",
       "pasesAsignados": 1,
-      "mesaId": "mesa_06",
+      "personas": [
+        {
+          "id": "per_20_1",
+          "nombre": "Sofía Treviño",
+          "mesaId": "mesa_06"
+        }
+      ],
       "abrioCuando": null,
       "rsvp": {
         "estado": "pendiente",
@@ -544,7 +854,28 @@
       "telefono": "",
       "codigo": "XP4NBEF",
       "pasesAsignados": 4,
-      "mesaId": "mesa_07",
+      "personas": [
+        {
+          "id": "per_21_1",
+          "nombre": "Rodrigo Montemayor",
+          "mesaId": "mesa_07"
+        },
+        {
+          "id": "per_21_2",
+          "nombre": "Gabriela Montemayor",
+          "mesaId": "mesa_07"
+        },
+        {
+          "id": "per_21_3",
+          "nombre": "Gerardo Montemayor",
+          "mesaId": "mesa_07"
+        },
+        {
+          "id": "per_21_4",
+          "nombre": "Valentina Montemayor",
+          "mesaId": "mesa_07"
+        }
+      ],
       "abrioCuando": {
         "dias": 15,
         "hora": "09:04"
@@ -567,7 +898,23 @@
       "telefono": "",
       "codigo": "62A7KZPA",
       "pasesAsignados": 3,
-      "mesaId": "mesa_07",
+      "personas": [
+        {
+          "id": "per_22_1",
+          "nombre": "Sebastián Cavazos",
+          "mesaId": "mesa_07"
+        },
+        {
+          "id": "per_22_2",
+          "nombre": "Camila Cavazos",
+          "mesaId": "mesa_07"
+        },
+        {
+          "id": "per_22_3",
+          "nombre": "Leonardo Cavazos",
+          "mesaId": "mesa_07"
+        }
+      ],
       "abrioCuando": {
         "dias": 16,
         "hora": "16:11"
@@ -590,7 +937,23 @@
       "telefono": "",
       "codigo": "QTHQ6BEB",
       "pasesAsignados": 3,
-      "mesaId": "mesa_07",
+      "personas": [
+        {
+          "id": "per_23_1",
+          "nombre": "Alonso Tamez",
+          "mesaId": "mesa_07"
+        },
+        {
+          "id": "per_23_2",
+          "nombre": "Isabela Tamez",
+          "mesaId": "mesa_07"
+        },
+        {
+          "id": "per_23_3",
+          "nombre": "Marcos Tamez",
+          "mesaId": "mesa_07"
+        }
+      ],
       "abrioCuando": {
         "dias": 16,
         "hora": "15:18"
@@ -613,7 +976,18 @@
       "telefono": "",
       "codigo": "XKJ96P9",
       "pasesAsignados": 2,
-      "mesaId": "mesa_08",
+      "personas": [
+        {
+          "id": "per_24_1",
+          "nombre": "Esteban Garza",
+          "mesaId": "mesa_08"
+        },
+        {
+          "id": "per_24_2",
+          "nombre": "Lorena Sada",
+          "mesaId": "mesa_08"
+        }
+      ],
       "abrioCuando": {
         "dias": 17,
         "hora": "22:25"
@@ -636,7 +1010,23 @@
       "telefono": "",
       "codigo": "4CD2AR",
       "pasesAsignados": 3,
-      "mesaId": "mesa_08",
+      "personas": [
+        {
+          "id": "per_25_1",
+          "nombre": "Julián Leal",
+          "mesaId": "mesa_08"
+        },
+        {
+          "id": "per_25_2",
+          "nombre": "Gloria Ríos",
+          "mesaId": "mesa_08"
+        },
+        {
+          "id": "per_25_3",
+          "nombre": "Adrián Leal Ríos",
+          "mesaId": "mesa_08"
+        }
+      ],
       "abrioCuando": {
         "dias": 17,
         "hora": "13:02"
@@ -659,7 +1049,18 @@
       "telefono": "",
       "codigo": "QAHHJJ",
       "pasesAsignados": 2,
-      "mesaId": "mesa_08",
+      "personas": [
+        {
+          "id": "per_26_1",
+          "nombre": "Paola Cárdenas",
+          "mesaId": "mesa_08"
+        },
+        {
+          "id": "per_26_2",
+          "nombre": "Bruno Cárdenas",
+          "mesaId": "mesa_08"
+        }
+      ],
       "abrioCuando": {
         "dias": 0,
         "hora": "09:09"
@@ -682,7 +1083,18 @@
       "telefono": "",
       "codigo": "KSRY3PR4",
       "pasesAsignados": 2,
-      "mesaId": "mesa_08",
+      "personas": [
+        {
+          "id": "per_27_1",
+          "nombre": "Lucía Saldívar",
+          "mesaId": "mesa_08"
+        },
+        {
+          "id": "per_27_2",
+          "nombre": "Marco Saldívar",
+          "mesaId": "mesa_08"
+        }
+      ],
       "abrioCuando": {
         "dias": 18,
         "hora": "19:16"
@@ -705,7 +1117,18 @@
       "telefono": "",
       "codigo": "FNTS66ZH",
       "pasesAsignados": 2,
-      "mesaId": "mesa_09",
+      "personas": [
+        {
+          "id": "per_28_1",
+          "nombre": "Dra. Mariela Soto",
+          "mesaId": "mesa_09"
+        },
+        {
+          "id": "per_28_2",
+          "nombre": "Manuel Soto",
+          "mesaId": "mesa_09"
+        }
+      ],
       "abrioCuando": {
         "dias": 5,
         "hora": "09:23"
@@ -728,7 +1151,13 @@
       "telefono": "",
       "codigo": "XAXBZ7",
       "pasesAsignados": 1,
-      "mesaId": "mesa_09",
+      "personas": [
+        {
+          "id": "per_29_1",
+          "nombre": "Diego Reyes",
+          "mesaId": "mesa_09"
+        }
+      ],
       "abrioCuando": {
         "dias": 18,
         "hora": "09:00"
@@ -751,7 +1180,18 @@
       "telefono": "",
       "codigo": "RVZN2QR5",
       "pasesAsignados": 2,
-      "mesaId": "mesa_09",
+      "personas": [
+        {
+          "id": "per_30_1",
+          "nombre": "Fernanda Ibarra",
+          "mesaId": "mesa_09"
+        },
+        {
+          "id": "per_30_2",
+          "nombre": "Raúl Ibarra",
+          "mesaId": "mesa_09"
+        }
+      ],
       "abrioCuando": {
         "dias": 19,
         "hora": "16:04"
@@ -774,7 +1214,18 @@
       "telefono": "",
       "codigo": "KA6XM62",
       "pasesAsignados": 2,
-      "mesaId": "mesa_09",
+      "personas": [
+        {
+          "id": "per_31_1",
+          "nombre": "Valeria Guerra",
+          "mesaId": "mesa_09"
+        },
+        {
+          "id": "per_31_2",
+          "nombre": "Óscar Guerra",
+          "mesaId": "mesa_09"
+        }
+      ],
       "abrioCuando": {
         "dias": 19,
         "hora": "15:11"
@@ -797,7 +1248,18 @@
       "telefono": "",
       "codigo": "RAS6CY66",
       "pasesAsignados": 2,
-      "mesaId": "mesa_09",
+      "personas": [
+        {
+          "id": "per_32_1",
+          "nombre": "Daniela Mendoza",
+          "mesaId": "mesa_09"
+        },
+        {
+          "id": "per_32_2",
+          "nombre": "Jorge Mendoza",
+          "mesaId": "mesa_09"
+        }
+      ],
       "abrioCuando": {
         "dias": 20,
         "hora": "22:18"
@@ -820,7 +1282,18 @@
       "telefono": "",
       "codigo": "7FD8FNQ",
       "pasesAsignados": 2,
-      "mesaId": "mesa_10",
+      "personas": [
+        {
+          "id": "per_33_1",
+          "nombre": "Renata Olvera",
+          "mesaId": "mesa_10"
+        },
+        {
+          "id": "per_33_2",
+          "nombre": "Luis Olvera",
+          "mesaId": "mesa_10"
+        }
+      ],
       "abrioCuando": {
         "dias": 20,
         "hora": "13:25"
@@ -843,7 +1316,18 @@
       "telefono": "",
       "codigo": "PNUPADGJ",
       "pasesAsignados": 2,
-      "mesaId": "mesa_10",
+      "personas": [
+        {
+          "id": "per_34_1",
+          "nombre": "Ximena Arredondo",
+          "mesaId": "mesa_10"
+        },
+        {
+          "id": "per_34_2",
+          "nombre": "Pablo Arredondo",
+          "mesaId": "mesa_10"
+        }
+      ],
       "abrioCuando": {
         "dias": 20,
         "hora": "12:02"
@@ -866,7 +1350,18 @@
       "telefono": "",
       "codigo": "978PAVZ",
       "pasesAsignados": 2,
-      "mesaId": "mesa_10",
+      "personas": [
+        {
+          "id": "per_35_1",
+          "nombre": "Andrea Barrera",
+          "mesaId": "mesa_10"
+        },
+        {
+          "id": "per_35_2",
+          "nombre": "Hugo Barrera",
+          "mesaId": "mesa_10"
+        }
+      ],
       "abrioCuando": {
         "dias": 21,
         "hora": "19:09"
@@ -889,7 +1384,18 @@
       "telefono": "",
       "codigo": "QV4DRX",
       "pasesAsignados": 2,
-      "mesaId": "mesa_10",
+      "personas": [
+        {
+          "id": "per_36_1",
+          "nombre": "Karla Sepúlveda",
+          "mesaId": "mesa_10"
+        },
+        {
+          "id": "per_36_2",
+          "nombre": "Emilio Sepúlveda",
+          "mesaId": "mesa_10"
+        }
+      ],
       "abrioCuando": {
         "dias": 21,
         "hora": "10:16"
@@ -912,7 +1418,13 @@
       "telefono": "",
       "codigo": "H27P6D6",
       "pasesAsignados": 1,
-      "mesaId": "mesa_10",
+      "personas": [
+        {
+          "id": "per_37_1",
+          "nombre": "Andrés Rocha",
+          "mesaId": "mesa_10"
+        }
+      ],
       "abrioCuando": {
         "dias": 5,
         "hora": "11:53"
@@ -932,7 +1444,18 @@
       "telefono": "",
       "codigo": "MQ877Y",
       "pasesAsignados": 2,
-      "mesaId": "mesa_11",
+      "personas": [
+        {
+          "id": "per_38_1",
+          "nombre": "Mónica Ayala",
+          "mesaId": "mesa_11"
+        },
+        {
+          "id": "per_38_2",
+          "nombre": "Ernesto Ayala",
+          "mesaId": "mesa_11"
+        }
+      ],
       "abrioCuando": {
         "dias": 22,
         "hora": "16:00"
@@ -955,7 +1478,18 @@
       "telefono": "",
       "codigo": "T7K5R2J4",
       "pasesAsignados": 2,
-      "mesaId": "mesa_11",
+      "personas": [
+        {
+          "id": "per_39_1",
+          "nombre": "Regina Lara",
+          "mesaId": "mesa_11"
+        },
+        {
+          "id": "per_39_2",
+          "nombre": "Tomás Lara",
+          "mesaId": "mesa_11"
+        }
+      ],
       "abrioCuando": {
         "dias": 22,
         "hora": "15:07"
@@ -978,7 +1512,18 @@
       "telefono": "",
       "codigo": "6SUWER",
       "pasesAsignados": 2,
-      "mesaId": "mesa_11",
+      "personas": [
+        {
+          "id": "per_40_1",
+          "nombre": "Sara Pámanes",
+          "mesaId": "mesa_11"
+        },
+        {
+          "id": "per_40_2",
+          "nombre": "Iker Pámanes",
+          "mesaId": "mesa_11"
+        }
+      ],
       "abrioCuando": {
         "dias": 23,
         "hora": "22:11"
@@ -1001,7 +1546,13 @@
       "telefono": "",
       "codigo": "4XFZHG",
       "pasesAsignados": 1,
-      "mesaId": "mesa_11",
+      "personas": [
+        {
+          "id": "per_41_1",
+          "nombre": "Carla Zamora",
+          "mesaId": "mesa_11"
+        }
+      ],
       "abrioCuando": {
         "dias": 1,
         "hora": "12:48"
@@ -1021,7 +1572,13 @@
       "telefono": "",
       "codigo": "XJTEBTX",
       "pasesAsignados": 1,
-      "mesaId": "mesa_11",
+      "personas": [
+        {
+          "id": "per_42_1",
+          "nombre": "Dr. Iván Quiroga",
+          "mesaId": "mesa_11"
+        }
+      ],
       "abrioCuando": null,
       "rsvp": {
         "estado": "pendiente",
@@ -1038,7 +1595,18 @@
       "telefono": "",
       "codigo": "HPX459U4",
       "pasesAsignados": 2,
-      "mesaId": "mesa_12",
+      "personas": [
+        {
+          "id": "per_43_1",
+          "nombre": "Alejandra Cisneros",
+          "mesaId": "mesa_12"
+        },
+        {
+          "id": "per_43_2",
+          "nombre": "Rubén Cisneros",
+          "mesaId": "mesa_12"
+        }
+      ],
       "abrioCuando": {
         "dias": 24,
         "hora": "19:02"
@@ -1061,7 +1629,18 @@
       "telefono": "",
       "codigo": "Q9PQB7",
       "pasesAsignados": 2,
-      "mesaId": "mesa_12",
+      "personas": [
+        {
+          "id": "per_44_1",
+          "nombre": "Natalia Fuentes",
+          "mesaId": "mesa_12"
+        },
+        {
+          "id": "per_44_2",
+          "nombre": "Gael Fuentes",
+          "mesaId": "mesa_12"
+        }
+      ],
       "abrioCuando": {
         "dias": 24,
         "hora": "10:09"
@@ -1084,7 +1663,18 @@
       "telefono": "",
       "codigo": "E32QRP",
       "pasesAsignados": 2,
-      "mesaId": null,
+      "personas": [
+        {
+          "id": "per_45_1",
+          "nombre": "Nicolás Ochoa",
+          "mesaId": null
+        },
+        {
+          "id": "per_45_2",
+          "nombre": "Silvia Ochoa",
+          "mesaId": null
+        }
+      ],
       "abrioCuando": null,
       "rsvp": {
         "estado": "pendiente",
@@ -1101,7 +1691,18 @@
       "telefono": "",
       "codigo": "BQZ3KC",
       "pasesAsignados": 2,
-      "mesaId": null,
+      "personas": [
+        {
+          "id": "per_46_1",
+          "nombre": "Sr. Felipe Lozano",
+          "mesaId": null
+        },
+        {
+          "id": "per_46_2",
+          "nombre": "Sra. Adriana Lozano",
+          "mesaId": null
+        }
+      ],
       "abrioCuando": null,
       "rsvp": {
         "estado": "pendiente",
@@ -1118,7 +1719,13 @@
       "telefono": "",
       "codigo": "KJF5R3",
       "pasesAsignados": 1,
-      "mesaId": null,
+      "personas": [
+        {
+          "id": "per_47_1",
+          "nombre": "Lic. Fernanda Vega",
+          "mesaId": null
+        }
+      ],
       "abrioCuando": {
         "dias": 7,
         "hora": "21:30"
@@ -1138,7 +1745,28 @@
       "telefono": "",
       "codigo": "UJPTGHS",
       "pasesAsignados": 4,
-      "mesaId": null,
+      "personas": [
+        {
+          "id": "per_48_1",
+          "nombre": "Jorge Benavides",
+          "mesaId": null
+        },
+        {
+          "id": "per_48_2",
+          "nombre": "Victoria Benavides",
+          "mesaId": null
+        },
+        {
+          "id": "per_48_3",
+          "nombre": "Arturo Benavides",
+          "mesaId": null
+        },
+        {
+          "id": "per_48_4",
+          "nombre": "Paulina Benavides",
+          "mesaId": null
+        }
+      ],
       "abrioCuando": {
         "dias": 5,
         "hora": "19:07"
@@ -1161,7 +1789,28 @@
       "telefono": "",
       "codigo": "C7AWH9K",
       "pasesAsignados": 4,
-      "mesaId": null,
+      "personas": [
+        {
+          "id": "per_49_1",
+          "nombre": "Mateo Salinas",
+          "mesaId": null
+        },
+        {
+          "id": "per_49_2",
+          "nombre": "Jimena Salinas",
+          "mesaId": null
+        },
+        {
+          "id": "per_49_3",
+          "nombre": "Santiago Salinas",
+          "mesaId": null
+        },
+        {
+          "id": "per_49_4",
+          "nombre": "Elisa Salinas",
+          "mesaId": null
+        }
+      ],
       "abrioCuando": {
         "dias": 26,
         "hora": "13:14"

@@ -4,3 +4,5 @@
 // Supabase se crea store.supabase.js con las mismas funciones y se cambia esta
 // línea; ninguna pantalla debe cambiar.
 export * from './store.local.js';
+// Reglas puras de mesas y personas (capacidad, estado de cada persona).
+export * from './reglas.js';

@@ -4,8 +4,11 @@
 import seed from './seed/mariana-diego.json';
 import { DEMO_LOGIN_CODE } from '../config.js';
 import { generarCodigo, normalizarCodigo } from './codigos.js';
+import { personasDe } from './reglas.js';
 
-const STORAGE_KEY = 'ramostudio:demo:v5'; // Subir la versión cuando cambie la forma del seed.
+const STORAGE_KEY = 'ramostudio:demo:v6'; // Subir la versión cuando cambie la forma del seed.
+// Versiones anteriores con la misma forma salvo la mesa (familia.mesaId): se migran.
+const KEYS_ANTERIORES = ['ramostudio:demo:v5', 'ramostudio:demo:v4', 'ramostudio:demo:v3'];
 const SESION_KEY = 'ramostudio:demo:sesion';
 const HORA = 60 * 60 * 1000;
 const DIA = 24 * HORA;
@@ -104,9 +107,38 @@ function conNombre(item) {
   return { ...item, texto: item.texto.replaceAll('{familia}', nombre) };
 }
 
+// Migración del formato viejo (una mesa por familia, familia.mesaId) al nuevo
+// (familia.personas[], cada persona con su mesaId) sin perder asignaciones:
+// cada persona hereda la mesa de su familia. Los nombres salen del seed si la
+// familia existe ahí con los mismos pases; si no, "Invitado 1", "Invitado 2"…
+function migrarDatos(viejo) {
+  const delSeed = new Map(seed.familias.map((f) => [f.id, f]));
+  for (const f of viejo.familias ?? []) {
+    if (Array.isArray(f.personas)) continue;
+    const base = delSeed.get(f.id);
+    const nombres = base && base.personas.length === f.pasesAsignados ? base.personas : null;
+    f.personas = Array.from({ length: f.pasesAsignados }, (_, i) => ({
+      id: nombres?.[i].id ?? `${f.id}_p${i + 1}`,
+      nombre: nombres?.[i].nombre ?? `Invitado ${i + 1}`,
+      mesaId: f.mesaId ?? null,
+    }));
+    delete f.mesaId;
+  }
+  return viejo;
+}
+
 function estado() {
   if (!memoria) {
-    memoria = leerStorage(STORAGE_KEY) ?? hidratarSeed();
+    memoria = leerStorage(STORAGE_KEY);
+    if (!memoria) {
+      const key = KEYS_ANTERIORES.find((k) => leerStorage(k));
+      if (key) {
+        memoria = migrarDatos(leerStorage(key));
+        escribirStorage(STORAGE_KEY, memoria);
+        escribirStorage(key, null);
+      }
+    }
+    memoria ??= hidratarSeed();
   }
   return memoria;
 }
@@ -167,14 +199,6 @@ function registrarActividad(eventoId, tipo, texto, familiaId = null) {
     texto,
     fecha: new Date().toISOString(),
   });
-}
-
-// Pases que ocupa una familia en una mesa: los confirmados si ya respondió,
-// los asignados si sigue pendiente.
-function pasesOcupados(f) {
-  if (f.rsvp.estado === 'confirmado') return f.rsvp.pasesConfirmados;
-  if (f.rsvp.estado === 'no_asiste') return 0;
-  return f.pasesAsignados;
 }
 
 // Días de calendario entre hoy y la fecha (no horas / 24), para que "faltan 58
@@ -247,14 +271,27 @@ export async function crearFamilia(eventoId, { nombre, pasesAsignados = 1, telef
     telefono,
     codigo: generarCodigo(codigosExistentes()),
     pasesAsignados: Math.max(1, Number(pasesAsignados) || 1),
-    mesaId: null,
+    personas: [],
     abrioFecha: null,
     rsvp: { estado: 'pendiente', pasesConfirmados: 0, nota: '', fecha: null },
   };
+  ajustarPersonas(f);
   estado().familias.push(f);
   registrarActividad(eventoId, 'familia', 'Se agregó a {familia}', f.id);
   guardar();
   return copia(f);
+}
+
+// Una persona por pase. Si suben los pases, las nuevas se sientan donde está
+// la familia (si toda está en una sola mesa); si bajan, salen las últimas.
+function ajustarPersonas(f) {
+  f.personas ??= [];
+  const mesas = new Set(f.personas.map((p) => p.mesaId));
+  const mesa = mesas.size === 1 ? [...mesas][0] : null;
+  while (f.personas.length < f.pasesAsignados) {
+    f.personas.push({ id: nuevoId('per'), nombre: `Invitado ${f.personas.length + 1}`, mesaId: mesa });
+  }
+  f.personas.length = f.pasesAsignados;
 }
 
 export async function actualizarFamilia(familiaId, cambios) {
@@ -265,6 +302,7 @@ export async function actualizarFamilia(familiaId, cambios) {
   if ('pasesAsignados' in cambios) {
     f.pasesAsignados = Math.max(1, Number(cambios.pasesAsignados) || 1);
     f.rsvp.pasesConfirmados = Math.min(f.rsvp.pasesConfirmados, f.pasesAsignados);
+    ajustarPersonas(f);
   }
   guardar();
   return copia(f);
@@ -302,7 +340,8 @@ export async function confirmarAsistencia(eventoId, codigo, { asiste, pasesConfi
     nota: String(nota ?? '').trim(),
     fecha: new Date().toISOString(),
   };
-  if (!asiste) f.mesaId = null;
+  // Quien no asiste deja libre su lugar.
+  for (const p of personasDe(f)) if (!p.ocupa) f.personas.find((x) => x.id === p.id).mesaId = null;
 
   f.abrioFecha ??= f.rsvp.fecha;
 
@@ -330,16 +369,26 @@ export async function registrarApertura(eventoId, codigo) {
 // Mesas
 // ---------------------------------------------------------------------------
 
+// En Supabase, cada persona es una fila de la tabla personas:
+//   personas (id uuid pk, familia_id uuid -> familias.id on delete cascade,
+//             nombre text, orden int, mesa_id uuid null -> mesas.id on delete set null)
+// getMesas cuenta las personas por mesa_id (una vista o un select con count),
+// y asignarPersonasMesa es una función RPC que, en una transacción, revisa el
+// cupo de la mesa y hace update personas set mesa_id = $mesa where id = any($ids).
+// Las políticas RLS dejan ver y cambiar solo las personas de las familias del
+// evento de la pareja.
+
 export async function getMesas(eventoId) {
-  const familias = estado().familias.filter((f) => f.eventoId === eventoId);
+  const personas = estado().familias.filter((f) => f.eventoId === eventoId).flatMap(personasDe);
   return estado().mesas
     .filter((m) => m.eventoId === eventoId)
     .map((m) => {
-      const sentadas = familias.filter((f) => f.mesaId === m.id);
+      const sentadas = personas.filter((p) => p.mesaId === m.id);
       return {
         ...copia(m),
-        familiaIds: sentadas.map((f) => f.id),
-        ocupados: sentadas.reduce((n, f) => n + pasesOcupados(f), 0),
+        personaIds: sentadas.map((p) => p.id),
+        familiaIds: [...new Set(sentadas.map((p) => p.familiaId))],
+        ocupados: sentadas.filter((p) => p.ocupa).length,
       };
     });
 }
@@ -368,31 +417,50 @@ export async function actualizarMesa(mesaId, cambios) {
 export async function eliminarMesa(mesaId) {
   const s = estado();
   mesaPorId(mesaId);
-  for (const f of s.familias) if (f.mesaId === mesaId) f.mesaId = null;
+  for (const f of s.familias) for (const p of f.personas) if (p.mesaId === mesaId) p.mesaId = null;
   s.mesas = s.mesas.filter((x) => x.id !== mesaId);
   guardar();
 }
 
-// mesaId = null quita a la familia de su mesa.
+// Sienta a varias personas en una mesa (mesaId = null las deja sin mesa). Es
+// todo o nada: si no caben, no mueve a nadie. Quien no asiste no se puede sentar.
+export async function asignarPersonasMesa(personaIds, mesaId) {
+  const ids = new Set(personaIds);
+  const familias = estado().familias;
+  const elegidas = familias.flatMap((f) => personasDe(f).filter((p) => ids.has(p.id)));
+  if (elegidas.length !== ids.size) throw new DataError('persona_no_encontrada', 'No encontramos a una de las personas.');
+  const real = (p) => familias.find((f) => f.id === p.familiaId).personas.find((x) => x.id === p.id);
+
+  if (mesaId != null) {
+    const m = mesaPorId(mesaId);
+    const noVan = elegidas.filter((p) => !p.ocupa);
+    if (noVan.length) {
+      throw new DataError('persona_no_asiste', `${noVan.map((p) => p.nombre).join(' y ')} no ${noVan.length === 1 ? 'asistirá' : 'asistirán'}.`);
+    }
+    const yaSentados = familias.flatMap(personasDe).filter((p) => p.mesaId === m.id && p.ocupa && !ids.has(p.id)).length;
+    const libres = m.capacidad - yaSentados;
+    if (elegidas.length > libres) {
+      throw new DataError('mesa_llena', libres > 0
+        ? `En ${m.nombre} solo ${libres === 1 ? 'queda 1 lugar libre' : `quedan ${libres} lugares libres`}.`
+        : `${m.nombre} ya no tiene lugares libres.`);
+    }
+  }
+  for (const p of elegidas) real(p).mesaId = mesaId ?? null;
+  guardar();
+}
+
+export async function asignarPersonaMesa(personaId, mesaId) {
+  return asignarPersonasMesa([personaId], mesaId);
+}
+
+// Atajo: mueve a toda la familia (a quienes asisten o siguen pendientes).
 export async function asignarMesa(familiaId, mesaId) {
   const f = familiaPorId(familiaId);
-  if (mesaId == null) {
-    f.mesaId = null;
-    guardar();
-    return copia(f);
-  }
-  const m = mesaPorId(mesaId);
-  if (f.rsvp.estado === 'no_asiste') {
+  if (mesaId != null && f.rsvp.estado === 'no_asiste') {
     throw new DataError('familia_no_asiste', `${f.nombre} indicó que no asistirá.`);
   }
-  const ocupados = estado().familias
-    .filter((x) => x.mesaId === m.id && x.id !== f.id)
-    .reduce((n, x) => n + pasesOcupados(x), 0);
-  if (ocupados + pasesOcupados(f) > m.capacidad) {
-    throw new DataError('mesa_llena', `${m.nombre} no tiene lugares suficientes.`);
-  }
-  f.mesaId = m.id;
-  guardar();
+  const ids = personasDe(f).filter((p) => p.ocupa || mesaId == null).map((p) => p.id);
+  await asignarPersonasMesa(ids, mesaId);
   return copia(f);
 }
 
@@ -506,7 +574,9 @@ export async function getResumen(eventoId) {
       noAsisten: suma(noAsisten, (f) => f.pasesAsignados),
     },
     mesas: {
-      familiasSinMesa: familias.filter((f) => !f.mesaId && f.rsvp.estado !== 'no_asiste').length,
+      familiasSinMesa: familias.filter((f) => personasDe(f).some((p) => p.ocupa && !p.mesaId)).length,
+      personasSinMesa: familias.flatMap(personasDe).filter((p) => p.ocupa && !p.mesaId).length,
+      personasConMesa: familias.flatMap(personasDe).filter((p) => p.ocupa && p.mesaId).length,
     },
     mensajes: estado().mensajes.filter((m) => m.eventoId === eventoId).length,
   };

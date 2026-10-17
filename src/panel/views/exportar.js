@@ -10,9 +10,6 @@ import { subvista } from '../componentes.js';
 
 const ESTADO = { confirmado: 'Confirmado', no_asiste: 'No asiste', pendiente: 'Pendiente' };
 
-// Lugares que ocupa: confirmados si ya respondió, pases si sigue pendiente.
-const lugares = (f) => (f.rsvp.estado === 'confirmado' ? f.rsvp.pasesConfirmados : f.rsvp.estado === 'no_asiste' ? 0 : f.pasesAsignados);
-
 let elegida = 'todo';
 
 export async function montar(destino, ctx) {
@@ -22,7 +19,16 @@ export async function montar(destino, ctx) {
     data.getFamilias(evento.id), data.getMesas(evento.id), data.getMensajes(evento.id), data.getResumen(evento.id),
   ]);
   const confirmadas = familias.filter((f) => f.rsvp.estado === 'confirmado');
-  const mesa = (f) => mesas.find((m) => m.id === f.mesaId)?.nombre ?? 'Sin mesa';
+  const nombreMesa = (id) => mesas.find((m) => m.id === id)?.nombre ?? 'Sin mesa';
+  // Mesa de la familia: una, varias ("Mesa 5 (3) · Mesa 12 (2)") o sin mesa.
+  const mesa = (f) => {
+    const partes = data.mesasDeFamilia(f);
+    if (!partes.length) return 'Sin mesa';
+    return partes.length === 1 ? nombreMesa(partes[0].mesaId) : partes.map((x) => `${nombreMesa(x.mesaId)} (${x.n})`).join(' · ');
+  };
+  const ESTADO_PERSONA = { confirmado: 'Confirmado', pendiente: 'Pendiente', no: 'No asiste' };
+  // Personas que van (o siguen pendientes), con su familia, para las hojas por mesa.
+  const gente = familias.flatMap((f) => data.personasDe(f).map((p) => ({ ...p, grupo: f.grupo ?? '' }))).filter((p) => p.ocupa);
   const mensaje = (f) => mensajes.find((m) => m.familiaId === f.id)?.texto ?? '';
 
   const opciones = [
@@ -72,37 +78,36 @@ export async function montar(destino, ctx) {
     };
   }
 
-  // Hoja "Mesas": cada mesa con sus invitados y, al final, quienes no tienen mesa.
+  // Hoja "Mesas": cada mesa con sus personas y, al final, quienes no tienen mesa.
   function mesasAgrupadas() {
     const filas = [];
     const negritas = [];
     const bloque = (titulo, detalle, lista) => {
       negritas.push(filas.length, filas.length + 1);
-      filas.push([titulo, detalle], ['Familia', 'Personas', 'Estado', 'Grupo']);
-      for (const f of lista) filas.push([f.nombre, lugares(f), ESTADO[f.rsvp.estado], f.grupo ?? '']);
+      filas.push([titulo, detalle], ['Persona', 'Familia', 'Estado', 'Grupo']);
+      for (const p of lista) filas.push([p.nombre, p.familia, ESTADO_PERSONA[p.estado], p.grupo]);
       if (!lista.length) filas.push(['Mesa libre']);
       filas.push([]);
     };
     for (const m of mesas) {
-      const lista = familias.filter((f) => f.mesaId === m.id && f.rsvp.estado !== 'no_asiste')
-        .sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
-      bloque(m.nombre, `${m.ocupados} de ${m.capacidad} lugares`, lista);
+      const cap = data.textoCapacidad(m.ocupados, m.capacidad);
+      bloque(m.nombre, `${m.ocupados} de ${m.capacidad} lugares · ${cap.texto}`, gente.filter((p) => p.mesaId === m.id));
     }
-    const sinMesa = familias.filter((f) => !f.mesaId && f.rsvp.estado !== 'no_asiste');
-    if (sinMesa.length) bloque('Sin mesa', plural(sinMesa.reduce((n, f) => n + lugares(f), 0), 'persona', 'personas'), sinMesa);
+    const sinMesa = gente.filter((p) => !p.mesaId);
+    if (sinMesa.length) bloque('Sin mesa', plural(sinMesa.length, 'persona', 'personas'), sinMesa);
     return { nombre: 'Mesas', encabezado: false, negritas, filas };
   }
 
   function hojas() {
     if (elegida === 'mesa') {
+      // Una fila por persona, ordenada por mesa (las sin mesa al final).
       const orden = [...mesas.map((m) => m.id), null];
-      const sentadas = familias
-        .filter((f) => f.rsvp.estado !== 'no_asiste')
-        .sort((a, b) => orden.indexOf(a.mesaId ?? null) - orden.indexOf(b.mesaId ?? null) || a.nombre.localeCompare(b.nombre, 'es'));
+      const porMesa = [...gente].sort((a, b) => orden.indexOf(a.mesaId ?? null) - orden.indexOf(b.mesaId ?? null)
+        || a.familia.localeCompare(b.familia, 'es'));
       return [resumen(), mesasAgrupadas(), {
-        nombre: 'Lista por mesa',
-        filas: [['Mesa', 'Familia', 'Personas', 'Estado', 'Grupo'],
-          ...sentadas.map((f) => [mesa(f), f.nombre, lugares(f), ESTADO[f.rsvp.estado], f.grupo ?? ''])],
+        nombre: 'Por mesa',
+        filas: [['Mesa', 'Persona', 'Familia', 'Estado', 'Grupo'],
+          ...porMesa.map((p) => [nombreMesa(p.mesaId), p.nombre, p.familia, ESTADO_PERSONA[p.estado], p.grupo])],
       }];
     }
     const lista = elegida === 'conf' ? confirmadas : familias;

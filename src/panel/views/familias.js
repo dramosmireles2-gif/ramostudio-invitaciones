@@ -12,6 +12,8 @@ import {
 const FILTROS = [['todos', 'Todos'], ['confirmado', 'Confirmados'], ['pend', 'Pendientes'], ['no', 'No asisten'], ['sinabrir', 'No han abierto']];
 const FILTRO_URL = { pendientes: 'pend', confirmados: 'confirmado', 'no-asisten': 'no', 'sin-abrir': 'sinabrir' };
 const GRUPOS = ['Familia de la novia', 'Familia del novio', 'Amigos', 'Trabajo'];
+// Valor del selector de mesa cuando la familia está repartida en varias mesas.
+const DIVIDIDA = '__dividida';
 
 // La búsqueda y el filtro se conservan al abrir una ficha y volver.
 const lista = { q: '', k: 'todos' };
@@ -42,10 +44,17 @@ export async function montar(destino, ctx) {
     mesas = ms;
     familias = fams.map((f) => {
       const msg = msgs.find((m) => m.familiaId === f.id); // getMensajes ya viene del más reciente al más viejo.
+      // La mesa sale de sus personas: una sola mesa, repartida en varias o sin mesa.
+      const partes = data.mesasDeFamilia(f);
+      const nombre = (id) => ms.find((m) => m.id === id)?.nombre;
+      const conMesa = partes.filter((x) => x.mesaId);
       return {
         ...f,
         status: estadoDe(f),
-        mesa: ms.find((m) => m.id === f.mesaId)?.nombre ?? null,
+        mesaId: partes.length === 1 ? partes[0].mesaId : partes.length ? DIVIDIDA : null,
+        mesa: partes.length > 1
+          ? partes.map((x) => `${x.mesaId ? nombre(x.mesaId) : 'Sin mesa'} (${x.n})`).join(' · ')
+          : conMesa.length ? nombre(conMesa[0].mesaId) : null,
         msg: msg?.texto ?? null,
         msgFecha: msg ? fechaNumerica(msg.fecha, { zona: evento.zonaHoraria }) : null,
       };
@@ -183,7 +192,9 @@ export async function montar(destino, ctx) {
         </div>
         <div class="field">
           <label class="field__label" for="ff-mesa">Mesa</label>
-          <select class="field__control" id="ff-mesa" name="mesa">${[opcion('', 'Sin mesa', fam?.mesaId ?? ''), ...mesas.map((m) => opcion(m.id, m.nombre, fam?.mesaId))]}</select>
+          <select class="field__control" id="ff-mesa" name="mesa">${[
+            ...(fam?.mesaId === DIVIDIDA ? [opcion(DIVIDIDA, 'Dividida (sin cambios)', DIVIDIDA)] : []),
+            opcion('', 'Sin mesa', fam?.mesaId ?? ''), ...mesas.map((m) => opcion(m.id, m.nombre, fam?.mesaId))]}</select>
         </div>
       </div>
       <span class="field__hint field__hint--error" data-error="mesa" hidden></span>
@@ -234,7 +245,9 @@ export async function montar(destino, ctx) {
       const f = fam ? await data.actualizarFamilia(fam.id, datos) : await data.crearFamilia(evento.id, datos);
       const mesaId = v.mesa || null;
       let sinLugar = null;
-      if (mesaId || fam?.mesaId) {
+      // "Dividida (sin cambios)" deja a cada persona en su mesa; para moverlas
+      // una por una está la hoja de cada mesa.
+      if (mesaId !== DIVIDIDA && (mesaId || fam?.mesaId)) {
         try {
           await data.asignarMesa(f.id, mesaId);
         } catch (err) {

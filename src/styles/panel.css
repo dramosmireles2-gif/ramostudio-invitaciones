@@ -185,32 +185,37 @@
 }
 .plano__mesas { display: grid; grid-template-columns: repeat(auto-fill, minmax(124px, 1fr)); justify-items: center; gap: 4px; }
 
-.mesa-mini { position: relative; width: var(--tam); height: var(--tam); flex: none; padding: 0; border: 0; background: transparent; cursor: pointer; border-radius: 50%; }
+.mesa-mini { position: relative; width: var(--tam); height: var(--tam); flex: none; }
 .mesa-mini__lugar {
-  position: absolute; width: calc(var(--tam) * .165); height: calc(var(--tam) * .165); border-radius: 50%;
+  position: absolute; width: calc(var(--tam) * .165); height: calc(var(--tam) * .165); border-radius: 50%; padding: 0;
   display: flex; align-items: center; justify-content: center;
   font-family: var(--font-sans); font-size: 9px; font-weight: var(--fw-semibold);
 }
+button.mesa-mini__lugar { cursor: pointer; }
+/* Área de toque más grande que el círculo. */
+button.mesa-mini__lugar::after { content: ""; position: absolute; inset: -5px; border-radius: 50%; }
 .mesa-mini__lugar--confirmado { background: var(--rs-pizarra); border: 1px solid var(--rs-pizarra); color: var(--rs-crema); }
 .mesa-mini__lugar--pendiente { background: var(--rs-crema-papel); border: 1px solid var(--rs-pizarra); color: var(--rs-pizarra); }
+.mesa-mini__lugar--exceso { background: var(--rs-vino); border: 1px solid var(--rs-vino); color: var(--rs-crema); }
 .mesa-mini__lugar--no { background: transparent; border: 1px dashed var(--rs-vino); color: var(--rs-vino); }
 .mesa-mini__lugar--libre { background: transparent; border: 1px dashed var(--line-field); }
 .mesa-mini__centro {
-  position: absolute; inset: calc(var(--tam) * .23); border-radius: 50%;
+  position: absolute; inset: calc(var(--tam) * .23); border-radius: 50%; padding: 0; cursor: pointer;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   background: var(--rs-crema-papel); border: 1px solid var(--rule-color, var(--rs-dorado));
 }
-.mesa-mini__centro--llena { border: 2px solid var(--rs-vino); }
+.mesa-mini__centro--exceso { border: 2px solid var(--rs-vino); }
 .mesa-mini__nombre { font-family: var(--font-serif); font-size: 15px; line-height: 1.1; color: var(--rs-tinta); }
 .mesa-mini__cupo { font-family: var(--font-sans); font-size: 12px; color: var(--rs-pizarra); }
-.mesa-mini__centro--llena .mesa-mini__cupo { color: var(--rs-vino); font-weight: var(--fw-semibold); }
+.mesa-mini__centro--exceso .mesa-mini__cupo { color: var(--rs-vino); font-weight: var(--fw-semibold); }
+.mesa-mini__centro--completa .mesa-mini__cupo { color: var(--rs-salvia); }
 
 .leyenda { display: flex; flex-wrap: wrap; gap: 8px 16px; padding: 0 6px; }
 .leyenda__item { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-sans); font-size: var(--fs-small); color: var(--rs-pizarra); }
 .leyenda__muestra { width: 14px; height: 14px; border-radius: 50%; }
 
 .mesa-bloque { display: flex; flex-direction: column; gap: 6px; padding: 16px 18px; }
-.mesa-bloque__cabeza { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.mesa-bloque__cabeza { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .mesa-bloque__filas { border-top: 1px solid var(--rule-color, var(--rs-dorado)); margin-top: 6px; }
 .mesa-bloque__fila { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 10px 0; border-bottom: 1px solid var(--line-paper); }
 .mesa-bloque__fila:last-child { border-bottom: 0; }
@@ -223,10 +228,71 @@
 .avisos__item:last-child { border-bottom: 0; }
 .avisos__vacio { padding: 12px 0; }
 
-.detalle-mesa { display: flex; flex-direction: column; gap: 14px; }
-.detalle-mesa__sobran { color: var(--rs-vino); border: 1px solid var(--rs-vino); border-radius: 12px; padding: 14px; }
-.detalle-mesa__familia { display: flex; flex-direction: column; gap: 10px; padding: 12px 0; border-top: 1px solid var(--line-paper); }
-.detalle-mesa__familia .status-tag, .detalle-mesa > .btn { align-self: flex-start; }
+/* Capacidad: el mismo texto en la lista, el plano y la hoja. */
+.capacidad { margin: 0; font-family: var(--font-sans); font-size: var(--fs-small); line-height: 1.4; color: var(--rs-pizarra); }
+.capacidad--exceso { color: var(--rs-vino); font-weight: var(--fw-semibold); }
+.capacidad--completa { color: var(--rs-salvia); }
+
+/* Hoja de una mesa. */
+.hoja-mesa { display: flex; flex-direction: column; gap: 14px; }
+.hoja-mesa__arriba { display: flex; flex-direction: column; gap: 14px; }
+.hoja-mesa__cuenta { font-size: 16px; }
+.hoja-mesa__familias { display: flex; flex-direction: column; gap: 10px; }
+.hoja-mesa > .btn--flush, .hoja-mesa__volver { align-self: flex-start; }
+.atenuado { color: var(--rs-pizarra); opacity: .75; }
+
+.ocupacion { display: flex; align-items: center; gap: 12px; }
+.ocupacion__barra { flex: 1; height: 10px; border-radius: var(--radius-pill); background: var(--rs-crema-sombra); overflow: hidden; }
+.ocupacion__barra span { display: block; height: 100%; border-radius: inherit; background: var(--rs-pizarra); }
+.ocupacion--exceso .ocupacion__barra span { background: var(--rs-vino); }
+.ocupacion--completa .ocupacion__barra span { background: var(--rs-salvia); }
+.ocupacion__cifra { flex: none; font-family: var(--font-serif); font-size: 26px; line-height: 1; color: var(--rs-tinta); }
+.ocupacion--exceso .ocupacion__cifra { color: var(--rs-vino); }
+
+.stepper { display: grid; grid-template-columns: 52px minmax(0, 1fr) 52px; gap: 8px; }
+.stepper__boton { padding: 0; font-size: 22px; }
+.stepper__valor { text-align: center; font-family: var(--font-serif); font-size: 22px; -moz-appearance: textfield; }
+.stepper__valor::-webkit-inner-spin-button, .stepper__valor::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+.alerta-mesa { display: flex; flex-direction: column; gap: 10px; padding: 14px; border: 1px solid var(--rs-vino); border-radius: 12px; background: var(--rs-vino-velo); }
+.alerta-mesa .t-body { color: var(--rs-tinta); }
+
+/* Tarjeta plegable de una familia, con sus personas. */
+.familia-mesa { background: var(--rs-crema-papel); border: 1px solid var(--line-paper); border-radius: 12px; }
+.familia-mesa__cabeza {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 14px 44px 14px 16px;
+  min-height: 48px; cursor: pointer; list-style: none; position: relative;
+}
+.familia-mesa__cabeza::-webkit-details-marker { display: none; }
+.familia-mesa__cabeza::after {
+  content: ""; position: absolute; right: 18px; top: 22px; width: 8px; height: 8px;
+  border-right: 1.5px solid var(--rs-pizarra); border-bottom: 1.5px solid var(--rs-pizarra); transform: rotate(45deg);
+}
+.familia-mesa[open] > .familia-mesa__cabeza::after { transform: rotate(-135deg); top: 26px; }
+.familia-mesa__titulo { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; width: 100%; }
+.familia-mesa__titulo .t-meta { flex: none; }
+.familia-mesa__dividida { font-family: var(--font-sans); font-size: 14px; font-weight: var(--fw-semibold); color: var(--rs-pizarra); }
+.familia-mesa__personas { display: flex; flex-direction: column; gap: 4px; padding: 0 16px 16px; }
+.familia-mesa__personas > .btn { align-self: flex-start; margin-top: 8px; }
+
+.persona-mesa { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 9.5rem); align-items: center; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line-paper); }
+.persona-mesa__dato { display: flex; flex-direction: column; min-width: 0; }
+.persona-mesa__nombre { font-family: var(--font-sans); font-size: 16px; color: var(--rs-tinta); overflow-wrap: anywhere; }
+.persona-mesa__estado { font-family: var(--font-sans); font-size: 13px; color: var(--rs-pizarra); }
+.persona-mesa--pendiente .persona-mesa__nombre, .persona-mesa--pendiente .persona-mesa__estado { opacity: .75; }
+.persona-mesa--no .persona-mesa__nombre { color: var(--rs-vino); text-decoration: line-through; }
+.persona-mesa__select { min-height: 48px; padding: 10px 36px 10px 12px; font-size: 15px; background-position: right 12px center; }
+
+/* Selección de personas para mover. */
+.seleccion { display: flex; flex-direction: column; padding: 4px 16px; }
+.seleccion__persona { display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 8px 0; border-top: 1px solid var(--line-paper); cursor: pointer; }
+.seleccion__persona:first-child { border-top: 0; }
+.seleccion__persona input { width: 22px; height: 22px; flex: none; accent-color: var(--rs-pizarra); }
+.seleccion__textos { display: flex; flex-direction: column; min-width: 0; }
+
+/* Mini hoja de una persona del plano. */
+.persona-info { display: flex; flex-direction: column; gap: 14px; }
+.persona-info__dato { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
 
 /* Más -------------------------------------------------------------------- */
 .mas { display: flex; flex-direction: column; gap: 16px; padding: 4px 24px 32px; min-width: 0; }
