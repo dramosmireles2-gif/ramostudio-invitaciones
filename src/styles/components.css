@@ -242,3 +242,27 @@ select.field__control {
   padding: 14px 18px; border-radius: 12px;
   box-shadow: inset 0 0 0 3px var(--rs-pizarra), inset 0 0 0 4px var(--rule-color, var(--rs-dorado));
 }
+
+/* MapaAlTocar: el mapa de Google se descarga solo cuando lo tocan. ------- */
+.mapa-tocar {
+  position: relative; width: 100%; aspect-ratio: 16 / 10; min-height: 180px; overflow: hidden;
+  border: 1px solid var(--ev-line, var(--line-field)); border-radius: var(--radius-md);
+  background-color: var(--ev-surface-2, var(--rs-polvo-velo));
+  /* Cuadrícula de papel de plano: sugiere un mapa sin descargar nada. */
+  background-image:
+    linear-gradient(var(--ev-line, var(--line-paper)) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ev-line, var(--line-paper)) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+.mapa-tocar__boton {
+  position: absolute; inset: 0; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+  border: 0; background: transparent; cursor: pointer; padding: 16px;
+  font-family: var(--ev-font-data, var(--font-sans)); font-size: 15px; font-weight: var(--fw-semibold);
+  color: var(--ev-text-2, var(--rs-pizarra));
+}
+.mapa-tocar__texto { background: var(--ev-surface, var(--rs-crema-papel)); padding: 6px 12px; border-radius: var(--radius-pill); }
+.mapa-tocar__pin {
+  width: 22px; height: 22px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg);
+  background: var(--ev-action, var(--rs-pizarra)); box-shadow: inset 0 0 0 6px var(--ev-action, var(--rs-pizarra)), inset 0 0 0 11px var(--ev-surface, var(--rs-crema-papel));
+}
+.mapa-tocar__iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }

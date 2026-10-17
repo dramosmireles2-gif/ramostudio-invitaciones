@@ -10,7 +10,8 @@ El diseño viene en JSX/React; aquí se traduce a JS plano.
 - **Resumen**: aprobado (celular y escritorio).
 - **Invitados**: aprobada (celular y escritorio).
 - **Mesas**: aprobada (celular y escritorio).
-- **Más** (Mensajes, Actividad, Mesa de regalos, Datos del evento, Exportar): Mesa de regalos aprobada con ajustes; el resto, en revisión.
+- **Más** (Mensajes, Actividad, Mesa de regalos, Datos del evento, Exportar): Mesa de regalos aprobada; Mensajes, Actividad, Datos del evento y Exportar
+  revisados, con ajustes de mapas, horas y fechas (en revisión).
 - Cada pantalla se muestra en el navegador (celular y escritorio) y se espera aprobación antes de
   pasar a la siguiente.
 
@@ -80,9 +81,24 @@ El diseño viene en JSX/React; aquí se traduce a JS plano.
   porque el teclado numérico del celular no las tiene). La fecha límite se guarda como días antes de
   la boda y debe ser anterior a ella. Si no cambian la fecha, la demo sigue en «hoy + 58 días»; si la
   cambian, queda fija hasta «reiniciar demo». La hora de la ceremonia es también `evento.hora`.
+- **Ubicación en mapa** (Ceremonia y Recepción): los novios pegan el link de Google Maps del lugar
+  (`src/lib/mapas.js`). Se guarda `mapaUrl` y, si el link las trae (`!3d…!4d…`, `@lat,lng`, `?q=`),
+  `coordenadas`. Los links cortos (`maps.app.goo.gl`) no las traen: entonces el mapa y Waze buscan por
+  nombre y dirección. Vista previa con `mapaAlTocar`: un recuadro que no descarga nada de Google hasta
+  que lo tocan; luego carga el mapa embebido sin API key (`maps.google.com/maps?…&output=embed`).
+- La demo apunta a un lugar público: Plaza Principal Miguel Hidalgo de Reynosa (26.0928694,
+  −98.2779834, de OpenStreetMap), en las dos sedes. Las direcciones ya no dicen «ficticia».
+- **Invitación**: `src/invitacion/sections/evento.js` es PROVISIONAL (hasta su diseño): cada lugar con
+  hora, dirección, mapa al tocar, «Abrir en Google Maps» y «Abrir en Waze» (`waze.com/ul`, gratis).
+  Estilos en `src/styles/invitacion.css`.
+- **Actividad**: el seed guarda `cuando: { dias, hora }` en la zona del evento (no `haceHoras`), así las
+  horas siempre quedan entre 8:00 a. m. y 11:00 p. m.; lo de hoy que aún no pasa se acomoda justo antes
+  de ahora y antes de las 8:30 a. m. toda la demo se recorre un día. Los textos llevan `{familia}` y
+  los mensajes toman el autor de la familia: siempre el nombre actual del seed. Grupos: «Hoy», «Ayer»
+  y luego «Miércoles 14 de octubre» (`diaRelativo`).
 - **Exportar**: `src/lib/xlsx.js` genera un .xlsx real sin librerías (ZIP sin compresión): toda la
   lista, solo confirmados o por mesa (sin quienes no asisten). Encabezado en negritas y fijo.
-- `STORAGE_KEY` subió a v4 por los cambios del seed.
+- `STORAGE_KEY` subió a v5 por los cambios del seed.
 
 ## Datos
 

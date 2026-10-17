@@ -285,3 +285,4 @@
   .mas { padding: 0; max-width: 640px; }
   .mas--ancha { max-width: 1040px; }
 }
+.datos-evento__mapa { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }

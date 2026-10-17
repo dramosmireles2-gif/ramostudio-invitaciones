@@ -5,7 +5,7 @@ import seed from './seed/mariana-diego.json';
 import { DEMO_LOGIN_CODE } from '../config.js';
 import { generarCodigo, normalizarCodigo } from './codigos.js';
 
-const STORAGE_KEY = 'ramostudio:demo:v4'; // Subir la versión cuando cambie la forma del seed.
+const STORAGE_KEY = 'ramostudio:demo:v5'; // Subir la versión cuando cambie la forma del seed.
 const SESION_KEY = 'ramostudio:demo:sesion';
 const HORA = 60 * 60 * 1000;
 const DIA = 24 * HORA;
@@ -41,27 +41,67 @@ function escribirStorage(key, valor) {
   }
 }
 
-function haceHorasAIso(horas) {
-  return horas == null ? null : new Date(Date.now() - horas * HORA).toISOString();
+// "Y-M-D" de hoy en la zona del evento.
+function hoyEnZona(zona) {
+  return new Intl.DateTimeFormat('en-CA', { timeZone: zona, year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
 }
 
-// Convierte los tiempos relativos del seed (haceHoras) en fechas reales.
+// Diferencia (en minutos) entre la zona y UTC en este momento, p. ej. -360 en CDMX.
+function desfaseMinutos(zona) {
+  const partes = Object.fromEntries(new Intl.DateTimeFormat('en-US', {
+    timeZone: zona, hourCycle: 'h23', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric',
+  }).formatToParts(new Date()).map((p) => [p.type, p.value]));
+  const comoUtc = Date.UTC(partes.year, partes.month - 1, partes.day, partes.hour, partes.minute);
+  return Math.round((comoUtc - Date.now()) / 60000 / 15) * 15; // Las zonas van de 15 en 15 minutos.
+}
+
+// Convierte los tiempos del seed ({ dias, hora } en la zona del evento) en
+// fechas reales, para que la actividad de la demo tenga horas creíbles (de
+// 8:00 a. m. a 11:00 p. m.) a cualquier hora que se abra.
 function hidratarSeed() {
   const s = structuredClone(seed);
   delete s._nota;
+  const zona = s.eventos[0].zonaHoraria;
+  const [a, m, d] = hoyEnZona(zona).split('-').map(Number);
+  const desfase = desfaseMinutos(zona);
+  const ahora = Date.now();
+  const minutosHoy = (ahora / 60000 + desfase) % 1440;
+  // Antes de las 8:30 nada de "hoy" sería creíble: toda la demo se recorre un día.
+  const extra = minutosHoy < 8 * 60 + 30 ? 1 : 0;
+  const aMs = (c) => {
+    const [h, min] = c.hora.split(':').map(Number);
+    return Date.UTC(a, m - 1, d - c.dias - extra, h, min) - desfase * 60000;
+  };
+
+  const tiempos = []; // [objeto, campo, cuando]
   for (const f of s.familias) {
-    f.rsvp.fecha = haceHorasAIso(f.rsvp.haceHoras);
-    delete f.rsvp.haceHoras;
-    f.abrioFecha = haceHorasAIso(f.abrioHaceHoras);
-    delete f.abrioHaceHoras;
+    tiempos.push([f.rsvp, 'fecha', f.rsvp.cuando], [f, 'abrioFecha', f.abrioCuando]);
+    delete f.rsvp.cuando;
+    delete f.abrioCuando;
   }
-  for (const lista of [s.mensajes, s.actividad]) {
-    for (const item of lista) {
-      item.fecha = haceHorasAIso(item.haceHoras);
-      delete item.haceHoras;
-    }
+  for (const item of [...s.mensajes, ...s.actividad]) {
+    tiempos.push([item, 'fecha', item.cuando]);
+    delete item.cuando;
+  }
+  // Lo de hoy que aún no ha pasado se acomoda justo antes de ahora, en el
+  // mismo orden (lo mismo de una familia comparte la misma hora).
+  const futuras = [...new Set(tiempos.filter(([, , c]) => c && aMs(c) > ahora).map(([, , c]) => aMs(c)))]
+    .sort((x, y) => y - x);
+  const ajuste = new Map(futuras.map((t, i) => [t, ahora - (i + 1) * 7 * 60000]));
+  for (const [obj, campo, c] of tiempos) {
+    if (!c) { obj[campo] = null; continue; }
+    const t = aMs(c);
+    obj[campo] = new Date(ajuste.get(t) ?? t).toISOString();
   }
   return s;
+}
+
+// Los textos de actividad del seed llevan {familia}: se pone el nombre actual
+// de la familia al leer, para que siempre coincida con su ficha.
+function conNombre(item) {
+  const f = item.familiaId && estado().familias.find((x) => x.id === item.familiaId);
+  const nombre = f?.nombre ?? item.nombre ?? 'Una familia';
+  return { ...item, texto: item.texto.replaceAll('{familia}', nombre) };
 }
 
 function estado() {
@@ -114,12 +154,16 @@ function mesaPorId(mesaId) {
   return m;
 }
 
+// En el texto, {familia} se cambia por el nombre actual de la familia al leer
+// (se guarda también el nombre de ese momento por si después la quitan).
 function registrarActividad(eventoId, tipo, texto, familiaId = null) {
+  const f = familiaId && estado().familias.find((x) => x.id === familiaId);
   estado().actividad.push({
     id: nuevoId('act'),
     eventoId,
     tipo,
     familiaId,
+    nombre: f?.nombre ?? null,
     texto,
     fecha: new Date().toISOString(),
   });
@@ -208,7 +252,7 @@ export async function crearFamilia(eventoId, { nombre, pasesAsignados = 1, telef
     rsvp: { estado: 'pendiente', pasesConfirmados: 0, nota: '', fecha: null },
   };
   estado().familias.push(f);
-  registrarActividad(eventoId, 'familia', `Se agregó a ${f.nombre}`, f.id);
+  registrarActividad(eventoId, 'familia', 'Se agregó a {familia}', f.id);
   guardar();
   return copia(f);
 }
@@ -264,9 +308,9 @@ export async function confirmarAsistencia(eventoId, codigo, { asiste, pasesConfi
 
   const texto = asiste
     ? pases === f.pasesAsignados
-      ? `${f.nombre} confirmó ${plural(pases, 'persona', 'personas')}.`
-      : `${f.nombre} confirmó ${pases} de ${plural(f.pasesAsignados, 'pase', 'pases')}.`
-    : `${f.nombre} respondió que no podrá ir.`;
+      ? `{familia} confirmó ${plural(pases, 'persona', 'personas')}.`
+      : `{familia} confirmó ${pases} de ${plural(f.pasesAsignados, 'pase', 'pases')}.`
+    : '{familia} respondió que no podrá ir.';
   registrarActividad(eventoId, asiste ? 'confirmacion' : 'no_asiste', texto, f.id);
   guardar();
   return copia(f);
@@ -278,7 +322,7 @@ export async function registrarApertura(eventoId, codigo) {
   const f = estado().familias.find((x) => x.eventoId === eventoId && x.codigo === c);
   if (!f || f.abrioFecha) return; // Solo cuenta la primera vez.
   f.abrioFecha = new Date().toISOString();
-  registrarActividad(eventoId, 'apertura', `${f.nombre} abrió su invitación.`, f.id);
+  registrarActividad(eventoId, 'apertura', '{familia} abrió su invitación.', f.id);
   guardar();
 }
 
@@ -357,7 +401,10 @@ export async function asignarMesa(familiaId, mesaId) {
 // ---------------------------------------------------------------------------
 
 export async function getMensajes(eventoId) {
+  const familias = estado().familias;
+  // El autor es el nombre actual de la familia, igual que en su ficha.
   return copia(estado().mensajes.filter((m) => m.eventoId === eventoId))
+    .map((m) => ({ ...m, autor: familias.find((f) => f.id === m.familiaId)?.nombre ?? m.autor }))
     .sort((a, b) => b.fecha.localeCompare(a.fecha));
 }
 
@@ -377,7 +424,7 @@ export async function enviarMensaje(eventoId, { codigo = null, autor, texto }) {
     fecha: new Date().toISOString(),
   };
   estado().mensajes.push(m);
-  registrarActividad(eventoId, 'mensaje', `${m.autor} les dejó un mensaje.`, m.familiaId);
+  registrarActividad(eventoId, 'mensaje', `${familia ? '{familia}' : m.autor} les dejó un mensaje.`, m.familiaId);
   guardar();
   return copia(m);
 }
@@ -416,6 +463,7 @@ export async function eliminarRegalo(regaloId) {
 
 export async function getActividad(eventoId, { limite = 50 } = {}) {
   return copia(estado().actividad.filter((a) => a.eventoId === eventoId))
+    .map(conNombre)
     .sort((a, b) => b.fecha.localeCompare(a.fecha))
     .slice(0, limite);
 }

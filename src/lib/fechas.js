@@ -23,12 +23,18 @@ export function fechaNumerica(iso, { corta = false, zona = 'America/Mexico_City'
   }).format(new Date(iso));
 }
 
-// "Hoy", "Ayer" o "14/10/2026", para agrupar la actividad por día.
+// "Hoy", "Ayer" o "Miércoles 14 de octubre" (con el año si no es el actual),
+// para agrupar la actividad por día.
 export function diaRelativo(iso, ahora = new Date(), zona = 'America/Mexico_City') {
   const dia = (d) => fechaNumerica(d, { zona });
   if (dia(iso) === dia(ahora)) return 'Hoy';
   if (dia(iso) === dia(new Date(ahora.getTime() - 86400000))) return 'Ayer';
-  return dia(iso);
+  const anio = (d) => new Intl.DateTimeFormat(LOCALE, { year: 'numeric', timeZone: zona }).format(new Date(d));
+  const texto = new Intl.DateTimeFormat(LOCALE, {
+    weekday: 'long', day: 'numeric', month: 'long', timeZone: zona,
+    ...(anio(iso) !== anio(ahora) ? { year: 'numeric' } : {}),
+  }).format(new Date(iso)).replace(',', '');
+  return texto.charAt(0).toUpperCase() + texto.slice(1);
 }
 
 export function saludo(ahora = new Date()) {

@@ -1,5 +1,5 @@
 {
-  "_nota": "DATOS FICTICIOS DE DEMO. Ningún nombre, teléfono o dirección es real. Las fechas son relativas: fechaRelativaDias = días desde hoy; haceHoras = horas antes de hoy.",
+  "_nota": "DATOS DE DEMO. Ningún nombre ni teléfono es real; el mapa apunta a un lugar público (Plaza Principal de Reynosa). Fechas relativas: fechaRelativaDias = días desde hoy; cuando = { dias atrás, hora } en la zona del evento.",
   "eventos": [
     {
       "id": "evt_demo_md",
@@ -36,17 +36,25 @@
           "id": "ceremonia",
           "tipo": "Ceremonia religiosa",
           "nombre": "Capilla del Rosario",
-          "direccion": "Calle Ejemplo 123, Col. Centro (dirección ficticia)",
+          "direccion": "Plaza Principal Miguel Hidalgo, Zona Centro, Reynosa, Tamps.",
           "hora": "17:00",
-          "mapaUrl": null
+          "mapaUrl": "https://www.google.com/maps/search/?api=1&query=26.0928694,-98.2779834",
+          "coordenadas": {
+            "lat": 26.0928694,
+            "lng": -98.2779834
+          }
         },
         {
           "id": "recepcion",
           "tipo": "Recepción",
           "nombre": "Jardín Las Magnolias",
-          "direccion": "Av. Demostración 456 (dirección ficticia)",
+          "direccion": "Frente a la Plaza Principal, Zona Centro, Reynosa, Tamps.",
           "hora": "19:00",
-          "mapaUrl": null
+          "mapaUrl": "https://www.google.com/maps/search/?api=1&query=26.0928694,-98.2779834",
+          "coordenadas": {
+            "lat": 26.0928694,
+            "lng": -98.2779834
+          }
         }
       ],
       "itinerario": [
@@ -116,12 +124,18 @@
       "codigo": "EYD7WSF",
       "pasesAsignados": 4,
       "mesaId": "mesa_01",
-      "abrioHaceHoras": 50.5,
+      "abrioCuando": {
+        "dias": 2,
+        "hora": "19:20"
+      },
       "rsvp": {
         "estado": "confirmado",
         "pasesConfirmados": 4,
         "nota": "",
-        "haceHoras": 50
+        "cuando": {
+          "dias": 2,
+          "hora": "19:50"
+        }
       }
     },
     {
@@ -133,12 +147,18 @@
       "codigo": "WB3REKRT",
       "pasesAsignados": 3,
       "mesaId": "mesa_01",
-      "abrioHaceHoras": 209.5,
+      "abrioCuando": {
+        "dias": 8,
+        "hora": "12:27"
+      },
       "rsvp": {
         "estado": "confirmado",
         "pasesConfirmados": 3,
         "nota": "",
-        "haceHoras": 209
+        "cuando": {
+          "dias": 8,
+          "hora": "12:57"
+        }
       }
     },
     {
@@ -150,12 +170,18 @@
       "codigo": "ASGEUA3",
       "pasesAsignados": 2,
       "mesaId": "mesa_01",
-      "abrioHaceHoras": 98.5,
+      "abrioCuando": {
+        "dias": 4,
+        "hora": "19:04"
+      },
       "rsvp": {
         "estado": "confirmado",
         "pasesConfirmados": 2,
         "nota": "",
-        "haceHoras": 98
+        "cuando": {
+          "dias": 4,
+          "hora": "19:34"
+        }
       }
     },
     {
@@ -167,12 +193,18 @@
       "codigo": "DAQWBB",
       "pasesAsignados": 3,
       "mesaId": "mesa_02",
-      "abrioHaceHoras": 227.5,
+      "abrioCuando": {
+        "dias": 9,
+        "hora": "10:11"
+      },
       "rsvp": {
         "estado": "confirmado",
         "pasesConfirmados": 3,
         "nota": "",
-        "haceHoras": 227
+        "cuando": {
+          "dias": 9,
+          "hora": "10:41"
+        }
       }
     },
     {
@@ -184,12 +216,18 @@
       "codigo": "GDATSW",
       "pasesAsignados": 4,
       "mesaId": "mesa_02",
-      "abrioHaceHoras": 170.5,
+      "abrioCuando": {
+        "dias": 7,
+        "hora": "19:18"
+      },
       "rsvp": {
         "estado": "confirmado",
         "pasesConfirmados": 4,
         "nota": "",
-        "haceHoras": 170
+        "cuando": {
+          "dias": 7,
+          "hora": "19:48"
+        }
       }
     },
     {
@@ -201,12 +239,18 @@
       "codigo": "J55YWM",
       "pasesAsignados": 2,
       "mesaId": "mesa_02",
-      "abrioHaceHoras": 245.5,
+      "abrioCuando": {
+        "dias": 10,
+        "hora": "16:25"
+      },
       "rsvp": {
         "estado": "confirmado",
         "pasesConfirmados": 2,
         "nota": "",
-        "haceHoras": 245
+        "cuando": {
+          "dias": 10,
+          "hora": "16:55"
+        }
       }
     },
     {
@@ -218,12 +262,15 @@
       "codigo": "F835XKD",
       "pasesAsignados": 4,
       "mesaId": "mesa_03",
-      "abrioHaceHoras": 1,
+      "abrioCuando": {
+        "dias": 0,
+        "hora": "20:32"
+      },
       "rsvp": {
         "estado": "pendiente",
         "pasesConfirmados": 0,
         "nota": "",
-        "haceHoras": null
+        "cuando": null
       }
     },
     {
@@ -235,12 +282,15 @@
       "codigo": "SXEY9WQ",
       "pasesAsignados": 2,
       "mesaId": "mesa_03",
-      "abrioHaceHoras": 51,
+      "abrioCuando": {
+        "dias": 2,
+        "hora": "18:39"
+      },
       "rsvp": {
         "estado": "pendiente",
         "pasesConfirmados": 0,
         "nota": "",
-        "haceHoras": null
+        "cuando": null
       }
     },
     {
@@ -252,12 +302,18 @@
       "codigo": "WNQKKCHU",
       "pasesAsignados": 4,
       "mesaId": "mesa_03",
-      "abrioHaceHoras": 272.5,
+      "abrioCuando": {
+        "dias": 11,
+        "hora": "13:16"
+      },
       "rsvp": {
         "estado": "confirmado",
         "pasesConfirmados": 4,
         "nota": "",
-        "haceHoras": 272
+        "cuando": {
+          "dias": 11,
+          "hora": "13:46"
+        }
       }
     },
     {
@@ -269,12 +325,18 @@
       "codigo": "R2MV5RYK",
       "pasesAsignados": 5,
       "mesaId": "mesa_04",
-      "abrioHaceHoras": 281.5,
+      "abrioCuando": {
+        "dias": 11,
+        "hora": "12:20"
+      },
       "rsvp": {
         "estado": "confirmado",
         "pasesConfirmados": 5,
         "nota": "",
-        "haceHoras": 281
+        "cuando": {
+          "dias": 11,
+          "hora": "12:50"
+        }
       }
     },
     {
@@ -286,12 +348,18 @@
       "codigo": "MVE7WDCC",
       "pasesAsignados": 4,
       "mesaId": "mesa_04",
-      "abrioHaceHoras": 68.5,
+      "abrioCuando": {
+        "dias": 2,
+        "hora": "09:27"
+      },
       "rsvp": {
         "estado": "confirmado",
         "pasesConfirmados": 4,
         "nota": "",
-        "haceHoras": 68
+        "cuando": {
+          "dias": 2,
+          "hora": "09:57"
+        }
       }
     },
     {
@@ -303,12 +371,12 @@
       "codigo": "QF4VFC9X",
       "pasesAsignados": 3,
       "mesaId": "mesa_04",
-      "abrioHaceHoras": null,
+      "abrioCuando": null,
       "rsvp": {
         "estado": "pendiente",
         "pasesConfirmados": 0,
         "nota": "",
-        "haceHoras": null
+        "cuando": null
       }
     },
     {
@@ -320,12 +388,12 @@
       "codigo": "TH34MG4",
       "pasesAsignados": 2,
       "mesaId": "mesa_05",
-      "abrioHaceHoras": null,
+      "abrioCuando": null,
       "rsvp": {
         "estado": "pendiente",
         "pasesConfirmados": 0,
         "nota": "",
-        "haceHoras": null
+        "cuando": null
       }
     },
     {
@@ -337,12 +405,18 @@
       "codigo": "47G7MF",
       "pasesAsignados": 5,
       "mesaId": "mesa_05",
-      "abrioHaceHoras": 317.5,
+      "abrioCuando": {
+        "dias": 13,
+        "hora": "16:18"
+      },
       "rsvp": {
         "estado": "confirmado",
         "pasesConfirmados": 5,
         "nota": "",
-        "haceHoras": 317
+        "cuando": {
+          "dias": 13,
+          "hora": "16:48"
+        }
       }
     },
     {
@@ -354,12 +428,15 @@
       "codigo": "334GEQ33",
       "pasesAsignados": 1,
       "mesaId": "mesa_05",
-      "abrioHaceHoras": 2.5,
+      "abrioCuando": {
+        "dias": 0,
+        "hora": "19:25"
+      },
       "rsvp": {
         "estado": "pendiente",
         "pasesConfirmados": 0,
         "nota": "",
-        "haceHoras": null
+        "cuando": null
       }
     },
     {
@@ -371,12 +448,12 @@
       "codigo": "YT53EHZ",
       "pasesAsignados": 1,
       "mesaId": "mesa_05",
-      "abrioHaceHoras": null,
+      "abrioCuando": null,
       "rsvp": {
         "estado": "pendiente",
         "pasesConfirmados": 0,
         "nota": "",
-        "haceHoras": null
+        "cuando": null
       }
     },
     {
@@ -388,12 +465,18 @@
       "codigo": "YG5TJGB",
       "pasesAsignados": 4,
       "mesaId": "mesa_06",
-      "abrioHaceHoras": 344.5,
+      "abrioCuando": {
+        "dias": 14,
+        "hora": "13:09"
+      },
       "rsvp": {
         "estado": "confirmado",
         "pasesConfirmados": 4,
         "nota": "",
-        "haceHoras": 344
+        "cuando": {
+          "dias": 14,
+          "hora": "13:39"
+        }
       }
     },
     {
@@ -405,12 +488,18 @@
       "codigo": "XVNHRU",
       "pasesAsignados": 3,
       "mesaId": "mesa_06",
-      "abrioHaceHoras": 353.5,
+      "abrioCuando": {
+        "dias": 14,
+        "hora": "12:16"
+      },
       "rsvp": {
         "estado": "confirmado",
         "pasesConfirmados": 3,
         "nota": "",
-        "haceHoras": 353
+        "cuando": {
+          "dias": 14,
+          "hora": "12:46"
+        }
       }
     },
     {
@@ -422,12 +511,12 @@
       "codigo": "BBSWZZQY",
       "pasesAsignados": 1,
       "mesaId": "mesa_06",
-      "abrioHaceHoras": null,
+      "abrioCuando": null,
       "rsvp": {
         "estado": "pendiente",
         "pasesConfirmados": 0,
         "nota": "",
-        "haceHoras": null
+        "cuando": null
       }
     },
     {
@@ -439,12 +528,12 @@
       "codigo": "BVGJRU",
       "pasesAsignados": 1,
       "mesaId": "mesa_06",
-      "abrioHaceHoras": null,
+      "abrioCuando": null,
       "rsvp": {
         "estado": "pendiente",
         "pasesConfirmados": 0,
         "nota": "",
-        "haceHoras": null
+        "cuando": null
       }
     },
     {
@@ -456,12 +545,18 @@
       "codigo": "XP4NBEF",
       "pasesAsignados": 4,
       "mesaId": "mesa_07",
-      "abrioHaceHoras": 380.5,
+      "abrioCuando": {
+        "dias": 15,
+        "hora": "09:04"
+      },
       "rsvp": {
         "estado": "confirmado",
         "pasesConfirmados": 4,
         "nota": "",
-        "haceHoras": 380
+        "cuando": {
+          "dias": 15,
+          "hora": "09:34"
+        }
       }
     },
     {
@@ -473,12 +568,18 @@
       "codigo": "62A7KZPA",
       "pasesAsignados": 3,
       "mesaId": "mesa_07",
-      "abrioHaceHoras": 389.5,
+      "abrioCuando": {
+        "dias": 16,
+        "hora": "16:11"
+      },
       "rsvp": {
         "estado": "confirmado",
         "pasesConfirmados": 3,
         "nota": "",
-        "haceHoras": 389
+        "cuando": {
+          "dias": 16,
+          "hora": "16:41"
+        }
       }
     },
     {
@@ -490,12 +591,18 @@
       "codigo": "QTHQ6BEB",
       "pasesAsignados": 3,
       "mesaId": "mesa_07",
-      "abrioHaceHoras": 398.5,
+      "abrioCuando": {
+        "dias": 16,
+        "hora": "15:18"
+      },
       "rsvp": {
         "estado": "confirmado",
         "pasesConfirmados": 3,
         "nota": "",
-        "haceHoras": 398
+        "cuando": {
+          "dias": 16,
+          "hora": "15:48"
+        }
       }
     },
     {
@@ -507,12 +614,18 @@
       "codigo": "XKJ96P9",
       "pasesAsignados": 2,
       "mesaId": "mesa_08",
-      "abrioHaceHoras": 407.5,
+      "abrioCuando": {
+        "dias": 17,
+        "hora": "22:25"
+      },
       "rsvp": {
         "estado": "confirmado",
         "pasesConfirmados": 2,
         "nota": "",
-        "haceHoras": 407
+        "cuando": {
+          "dias": 17,
+          "hora": "22:55"
+        }
       }
     },
     {
@@ -524,12 +637,18 @@
       "codigo": "4CD2AR",
       "pasesAsignados": 3,
       "mesaId": "mesa_08",
-      "abrioHaceHoras": 416.5,
+      "abrioCuando": {
+        "dias": 17,
+        "hora": "13:02"
+      },
       "rsvp": {
         "estado": "confirmado",
         "pasesConfirmados": 3,
         "nota": "",
-        "haceHoras": 416
+        "cuando": {
+          "dias": 17,
+          "hora": "13:32"
+        }
       }
     },
     {
@@ -541,12 +660,18 @@
       "codigo": "QAHHJJ",
       "pasesAsignados": 2,
       "mesaId": "mesa_08",
-      "abrioHaceHoras": 20.5,
+      "abrioCuando": {
+        "dias": 0,
+        "hora": "09:09"
+      },
       "rsvp": {
         "estado": "confirmado",
         "pasesConfirmados": 2,
         "nota": "",
-        "haceHoras": 20
+        "cuando": {
+          "dias": 0,
+          "hora": "09:39"
+        }
       }
     },
     {
@@ -558,12 +683,18 @@
       "codigo": "KSRY3PR4",
       "pasesAsignados": 2,
       "mesaId": "mesa_08",
-      "abrioHaceHoras": 434.5,
+      "abrioCuando": {
+        "dias": 18,
+        "hora": "19:16"
+      },
       "rsvp": {
         "estado": "confirmado",
         "pasesConfirmados": 2,
         "nota": "",
-        "haceHoras": 434
+        "cuando": {
+          "dias": 18,
+          "hora": "19:46"
+        }
       }
     },
     {
@@ -575,12 +706,18 @@
       "codigo": "FNTS66ZH",
       "pasesAsignados": 2,
       "mesaId": "mesa_09",
-      "abrioHaceHoras": 140.5,
+      "abrioCuando": {
+        "dias": 5,
+        "hora": "09:23"
+      },
       "rsvp": {
         "estado": "no_asiste",
         "pasesConfirmados": 0,
         "nota": "",
-        "haceHoras": 140
+        "cuando": {
+          "dias": 5,
+          "hora": "09:53"
+        }
       }
     },
     {
@@ -592,12 +729,18 @@
       "codigo": "XAXBZ7",
       "pasesAsignados": 1,
       "mesaId": "mesa_09",
-      "abrioHaceHoras": 452.5,
+      "abrioCuando": {
+        "dias": 18,
+        "hora": "09:00"
+      },
       "rsvp": {
         "estado": "no_asiste",
         "pasesConfirmados": 0,
         "nota": "",
-        "haceHoras": 452
+        "cuando": {
+          "dias": 18,
+          "hora": "09:30"
+        }
       }
     },
     {
@@ -609,12 +752,18 @@
       "codigo": "RVZN2QR5",
       "pasesAsignados": 2,
       "mesaId": "mesa_09",
-      "abrioHaceHoras": 461.5,
+      "abrioCuando": {
+        "dias": 19,
+        "hora": "16:04"
+      },
       "rsvp": {
         "estado": "confirmado",
         "pasesConfirmados": 2,
         "nota": "",
-        "haceHoras": 461
+        "cuando": {
+          "dias": 19,
+          "hora": "16:34"
+        }
       }
     },
     {
@@ -626,12 +775,18 @@
       "codigo": "KA6XM62",
       "pasesAsignados": 2,
       "mesaId": "mesa_09",
-      "abrioHaceHoras": 470.5,
+      "abrioCuando": {
+        "dias": 19,
+        "hora": "15:11"
+      },
       "rsvp": {
         "estado": "confirmado",
         "pasesConfirmados": 2,
         "nota": "",
-        "haceHoras": 470
+        "cuando": {
+          "dias": 19,
+          "hora": "15:41"
+        }
       }
     },
     {
@@ -643,12 +798,18 @@
       "codigo": "RAS6CY66",
       "pasesAsignados": 2,
       "mesaId": "mesa_09",
-      "abrioHaceHoras": 479.5,
+      "abrioCuando": {
+        "dias": 20,
+        "hora": "22:18"
+      },
       "rsvp": {
         "estado": "confirmado",
         "pasesConfirmados": 2,
         "nota": "",
-        "haceHoras": 479
+        "cuando": {
+          "dias": 20,
+          "hora": "22:48"
+        }
       }
     },
     {
@@ -660,12 +821,18 @@
       "codigo": "7FD8FNQ",
       "pasesAsignados": 2,
       "mesaId": "mesa_10",
-      "abrioHaceHoras": 488.5,
+      "abrioCuando": {
+        "dias": 20,
+        "hora": "13:25"
+      },
       "rsvp": {
         "estado": "confirmado",
         "pasesConfirmados": 2,
         "nota": "",
-        "haceHoras": 488
+        "cuando": {
+          "dias": 20,
+          "hora": "13:55"
+        }
       }
     },
     {
@@ -677,12 +844,18 @@
       "codigo": "PNUPADGJ",
       "pasesAsignados": 2,
       "mesaId": "mesa_10",
-      "abrioHaceHoras": 497.5,
+      "abrioCuando": {
+        "dias": 20,
+        "hora": "12:02"
+      },
       "rsvp": {
         "estado": "confirmado",
         "pasesConfirmados": 2,
         "nota": "",
-        "haceHoras": 497
+        "cuando": {
+          "dias": 20,
+          "hora": "12:32"
+        }
       }
     },
     {
@@ -694,12 +867,18 @@
       "codigo": "978PAVZ",
       "pasesAsignados": 2,
       "mesaId": "mesa_10",
-      "abrioHaceHoras": 506.5,
+      "abrioCuando": {
+        "dias": 21,
+        "hora": "19:09"
+      },
       "rsvp": {
         "estado": "confirmado",
         "pasesConfirmados": 2,
         "nota": "",
-        "haceHoras": 506
+        "cuando": {
+          "dias": 21,
+          "hora": "19:39"
+        }
       }
     },
     {
@@ -711,12 +890,18 @@
       "codigo": "QV4DRX",
       "pasesAsignados": 2,
       "mesaId": "mesa_10",
-      "abrioHaceHoras": 515.5,
+      "abrioCuando": {
+        "dias": 21,
+        "hora": "10:16"
+      },
       "rsvp": {
         "estado": "confirmado",
         "pasesConfirmados": 2,
         "nota": "",
-        "haceHoras": 515
+        "cuando": {
+          "dias": 21,
+          "hora": "10:46"
+        }
       }
     },
     {
@@ -728,12 +913,15 @@
       "codigo": "H27P6D6",
       "pasesAsignados": 1,
       "mesaId": "mesa_10",
-      "abrioHaceHoras": 138,
+      "abrioCuando": {
+        "dias": 5,
+        "hora": "11:53"
+      },
       "rsvp": {
         "estado": "pendiente",
         "pasesConfirmados": 0,
         "nota": "",
-        "haceHoras": null
+        "cuando": null
       }
     },
     {
@@ -745,12 +933,18 @@
       "codigo": "MQ877Y",
       "pasesAsignados": 2,
       "mesaId": "mesa_11",
-      "abrioHaceHoras": 533.5,
+      "abrioCuando": {
+        "dias": 22,
+        "hora": "16:00"
+      },
       "rsvp": {
         "estado": "confirmado",
         "pasesConfirmados": 2,
         "nota": "",
-        "haceHoras": 533
+        "cuando": {
+          "dias": 22,
+          "hora": "16:30"
+        }
       }
     },
     {
@@ -762,12 +956,18 @@
       "codigo": "T7K5R2J4",
       "pasesAsignados": 2,
       "mesaId": "mesa_11",
-      "abrioHaceHoras": 542.5,
+      "abrioCuando": {
+        "dias": 22,
+        "hora": "15:07"
+      },
       "rsvp": {
         "estado": "confirmado",
         "pasesConfirmados": 2,
         "nota": "",
-        "haceHoras": 542
+        "cuando": {
+          "dias": 22,
+          "hora": "15:37"
+        }
       }
     },
     {
@@ -779,12 +979,18 @@
       "codigo": "6SUWER",
       "pasesAsignados": 2,
       "mesaId": "mesa_11",
-      "abrioHaceHoras": 551.5,
+      "abrioCuando": {
+        "dias": 23,
+        "hora": "22:11"
+      },
       "rsvp": {
         "estado": "confirmado",
         "pasesConfirmados": 2,
         "nota": "",
-        "haceHoras": 551
+        "cuando": {
+          "dias": 23,
+          "hora": "22:41"
+        }
       }
     },
     {
@@ -796,12 +1002,15 @@
       "codigo": "4XFZHG",
       "pasesAsignados": 1,
       "mesaId": "mesa_11",
-      "abrioHaceHoras": 17,
+      "abrioCuando": {
+        "dias": 1,
+        "hora": "12:48"
+      },
       "rsvp": {
         "estado": "pendiente",
         "pasesConfirmados": 0,
         "nota": "",
-        "haceHoras": null
+        "cuando": null
       }
     },
     {
@@ -813,12 +1022,12 @@
       "codigo": "XJTEBTX",
       "pasesAsignados": 1,
       "mesaId": "mesa_11",
-      "abrioHaceHoras": null,
+      "abrioCuando": null,
       "rsvp": {
         "estado": "pendiente",
         "pasesConfirmados": 0,
         "nota": "",
-        "haceHoras": null
+        "cuando": null
       }
     },
     {
@@ -830,12 +1039,18 @@
       "codigo": "HPX459U4",
       "pasesAsignados": 2,
       "mesaId": "mesa_12",
-      "abrioHaceHoras": 578.5,
+      "abrioCuando": {
+        "dias": 24,
+        "hora": "19:02"
+      },
       "rsvp": {
         "estado": "confirmado",
         "pasesConfirmados": 2,
         "nota": "",
-        "haceHoras": 578
+        "cuando": {
+          "dias": 24,
+          "hora": "19:32"
+        }
       }
     },
     {
@@ -847,12 +1062,18 @@
       "codigo": "Q9PQB7",
       "pasesAsignados": 2,
       "mesaId": "mesa_12",
-      "abrioHaceHoras": 587.5,
+      "abrioCuando": {
+        "dias": 24,
+        "hora": "10:09"
+      },
       "rsvp": {
         "estado": "confirmado",
         "pasesConfirmados": 2,
         "nota": "",
-        "haceHoras": 587
+        "cuando": {
+          "dias": 24,
+          "hora": "10:39"
+        }
       }
     },
     {
@@ -864,12 +1085,12 @@
       "codigo": "E32QRP",
       "pasesAsignados": 2,
       "mesaId": null,
-      "abrioHaceHoras": null,
+      "abrioCuando": null,
       "rsvp": {
         "estado": "pendiente",
         "pasesConfirmados": 0,
         "nota": "",
-        "haceHoras": null
+        "cuando": null
       }
     },
     {
@@ -881,12 +1102,12 @@
       "codigo": "BQZ3KC",
       "pasesAsignados": 2,
       "mesaId": null,
-      "abrioHaceHoras": null,
+      "abrioCuando": null,
       "rsvp": {
         "estado": "pendiente",
         "pasesConfirmados": 0,
         "nota": "",
-        "haceHoras": null
+        "cuando": null
       }
     },
     {
@@ -898,12 +1119,15 @@
       "codigo": "KJF5R3",
       "pasesAsignados": 1,
       "mesaId": null,
-      "abrioHaceHoras": 168,
+      "abrioCuando": {
+        "dias": 7,
+        "hora": "21:30"
+      },
       "rsvp": {
         "estado": "pendiente",
         "pasesConfirmados": 0,
         "nota": "",
-        "haceHoras": null
+        "cuando": null
       }
     },
     {
@@ -915,12 +1139,18 @@
       "codigo": "UJPTGHS",
       "pasesAsignados": 4,
       "mesaId": null,
-      "abrioHaceHoras": 122.5,
+      "abrioCuando": {
+        "dias": 5,
+        "hora": "19:07"
+      },
       "rsvp": {
         "estado": "no_asiste",
         "pasesConfirmados": 0,
         "nota": "",
-        "haceHoras": 122
+        "cuando": {
+          "dias": 5,
+          "hora": "19:37"
+        }
       }
     },
     {
@@ -932,12 +1162,18 @@
       "codigo": "C7AWH9K",
       "pasesAsignados": 4,
       "mesaId": null,
-      "abrioHaceHoras": 632.5,
+      "abrioCuando": {
+        "dias": 26,
+        "hora": "13:14"
+      },
       "rsvp": {
         "estado": "no_asiste",
         "pasesConfirmados": 0,
         "nota": "",
-        "haceHoras": 632
+        "cuando": {
+          "dias": 26,
+          "hora": "13:44"
+        }
       }
     }
   ],
@@ -1022,7 +1258,10 @@
       "familiaId": "fam_01",
       "autor": "Familia García Pérez",
       "texto": "¡Ahí estaremos! Nos llena de alegría verlos dar este paso. Con cariño, los García Pérez.",
-      "haceHoras": 50
+      "cuando": {
+        "dias": 2,
+        "hora": "19:50"
+      }
     },
     {
       "id": "msg_02",
@@ -1030,7 +1269,10 @@
       "familiaId": "fam_03",
       "autor": "Ana y Luis López",
       "texto": "Con mucho cariño, cuenten con nosotros para bailar toda la noche.",
-      "haceHoras": 98
+      "cuando": {
+        "dias": 4,
+        "hora": "19:34"
+      }
     },
     {
       "id": "msg_03",
@@ -1038,7 +1280,10 @@
       "familiaId": "fam_05",
       "autor": "Familia Gutiérrez",
       "texto": "Diego, tu abuela ya está escogiendo vestido. Ahí nos vemos.",
-      "haceHoras": 170
+      "cuando": {
+        "dias": 7,
+        "hora": "19:48"
+      }
     },
     {
       "id": "msg_04",
@@ -1046,7 +1291,10 @@
       "familiaId": "fam_26",
       "autor": "Paola y Bruno Cárdenas",
       "texto": "¡Qué emoción! Ya compramos el vuelo desde Monterrey.",
-      "haceHoras": 20
+      "cuando": {
+        "dias": 0,
+        "hora": "09:39"
+      }
     },
     {
       "id": "msg_05",
@@ -1054,7 +1302,10 @@
       "familiaId": "fam_28",
       "autor": "Dra. Soto",
       "texto": "Lamentamos mucho no poder acompañarlos; estaremos fuera del país. Les deseamos toda la felicidad.",
-      "haceHoras": 140
+      "cuando": {
+        "dias": 5,
+        "hora": "09:53"
+      }
     },
     {
       "id": "msg_06",
@@ -1062,7 +1313,10 @@
       "familiaId": "fam_48",
       "autor": "Familia Benavides",
       "texto": "Les mandamos un abrazo enorme; ese fin de semana tenemos otra boda en Saltillo.",
-      "haceHoras": 122
+      "cuando": {
+        "dias": 5,
+        "hora": "19:37"
+      }
     }
   ],
   "regalos": [
@@ -1097,64 +1351,88 @@
       "eventoId": "evt_demo_md",
       "tipo": "apertura",
       "familiaId": "fam_07",
-      "texto": "Familia Martínez abrió su invitación.",
-      "haceHoras": 1
+      "texto": "{familia} abrió su invitación.",
+      "cuando": {
+        "dias": 0,
+        "hora": "20:32"
+      }
     },
     {
       "id": "act_02",
       "eventoId": "evt_demo_md",
       "tipo": "apertura",
       "familiaId": "fam_15",
-      "texto": "Ing. Rafael Cantú abrió su invitación.",
-      "haceHoras": 2.5
+      "texto": "{familia} abrió su invitación.",
+      "cuando": {
+        "dias": 0,
+        "hora": "19:25"
+      }
     },
     {
       "id": "act_03",
       "eventoId": "evt_demo_md",
       "tipo": "confirmacion",
       "familiaId": "fam_26",
-      "texto": "Paola y Bruno Cárdenas confirmaron 2 personas y les dejaron un mensaje.",
-      "haceHoras": 20
+      "texto": "{familia} confirmaron 2 personas y les dejaron un mensaje.",
+      "cuando": {
+        "dias": 0,
+        "hora": "09:39"
+      }
     },
     {
       "id": "act_04",
       "eventoId": "evt_demo_md",
       "tipo": "apertura",
       "familiaId": "fam_41",
-      "texto": "Carla Zamora abrió su invitación.",
-      "haceHoras": 17
+      "texto": "{familia} abrió su invitación.",
+      "cuando": {
+        "dias": 1,
+        "hora": "12:48"
+      }
     },
     {
       "id": "act_05",
       "eventoId": "evt_demo_md",
       "tipo": "confirmacion",
       "familiaId": "fam_01",
-      "texto": "Familia García Pérez confirmó 4 personas y les dejó un mensaje.",
-      "haceHoras": 50
+      "texto": "{familia} confirmó 4 personas y les dejó un mensaje.",
+      "cuando": {
+        "dias": 2,
+        "hora": "19:50"
+      }
     },
     {
       "id": "act_06",
       "eventoId": "evt_demo_md",
       "tipo": "confirmacion",
       "familiaId": "fam_11",
-      "texto": "Familia Flores confirmó 4 personas.",
-      "haceHoras": 68
+      "texto": "{familia} confirmó 4 personas.",
+      "cuando": {
+        "dias": 2,
+        "hora": "09:57"
+      }
     },
     {
       "id": "act_07",
       "eventoId": "evt_demo_md",
       "tipo": "no_asiste",
       "familiaId": "fam_48",
-      "texto": "Familia Benavides respondió que no podrá ir.",
-      "haceHoras": 122
+      "texto": "{familia} respondió que no podrá ir.",
+      "cuando": {
+        "dias": 5,
+        "hora": "19:37"
+      }
     },
     {
       "id": "act_08",
       "eventoId": "evt_demo_md",
       "tipo": "no_asiste",
       "familiaId": "fam_28",
-      "texto": "Dra. Soto respondió que no podrá ir.",
-      "haceHoras": 140
+      "texto": "{familia} respondió que no podrá ir.",
+      "cuando": {
+        "dias": 5,
+        "hora": "09:53"
+      }
     }
   ]
 }
