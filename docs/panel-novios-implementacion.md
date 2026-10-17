@@ -10,8 +10,9 @@ El diseño viene en JSX/React; aquí se traduce a JS plano.
 - **Resumen**: aprobado (celular y escritorio).
 - **Invitados**: aprobada (celular y escritorio).
 - **Mesas**: aprobada (celular y escritorio).
-- **Siguiente**: Más. Cada pantalla se muestra en el navegador
-  (celular y escritorio) y se espera aprobación antes de pasar a la siguiente.
+- **Más** (Mensajes, Actividad, Mesa de regalos, Datos del evento, Exportar): Mesa de regalos aprobada con ajustes; el resto, en revisión.
+- Cada pantalla se muestra en el navegador (celular y escritorio) y se espera aprobación antes de
+  pasar a la siguiente.
 
 ## Qué hay
 
@@ -59,6 +60,30 @@ El diseño viene en JSX/React; aquí se traduce a JS plano.
   cuentan en la ocupación; «Liberar lugares» las pasa a sin mesa.
 - `btn--quitar` (texto vino) sirve para «Quitar de la lista» y «Quitar esta mesa».
 
+## Más
+
+- Menú en `src/panel/views/mas.js`; cada subvista (`#mensajes`, `#actividad`, `#regalos`,
+  `#datos-evento`, `#exportar`) usa `subvista()` de `componentes.js` («Volver a Más»). El
+  encabezado del panel muestra el nombre de la subsección (por ejemplo «Mesa de regalos»).
+  En escritorio la columna mide como máximo 640px (1040px en Mesa de regalos).
+- Etiqueta «Demo» única en el encabezado del panel (debajo del sello en celular, junto a «Ver mi
+  invitación» en escritorio). Los textos de la demo no repiten «ficticio».
+- No se pudo copiar el sello «rs» oficial desde el diseño; el pie de Más lleva solo el wordmark.
+- **Mesa de regalos**: `guardarRegalo` y `eliminarRegalo` en el store; tipos `mesa`, `lista` y
+  `transferencia`. La lluvia de sobres es `evento.lluviaDeSobres` (ya no es un regalo). Seed: Liverpool
+  (evento n.º 00000000), Amazon (lista n.º 00000000) y «Banco Ejemplo · cuenta 0000 0000 0000 0000»,
+  sin enlaces. Vista previa con el tema del evento (`aplicarTema` sobre la tarjeta).
+- Celular: vista previa abajo y cada opción se edita en una hoja. Escritorio: vista previa fija a la
+  derecha y la opción se edita en la columna izquierda (la hoja la taparía), con la vista previa
+  cambiando mientras escriben.
+- **Datos del evento**: fechas en dd/mm/aaaa (`leerFechaNumerica`; las diagonales se ponen solas
+  porque el teclado numérico del celular no las tiene). La fecha límite se guarda como días antes de
+  la boda y debe ser anterior a ella. Si no cambian la fecha, la demo sigue en «hoy + 58 días»; si la
+  cambian, queda fija hasta «reiniciar demo». La hora de la ceremonia es también `evento.hora`.
+- **Exportar**: `src/lib/xlsx.js` genera un .xlsx real sin librerías (ZIP sin compresión): toda la
+  lista, solo confirmados o por mesa (sin quienes no asisten). Encabezado en negritas y fijo.
+- `STORAGE_KEY` subió a v4 por los cambios del seed.
+
 ## Datos
 
 - `src/data/seed/mariana-diego.json` usa los datos ficticios del diseño: 49 familias, 120 pases y
@@ -79,4 +104,4 @@ El diseño viene en JSX/React; aquí se traduce a JS plano.
   salen solo de `src/lib/links.js` (`demo.ramosmkt.lat`).
 - **Mesa de regalos**: usar datos claramente ficticios (por ejemplo «Banco Ejemplo · cuenta
   0000 0000 0000 0000»). Nunca una cuenta o CLABE con formato real, aunque el diseño traiga una
-  (`PanelData.js` trae una CLABE de BBVA: no usarla). Los regalos del seed todavía no se tocan.
+  (`PanelData.js` trae una CLABE de BBVA: no usarla).

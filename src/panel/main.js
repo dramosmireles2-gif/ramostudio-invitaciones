@@ -21,17 +21,18 @@ import * as datosEvento from './views/datos-evento.js';
 import * as exportar from './views/exportar.js';
 import * as mas from './views/mas.js';
 
-// pestaña = la pestaña que se marca como actual.
+// pestaña = la pestaña que se marca como actual. El encabezado muestra el
+// título de la vista (en las subvistas de Más, el de la subsección).
 const VISTAS = {
   resumen: { titulo: 'Resumen', pestana: 'resumen', modulo: resumen },
   invitados: { titulo: 'Sus invitados', pestana: 'invitados', modulo: familias },
   mesas: { titulo: 'Mesas', pestana: 'mesas', modulo: mesas },
   mas: { titulo: 'Más', pestana: 'mas', modulo: mas },
-  mensajes: { titulo: 'Mensajes', pestana: 'mas', modulo: mensajes },
+  mensajes: { titulo: 'Mensajes de sus invitados', pestana: 'mas', modulo: mensajes },
   actividad: { titulo: 'Actividad reciente', pestana: 'mas', modulo: actividad },
   regalos: { titulo: 'Mesa de regalos', pestana: 'mas', modulo: regalos },
   'datos-evento': { titulo: 'Datos del evento', pestana: 'mas', modulo: datosEvento },
-  exportar: { titulo: 'Exportar', pestana: 'mas', modulo: exportar },
+  exportar: { titulo: 'Exportar lista a Excel', pestana: 'mas', modulo: exportar },
 };
 const PESTANAS = [['resumen', 'Resumen'], ['invitados', 'Invitados'], ['mesas', 'Mesas'], ['mas', 'Más']];
 
@@ -43,6 +44,10 @@ const escritorioMq = matchMedia('(min-width: 1024px)');
 
 const pestanas = (clase) => PESTANAS.map(([id, texto]) =>
   crudo(html`<a class="${clase}" href="#${id}" data-pestana="${id}">${texto}</a>`));
+
+// Una sola etiqueta discreta avisa que todo es demo con datos de ejemplo.
+// Celular: debajo del sello. Escritorio: junto a "Ver mi invitación".
+const demo = html`<span class="panel-demo" title="Esta es una demo con datos de ejemplo">Demo</span>`;
 
 document.getElementById('panel').innerHTML = html`
   <aside class="panel-lateral">
@@ -57,12 +62,13 @@ document.getElementById('panel').innerHTML = html`
   </aside>
   <div class="panel-principal">
     <header class="panel-cabeza">
-      <span class="panel-cabeza__sello">${crudo(waxSeal(tema.monograma, 48))}</span>
+      <span class="panel-cabeza__sello">${crudo(waxSeal(tema.monograma, 48))}${crudo(demo)}</span>
       <div class="panel-cabeza__textos">
         <div class="label panel-cabeza__evento">${evento.titulo} · ${fechaNumerica(evento.fecha, { corta: true })}</div>
         <div class="label panel-cabeza__eyebrow">Su panel de boda</div>
         <h1 class="t-h1 panel-cabeza__titulo"></h1>
       </div>
+      ${crudo(demo)}
       <a class="btn btn--secondary panel-cabeza__invitacion" href="${rutaInvitacion(evento.slug)}" target="_blank" rel="noopener">Ver mi invitación</a>
     </header>
     <div class="panel-cabeza__filete">${crudo(goldRule())}</div>

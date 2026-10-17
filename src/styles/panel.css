@@ -39,6 +39,14 @@
 .panel-cabeza__textos { flex: 1; min-width: 0; }
 .panel-cabeza__evento { letter-spacing: .12em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .panel-cabeza__filete { padding: 0 24px 16px; }
+/* Una sola etiqueta discreta: todo el panel es demo con datos de ejemplo. */
+.panel-cabeza__sello { flex: none; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.panel-cabeza > .panel-demo { display: none; }
+.panel-demo {
+  flex: none; padding: 2px 8px; border: 1px solid var(--line-field); border-radius: var(--radius-pill);
+  font-family: var(--font-sans); font-size: var(--fs-micro); font-weight: var(--fw-semibold); letter-spacing: .14em; text-transform: uppercase;
+  color: var(--rs-pizarra);
+}
 .panel-vista { display: flex; flex-direction: column; min-width: 0; }
 
 .panel-pestanas {
@@ -82,6 +90,7 @@
   .panel-cabeza__eyebrow { display: block; }
   .panel-cabeza__titulo { font-size: 36px; }
   .panel-cabeza__invitacion { display: inline-flex; flex: none; }
+  .panel-cabeza > .panel-demo { display: inline-block; align-self: center; margin-left: auto; padding: 3px 10px; }
   .panel-cabeza__filete { padding: 0; }
 }
 
@@ -218,3 +227,61 @@
 .detalle-mesa__sobran { color: var(--rs-vino); border: 1px solid var(--rs-vino); border-radius: 12px; padding: 14px; }
 .detalle-mesa__familia { display: flex; flex-direction: column; gap: 10px; padding: 12px 0; border-top: 1px solid var(--line-paper); }
 .detalle-mesa__familia .status-tag, .detalle-mesa > .btn { align-self: flex-start; }
+
+/* Más -------------------------------------------------------------------- */
+.mas { display: flex; flex-direction: column; gap: 16px; padding: 4px 24px 32px; min-width: 0; }
+.mas__volver { align-self: flex-start; }
+.mas__menu { display: flex; flex-direction: column; padding: 0 18px; }
+.mas__opcion {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 2px; min-height: 72px; padding: 14px 0;
+  border-bottom: 1px solid var(--line-paper); text-decoration: none;
+}
+.mas__opcion:last-child { border-bottom: 0; }
+.mas__opcion-titulo { font-family: var(--font-serif); font-size: 19px; color: var(--rs-tinta); }
+.mas__salir { align-self: center; }
+.mas__marca { display: flex; justify-content: center; margin-top: 8px; }
+.mas__vacio { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 32px 24px; text-align: center; }
+
+.regalos { display: flex; flex-direction: column; gap: 16px; }
+.regalos__opcion { display: flex; flex-direction: column; gap: 8px; }
+.regalos__detalle { overflow-wrap: anywhere; }
+.regalos__acciones { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.regalos__sobres { display: flex; flex-direction: column; gap: 10px; }
+.regalos__editor, .regalos__lista, .regalos__vista, .regalos__en-linea { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.regalos__cancelar { align-self: center; }
+/* Escritorio: lo que editan a la izquierda y la vista previa fija a la derecha. */
+.regalos--escritorio { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: start; }
+.regalos--escritorio .regalos__vista { position: sticky; top: 24px; }
+.regalo-preview {
+  display: flex; flex-direction: column; gap: 16px; align-items: center; text-align: center;
+  padding: 32px 20px; border-radius: var(--radius-lg); border: 1px solid var(--line-hair);
+  background: var(--ev-bg); color: var(--ev-text);
+}
+.regalo-preview__label { font-family: var(--ev-font-data); font-size: 13px; font-weight: var(--fw-semibold); letter-spacing: .2em; text-transform: uppercase; color: var(--ev-text-2); }
+.regalo-preview__titulo { font-family: var(--ev-font-title); font-style: var(--ev-title-style); font-weight: 400; font-size: 26px; line-height: 1.25; color: var(--ev-text); margin: 0; }
+.regalo-preview__texto { font-family: var(--ev-font-data); font-size: 17px; line-height: 1.5; color: var(--ev-text-2); margin: 0; }
+.regalo-preview__opcion {
+  width: 100%; display: flex; flex-direction: column; gap: 8px; align-items: center; padding: 16px;
+  background: var(--ev-surface); border: 1px solid var(--ev-line); border-radius: 12px;
+}
+.regalo-preview__nombre { font-family: var(--ev-font-title); font-size: 20px; color: var(--ev-text); }
+.regalo-preview__detalle { font-family: var(--ev-font-data); font-size: 15px; color: var(--ev-text-2); overflow-wrap: anywhere; }
+
+.datos-evento { display: flex; flex-direction: column; gap: 16px; }
+.datos-evento h3:not(:first-child) { margin-top: 8px; }
+
+.exportar { display: flex; flex-direction: column; gap: 16px; }
+.exportar__opciones { display: flex; flex-direction: column; gap: 10px; }
+.exportar__opcion {
+  display: flex; align-items: center; gap: 14px; min-height: 72px; padding: 14px 18px;
+  text-align: left; cursor: pointer; font: inherit; box-shadow: none;
+}
+.exportar__opcion[aria-checked="true"] { border-color: var(--rs-pizarra); box-shadow: 4px 4px 0 0 var(--rs-crema-sombra); }
+.exportar__radio { width: 20px; height: 20px; flex: none; border-radius: 50%; border: 1px solid var(--rs-pizarra); }
+.exportar__opcion[aria-checked="true"] .exportar__radio { box-shadow: inset 0 0 0 4px var(--rs-crema-papel), inset 0 0 0 10px var(--rs-pizarra); }
+.exportar__textos { display: flex; flex-direction: column; gap: 2px; }
+
+@media (min-width: 1024px) {
+  .mas { padding: 0; max-width: 640px; }
+  .mas--ancha { max-width: 1040px; }
+}

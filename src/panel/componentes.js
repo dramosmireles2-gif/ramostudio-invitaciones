@@ -10,6 +10,17 @@ const ETIQUETA_ACTIVIDAD = {
   no_asiste: ['no', 'No asistirá'],
 };
 
+// Columna de una subvista de Más con "Volver a Más" (el título va en el
+// encabezado del panel). Devuelve el elemento donde va el contenido.
+export function subvista(destino, { ir }) {
+  const el = document.createElement('div');
+  el.className = 'mas';
+  el.innerHTML = html`<button class="btn btn--quiet btn--flush mas__volver" type="button">Volver a Más</button>`;
+  el.querySelector('.mas__volver').addEventListener('click', () => ir('mas'));
+  destino.append(el);
+  return el;
+}
+
 // Lista de actividad agrupada por día ("Hoy", "Ayer", "14/10/2026").
 export function actividadLista(items, zona) {
   let ultimo = null;

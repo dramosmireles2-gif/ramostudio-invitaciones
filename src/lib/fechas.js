@@ -58,3 +58,18 @@ export function haceCuanto(iso, ahora = Date.now()) {
   }
   return relativo.format(Math.round(v), 'year');
 }
+
+// Lee "dd/mm/aaaa". Devuelve { dia, mes, anio } o null si no es una fecha real.
+export function leerFechaNumerica(texto) {
+  const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(String(texto ?? '').trim());
+  if (!m) return null;
+  const [dia, mes, anio] = [Number(m[1]), Number(m[2]), Number(m[3])];
+  const d = new Date(anio, mes - 1, dia);
+  return d.getDate() === dia && d.getMonth() === mes - 1 ? { dia, mes, anio } : null;
+}
+
+// Mientras se escribe: deja solo números y pone las diagonales ("07112026" → "07/11/2026").
+export function formatearMientrasEscribe(texto) {
+  const n = String(texto).replace(/\D/g, '').slice(0, 8);
+  return [n.slice(0, 2), n.slice(2, 4), n.slice(4)].filter(Boolean).join('/');
+}

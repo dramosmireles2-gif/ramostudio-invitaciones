@@ -5,7 +5,7 @@ import seed from './seed/mariana-diego.json';
 import { DEMO_LOGIN_CODE } from '../config.js';
 import { generarCodigo, normalizarCodigo } from './codigos.js';
 
-const STORAGE_KEY = 'ramostudio:demo:v2'; // Subir la versión cuando cambie la forma del seed.
+const STORAGE_KEY = 'ramostudio:demo:v4'; // Subir la versión cuando cambie la forma del seed.
 const SESION_KEY = 'ramostudio:demo:sesion';
 const HORA = 60 * 60 * 1000;
 const DIA = 24 * HORA;
@@ -158,7 +158,7 @@ export async function getEventoPorId(eventoId) {
 
 const CAMPOS_EVENTO = [
   'titulo', 'anfitriones', 'ciudad', 'hora', 'frase', 'padres', 'padrinos', 'sedes',
-  'itinerario', 'vestimenta', 'musica', 'tema', 'fechaLimiteRsvpDiasAntes',
+  'itinerario', 'vestimenta', 'musica', 'tema', 'fechaLimiteRsvpDiasAntes', 'lluviaDeSobres',
 ];
 
 export async function actualizarEvento(eventoId, cambios) {
@@ -384,6 +384,34 @@ export async function enviarMensaje(eventoId, { codigo = null, autor, texto }) {
 
 export async function getRegalos(eventoId) {
   return copia(estado().regalos.filter((r) => r.eventoId === eventoId));
+}
+
+const TIPOS_REGALO = ['mesa', 'lista', 'transferencia'];
+
+// Crea la opción si no trae id; si lo trae, la actualiza.
+export async function guardarRegalo(eventoId, { id = null, tipo, titulo, detalle = '', url = null }) {
+  eventoPorId(eventoId);
+  if (!String(titulo ?? '').trim()) throw new DataError('titulo_requerido', 'Escriban el nombre de la tienda o del banco.');
+  const datos = {
+    tipo: TIPOS_REGALO.includes(tipo) ? tipo : 'mesa',
+    titulo: titulo.trim(),
+    detalle: String(detalle ?? '').trim(),
+    url: tipo === 'transferencia' ? null : String(url ?? '').trim() || null,
+  };
+  let r = id && estado().regalos.find((x) => x.id === id && x.eventoId === eventoId);
+  if (r) Object.assign(r, datos);
+  else {
+    r = { id: nuevoId('reg'), eventoId, ...datos };
+    estado().regalos.push(r);
+  }
+  guardar();
+  return copia(r);
+}
+
+export async function eliminarRegalo(regaloId) {
+  const s = estado();
+  s.regalos = s.regalos.filter((x) => x.id !== regaloId);
+  guardar();
 }
 
 export async function getActividad(eventoId, { limite = 50 } = {}) {

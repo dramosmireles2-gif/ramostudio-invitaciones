@@ -15,6 +15,7 @@
       "zonaHoraria": "America/Mexico_City",
       "ciudad": "Reynosa, Tamaulipas",
       "fechaLimiteRsvpDiasAntes": 35,
+      "lluviaDeSobres": true,
       "frase": "Y en medio de todo, nos encontramos.",
       "padres": {
         "novia": [
@@ -1069,24 +1070,24 @@
       "id": "reg_01",
       "eventoId": "evt_demo_md",
       "tipo": "mesa",
-      "titulo": "Mesa de regalos",
-      "detalle": "Tienda departamental · Evento n.º 00000000 (ficticio)",
+      "titulo": "Liverpool",
+      "detalle": "Evento n.º 00000000",
       "url": null
     },
     {
       "id": "reg_02",
       "eventoId": "evt_demo_md",
-      "tipo": "transferencia",
-      "titulo": "Transferencia",
-      "detalle": "Datos bancarios de ejemplo (no reales)",
+      "tipo": "lista",
+      "titulo": "Amazon",
+      "detalle": "Lista de bodas n.º 00000000",
       "url": null
     },
     {
       "id": "reg_03",
       "eventoId": "evt_demo_md",
-      "tipo": "sobre",
-      "titulo": "Lluvia de sobres",
-      "detalle": "Habrá un buzón a la entrada de la recepción.",
+      "tipo": "transferencia",
+      "titulo": "Banco Ejemplo",
+      "detalle": "Titular: Mariana Solís · cuenta 0000 0000 0000 0000",
       "url": null
     }
   ],
