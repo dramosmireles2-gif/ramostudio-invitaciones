@@ -80,6 +80,14 @@ export function chips(opciones, valor, etiqueta) {
     crudo(html`<button class="chips__chip" type="button" data-chip="${k}" aria-pressed="${valor === k}">${texto}</button>`))}</div>`;
 }
 
+// Control segmentado (dos o tres opciones del mismo ancho). nombre identifica
+// el grupo en data-segmented; cada botón lleva su clave en data-valor.
+export function segmented(nombre, opciones, valor, etiqueta) {
+  return html`<div class="segmented" role="group" aria-label="${etiqueta}" data-segmented="${nombre}"
+    style="--segmentos:${opciones.length}">${opciones.map(([k, texto]) =>
+    crudo(html`<button class="segmented__opcion" type="button" data-valor="${k}" aria-pressed="${valor === k}">${texto}</button>`))}</div>`;
+}
+
 // Mensaje de un invitado como nota de papel.
 export function paperNote({ name, date, msg }) {
   return html`<figure class="paper-note">

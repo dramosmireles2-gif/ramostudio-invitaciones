@@ -118,7 +118,7 @@ export async function montar(destino, ctx) {
       </div>
       <div class="ficha__acciones">
         <button class="btn btn--secondary btn--full" type="button" data-editar>Editar datos</button>
-        <button class="btn btn--quiet ficha__quitar" type="button" data-quitar>Quitar de la lista</button>
+        <button class="btn btn--quiet btn--quitar" type="button" data-quitar>Quitar de la lista</button>
       </div>
     </div>`;
   }

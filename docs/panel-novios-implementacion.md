@@ -9,7 +9,8 @@ El diseño viene en JSX/React; aquí se traduce a JS plano.
 - **Entrar**: aprobada.
 - **Resumen**: aprobado (celular y escritorio).
 - **Invitados**: aprobada (celular y escritorio).
-- **Siguiente**, en este orden: Mesas y Más. Cada pantalla se muestra en el navegador
+- **Mesas**: aprobada (celular y escritorio).
+- **Siguiente**: Más. Cada pantalla se muestra en el navegador
   (celular y escritorio) y se espera aprobación antes de pasar a la siguiente.
 
 ## Qué hay
@@ -41,6 +42,22 @@ El diseño viene en JSX/React; aquí se traduce a JS plano.
 - «Compartir por WhatsApp» abre WhatsApp con la invitación y el enlace de la familia (`links.js`).
 - **QR pendiente**: la hoja «Su código QR» muestra el marco del diseño sin código. Generar el QR
   necesita una librería; preguntar antes de agregarla.
+
+## Mesas
+
+- Vista en `src/panel/views/mesas.js` (ruta `#mesas`). Igual en celular y escritorio; en escritorio la
+  columna mide como máximo 720px, como en el diseño.
+- Totales (con lugar y sin mesa), plano del salón o lista por mesa (`segmented` nuevo en `ui.js`),
+  «Solo confirmados», avisos «Para revisar» (mesa sobrepasada, familias sin mesa, familias que no
+  asisten y siguen sentadas, mesas con 4 personas o menos) y «Agregar mesa».
+- La hoja de cada mesa (o de «Sin mesa») mueve familias, cambia los lugares (8, 10 o 12) y quita la
+  mesa con confirmación. Las nuevas se llaman «Mesa N» después de la más alta.
+- Los lugares se cuentan como en `getMesas`: confirmados si ya respondió, pases si sigue pendiente,
+  ninguno si no asiste. Por eso, a diferencia del diseño, la demo no deja sentar a más personas de las
+  que caben (`asignarMesa` avisa que la mesa está llena); «Sobran» aparece solo si se bajan los lugares.
+- Las familias que no asisten y siguen en una mesa se dibujan con lugares punteados en vino y no
+  cuentan en la ocupación; «Liberar lugares» las pasa a sin mesa.
+- `btn--quitar` (texto vino) sirve para «Quitar de la lista» y «Quitar esta mesa».
 
 ## Datos
 

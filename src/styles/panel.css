@@ -151,8 +151,6 @@
 .ficha__par { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
 .ficha__par .btn { padding: 0 12px; }
 .ficha__acciones { display: flex; flex-direction: column; gap: 6px; }
-.ficha__quitar { --btn-line: var(--rs-vino); }
-.ficha__quitar:hover { color: var(--rs-vino); }
 
 .familia-form { display: flex; flex-direction: column; gap: 16px; }
 .familia-form__par { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
@@ -163,3 +161,60 @@
   background: var(--rs-crema-papel); border: 1px solid var(--rule-color, var(--rs-dorado));
   outline: 1px solid var(--rule-color, var(--rs-dorado)); outline-offset: -10px; border-radius: 8px;
 }
+
+/* Mesas ------------------------------------------------------------------ */
+.mesas { display: flex; flex-direction: column; gap: 16px; padding: 4px 24px 32px; min-width: 0; }
+.mesas--escritorio { padding: 0; max-width: 720px; }
+.mesas__totales { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+.mesas__vacio { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 32px 24px; text-align: center; }
+
+.plano { display: flex; flex-direction: column; gap: 12px; padding: 14px 10px; }
+.plano > .t-meta { padding: 0 6px; }
+.plano__novios {
+  min-height: 48px; display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--rule-color, var(--rs-dorado)); border-radius: 8px;
+}
+.plano__mesas { display: grid; grid-template-columns: repeat(auto-fill, minmax(124px, 1fr)); justify-items: center; gap: 4px; }
+
+.mesa-mini { position: relative; width: var(--tam); height: var(--tam); flex: none; padding: 0; border: 0; background: transparent; cursor: pointer; border-radius: 50%; }
+.mesa-mini__lugar {
+  position: absolute; width: calc(var(--tam) * .165); height: calc(var(--tam) * .165); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-sans); font-size: 9px; font-weight: var(--fw-semibold);
+}
+.mesa-mini__lugar--confirmado { background: var(--rs-pizarra); border: 1px solid var(--rs-pizarra); color: var(--rs-crema); }
+.mesa-mini__lugar--pendiente { background: var(--rs-crema-papel); border: 1px solid var(--rs-pizarra); color: var(--rs-pizarra); }
+.mesa-mini__lugar--no { background: transparent; border: 1px dashed var(--rs-vino); color: var(--rs-vino); }
+.mesa-mini__lugar--libre { background: transparent; border: 1px dashed var(--line-field); }
+.mesa-mini__centro {
+  position: absolute; inset: calc(var(--tam) * .23); border-radius: 50%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: var(--rs-crema-papel); border: 1px solid var(--rule-color, var(--rs-dorado));
+}
+.mesa-mini__centro--llena { border: 2px solid var(--rs-vino); }
+.mesa-mini__nombre { font-family: var(--font-serif); font-size: 15px; line-height: 1.1; color: var(--rs-tinta); }
+.mesa-mini__cupo { font-family: var(--font-sans); font-size: 12px; color: var(--rs-pizarra); }
+.mesa-mini__centro--llena .mesa-mini__cupo { color: var(--rs-vino); font-weight: var(--fw-semibold); }
+
+.leyenda { display: flex; flex-wrap: wrap; gap: 8px 16px; padding: 0 6px; }
+.leyenda__item { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-sans); font-size: var(--fs-small); color: var(--rs-pizarra); }
+.leyenda__muestra { width: 14px; height: 14px; border-radius: 50%; }
+
+.mesa-bloque { display: flex; flex-direction: column; gap: 6px; padding: 16px 18px; }
+.mesa-bloque__cabeza { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.mesa-bloque__filas { border-top: 1px solid var(--rule-color, var(--rs-dorado)); margin-top: 6px; }
+.mesa-bloque__fila { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 10px 0; border-bottom: 1px solid var(--line-paper); }
+.mesa-bloque__fila:last-child { border-bottom: 0; }
+.mesa-bloque__dato { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; width: 100%; }
+.mesa-bloque__dato .t-meta { flex: none; }
+.mesa-bloque > .btn { align-self: flex-start; }
+
+.avisos { padding: 6px 18px; }
+.avisos__item { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 12px 0; border-bottom: 1px solid var(--line-paper); }
+.avisos__item:last-child { border-bottom: 0; }
+.avisos__vacio { padding: 12px 0; }
+
+.detalle-mesa { display: flex; flex-direction: column; gap: 14px; }
+.detalle-mesa__sobran { color: var(--rs-vino); border: 1px solid var(--rs-vino); border-radius: 12px; padding: 14px; }
+.detalle-mesa__familia { display: flex; flex-direction: column; gap: 10px; padding: 12px 0; border-top: 1px solid var(--line-paper); }
+.detalle-mesa__familia .status-tag, .detalle-mesa > .btn { align-self: flex-start; }

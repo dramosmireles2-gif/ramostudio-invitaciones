@@ -58,6 +58,20 @@
 .btn--secondary:hover, .btn--quiet:hover { color: var(--rs-tinta); }
 .btn--secondary:active:not(:disabled), .btn--quiet:active:not(:disabled) { background: var(--btn-press-2, var(--rs-crema-sombra)); }
 .btn--flush { padding: 0; }
+.btn--quitar { --btn-line: var(--rs-vino); }
+.btn--quitar:hover { color: var(--rs-vino); }
+
+/* Segmented: dos o tres vistas de lo mismo. ------------------------------- */
+.segmented {
+  display: grid; grid-template-columns: repeat(var(--segmentos, 2), minmax(0, 1fr));
+  border: 1px solid var(--rs-pizarra); border-radius: 12px; overflow: hidden;
+}
+.segmented__opcion {
+  min-height: 48px; border: 0; cursor: pointer; background: transparent; color: var(--rs-pizarra);
+  font-family: var(--font-sans); font-size: 15px; font-weight: var(--fw-semibold);
+}
+.segmented__opcion + .segmented__opcion { border-left: 1px solid var(--rs-pizarra); }
+.segmented__opcion[aria-pressed="true"] { background: var(--rs-pizarra); color: var(--rs-crema); }
 
 /* Field ------------------------------------------------------------------ */
 .field { display: flex; flex-direction: column; gap: 8px; }
