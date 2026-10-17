@@ -8,7 +8,8 @@ El diseño viene en JSX/React; aquí se traduce a JS plano.
 
 - **Entrar**: aprobada.
 - **Resumen**: aprobado (celular y escritorio).
-- **Siguiente**, en este orden: Invitados, luego Mesas y Más. Cada pantalla se muestra en el navegador
+- **Invitados**: aprobada (celular y escritorio).
+- **Siguiente**, en este orden: Mesas y Más. Cada pantalla se muestra en el navegador
   (celular y escritorio) y se espera aprobación antes de pasar a la siguiente.
 
 ## Qué hay
@@ -24,6 +25,22 @@ El diseño viene en JSX/React; aquí se traduce a JS plano.
   helpers de marcado en `src/lib/ui.js` y pantallas del panel en `src/styles/panel.css`.
 - `src/lib/theme.js`: `aplicarTema` (tokens `--ev-*` de la invitación) y `aplicarTemaPanel` (el panel
   solo toma del evento el acento y el monograma; el botón usa el acento solo si da 4.5:1 con crema).
+
+## Invitados
+
+- Vista en `src/panel/views/familias.js` (ruta `#invitados`). Celular: lista con búsqueda, filtros
+  (Todos, Confirmados, Pendientes, No asisten, No han abierto) y la ficha en
+  `#invitados?familia=<id>` para que Atrás regrese a la lista; la búsqueda y el filtro se conservan.
+  Escritorio: lista y ficha fija de 420px; abre con la primera familia elegida.
+- `#invitados?filtro=pendientes|confirmados|no-asisten|sin-abrir` preselecciona el filtro.
+- Componentes nuevos del design system en `src/lib/ui.js` y `components.css`: `guestRow`, `chips`,
+  `paperNote` y `abrirConfirmacion` (acción destructiva en vino). `select.field__control` lleva flecha.
+- Agregar y editar usan `crearFamilia`, `actualizarFamilia` y `asignarMesa`. Si la mesa está llena,
+  al editar se avisa en el formulario; al agregar, la familia queda sin mesa y se avisa. El WhatsApp es
+  opcional; si se escribe, deben ser 10 números.
+- «Compartir por WhatsApp» abre WhatsApp con la invitación y el enlace de la familia (`links.js`).
+- **QR pendiente**: la hoja «Su código QR» muestra el marco del diseño sin código. Generar el QR
+  necesita una librería; preguntar antes de agregarla.
 
 ## Datos
 

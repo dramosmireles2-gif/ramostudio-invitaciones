@@ -122,3 +122,44 @@
 .recordar__lista { padding: 0 18px; }
 .recordar__familia { display: flex; flex-direction: column; gap: 8px; padding: 14px 0; border-bottom: 1px solid var(--line-paper); }
 .recordar__familia:last-child { border-bottom: 0; }
+
+/* Invitados -------------------------------------------------------------- */
+.invitados { display: flex; flex-direction: column; gap: 16px; padding: 4px 24px 32px; min-width: 0; }
+.invitados__lista { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.invitados__filas { padding: 0 18px; }
+.invitados__ninguna { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
+.invitados__vacio { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 32px 24px; text-align: center; }
+.invitados__volver { align-self: flex-start; }
+.invitados--escritorio { display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 32px; align-items: start; padding: 0; }
+.invitados__lado { position: sticky; top: 24px; }
+
+.ficha { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.ficha__datos { display: flex; flex-direction: column; gap: 14px; }
+.ficha__datos .status-tag { align-self: flex-start; }
+.ficha__titulo { display: flex; flex-direction: column; gap: 6px; }
+.ficha__titulo .t-h1 { font-size: 28px; }
+.ficha__lista { display: flex; flex-direction: column; border-top: 1px solid var(--line-paper); padding-top: 4px; }
+.ficha__dato {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
+  min-height: 48px; padding: 8px 0; border-bottom: 1px solid var(--line-paper);
+}
+.ficha__dato:last-child { border-bottom: 0; }
+.ficha__valor { font-family: var(--font-serif); font-size: 19px; line-height: 1.2; color: var(--rs-tinta); text-align: right; }
+.ficha__valor--numero { font-size: 28px; }
+.ficha__enlace { display: flex; flex-direction: column; gap: 12px; }
+.ficha__url { word-break: break-all; }
+.ficha__par { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
+.ficha__par .btn { padding: 0 12px; }
+.ficha__acciones { display: flex; flex-direction: column; gap: 6px; }
+.ficha__quitar { --btn-line: var(--rs-vino); }
+.ficha__quitar:hover { color: var(--rs-vino); }
+
+.familia-form { display: flex; flex-direction: column; gap: 16px; }
+.familia-form__par { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+
+.qr { display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; }
+.qr__marco {
+  width: 220px; height: 220px; display: flex; align-items: center; justify-content: center; padding: 28px;
+  background: var(--rs-crema-papel); border: 1px solid var(--rule-color, var(--rs-dorado));
+  outline: 1px solid var(--rule-color, var(--rs-dorado)); outline-offset: -10px; border-radius: 8px;
+}

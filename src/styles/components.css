@@ -76,6 +76,20 @@
 .field__control[aria-invalid="true"] { border-color: var(--rs-vino); }
 .field__hint { font-family: var(--font-sans); font-size: 14px; color: var(--field-label, var(--rs-pizarra)); }
 .field__hint--error { color: var(--rs-vino); }
+select.field__control {
+  padding-right: 44px; cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1 1l6 6 6-6' fill='none' stroke='%233E5266' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 16px center;
+}
+
+/* Chips: filtros en píldora. ---------------------------------------------- */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips__chip {
+  min-height: 48px; padding: 0 16px; border-radius: var(--radius-pill); cursor: pointer;
+  font-family: var(--font-sans); font-size: 15px; font-weight: var(--fw-semibold);
+  border: 1px solid var(--rs-pizarra); background: transparent; color: var(--rs-pizarra);
+}
+.chips__chip[aria-pressed="true"] { background: var(--rs-pizarra); color: var(--rs-crema); }
 
 /* StatCard --------------------------------------------------------------- */
 .stat-card {
@@ -97,6 +111,38 @@
 .stat-card__note { font-family: var(--font-sans); font-size: 14px; }
 .stat-card--dark { background: var(--rs-pizarra); border-color: var(--rs-pizarra); box-shadow: none; color: var(--rs-crema); }
 .stat-card--dark .stat-card__value { color: var(--rs-crema); }
+
+/* GuestRow: una familia en la lista de invitados. ----------------------- */
+.guest-row {
+  width: 100%; display: flex; align-items: flex-start; gap: 14px; min-height: 72px; padding: 16px 0;
+  border: 0; border-bottom: 1px solid var(--line-paper); background: transparent;
+  text-align: left; cursor: pointer; min-width: 0; font: inherit; color: inherit;
+}
+.guest-row:last-child { border-bottom: 0; }
+.guest-row[aria-pressed="true"] { background: var(--rs-crema-sombra); box-shadow: -18px 0 0 var(--rs-crema-sombra), 18px 0 0 var(--rs-crema-sombra); }
+.guest-row__inicial {
+  flex: none; width: 40px; height: 40px; border-radius: 50%;
+  border: 1px solid var(--rule-color, var(--rs-dorado));
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-serif); font-style: italic; font-size: 18px; color: var(--rs-pizarra);
+}
+.guest-row__textos { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.guest-row__nombre { font-family: var(--font-serif); font-size: 19px; line-height: 1.25; color: var(--rs-tinta); }
+.guest-row__meta { font-family: var(--font-sans); font-size: 15px; line-height: 1.4; color: var(--rs-pizarra); }
+.guest-row__mensaje {
+  font-family: var(--font-serif); font-style: italic; font-size: 17px; line-height: 1.4; color: var(--rs-tinta);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+
+/* PaperNote: mensaje de un invitado. -------------------------------------- */
+.paper-note {
+  margin: 0; min-width: 0; display: flex; flex-direction: column; gap: 12px; padding: 22px 22px 18px;
+  background: var(--rs-crema-papel); border: 1px solid var(--line-paper); border-radius: var(--radius-sm);
+  box-shadow: 4px 4px 0 0 var(--rs-crema-sombra);
+}
+.paper-note__texto { margin: 0; font-family: var(--font-serif); font-style: italic; font-size: 19px; line-height: 1.45; color: var(--rs-tinta); }
+.paper-note__pie { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-family: var(--font-sans); font-size: 15px; line-height: 1.4; color: var(--rs-pizarra); }
+.paper-note__pie .t-strong { font-weight: var(--fw-semibold); }
 
 /* StatusTag: el estado se distingue por texto y por la forma del punto. ---- */
 .status-tag {
@@ -163,6 +209,14 @@
 .bottom-sheet__asa { align-self: center; width: 40px; height: 4px; border-radius: 2px; background: rgba(62, 82, 102, .25); flex: none; }
 .bottom-sheet__cabeza { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .bottom-sheet__cabeza .btn { padding: 0 4px; flex: none; }
+.overlay--centro { justify-content: center; padding: 24px; }
+.confirmar {
+  position: relative; width: 100%; max-width: 360px; display: flex; flex-direction: column; gap: 14px; padding: 24px;
+  background: var(--rs-crema-papel); border: 1px solid var(--rule-color, var(--rs-dorado)); border-radius: var(--radius-lg);
+  box-shadow: 6px 6px 0 0 var(--rs-crema-sombra);
+}
+.confirmar__acciones { display: flex; flex-direction: column; gap: 10px; margin-top: 6px; }
+.btn--peligro { --btn-bg: var(--rs-vino); --btn-bg-press: #6A322C; --btn-ring: var(--rs-crema); }
 @keyframes subir { from { transform: translateY(24px); opacity: 0; } }
 
 /* Toast ------------------------------------------------------------------ */
