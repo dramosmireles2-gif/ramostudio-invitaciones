@@ -4,12 +4,12 @@ Diseño de origen: proyecto de Claude Design «Panel de novios»
 (https://claude.ai/design/p/76338a84-ae90-4c5f-99c0-74fa747c6212?file=Panel+de+novios.dc.html).
 El diseño viene en JSX/React; aquí se traduce a JS plano.
 
-## Estado (2026-10-16)
+## Estado (2026-10-20)
 
 - **Entrar**: aprobada.
 - **Resumen**: aprobado (celular y escritorio).
 - **Invitados**: aprobada (celular y escritorio).
-- **Mesas**: aprobada (celular y escritorio).
+- **Mesas**: aprobada; rehecha por persona (cada invitado con su mesa), en revisión.
 - **Más** (Mensajes, Actividad, Mesa de regalos, Datos del evento, Exportar): Mesa de regalos y Exportar aprobados; Mensajes, Actividad y Datos del evento
   con ajustes de mapas, horas y fechas (en revisión).
 - Cada pantalla se muestra en el navegador (celular y escritorio) y se espera aprobación antes de
@@ -49,17 +49,87 @@ El diseño viene en JSX/React; aquí se traduce a JS plano.
 
 - Vista en `src/panel/views/mesas.js` (ruta `#mesas`). Igual en celular y escritorio; en escritorio la
   columna mide como máximo 720px, como en el diseño.
-- Totales (con lugar y sin mesa), plano del salón o lista por mesa (`segmented` nuevo en `ui.js`),
-  «Solo confirmados», avisos «Para revisar» (mesa sobrepasada, familias sin mesa, familias que no
-  asisten y siguen sentadas, mesas con 4 personas o menos) y «Agregar mesa».
-- La hoja de cada mesa (o de «Sin mesa») mueve familias, cambia los lugares (8, 10 o 12) y quita la
-  mesa con confirmación. Las nuevas se llaman «Mesa N» después de la más alta.
-- Los lugares se cuentan como en `getMesas`: confirmados si ya respondió, pases si sigue pendiente,
-  ninguno si no asiste. Por eso, a diferencia del diseño, la demo no deja sentar a más personas de las
-  que caben (`asignarMesa` avisa que la mesa está llena); «Sobran» aparece solo si se bajan los lugares.
-- Las familias que no asisten y siguen en una mesa se dibujan con lugares punteados en vino y no
-  cuentan en la ocupación; «Liberar lugares» las pasa a sin mesa.
+- Totales en personas (con lugar y sin mesa), plano del salón o lista por mesa (`segmented` de
+  `ui.js`), «Solo confirmados», avisos «Para revisar» (mesa sobrepasada, personas sin mesa, personas que
+  no asisten y siguen sentadas, mesas con 4 personas o menos) y «Agregar mesa» («Mesa N» después de la
+  más alta).
+- **Plano**: un círculo por persona con sus iniciales; primero confirmados, luego pendientes, luego
+  quienes no asisten (punteado vino, no ocupan lugar) y al final los lugares libres. Los lugares que
+  pasan la capacidad se ven en rojo. Tocar un círculo abre una mini hoja con nombre completo, familia,
+  estado de RSVP y mesa («Ver Mesa N»); tocar el centro abre la hoja de la mesa.
+- **Hoja de mesa** (y la de «Sin mesa»), de arriba abajo: barra de ocupación «12/10» (roja si se pasa,
+  verde si está completa), «Lugares en la mesa» con − y + (1 a 30), el texto de capacidad, la alerta
+  con acción si sobran personas, «9 confirmados · 3 por confirmar» (pendientes atenuados), tarjetas
+  plegables por familia con sus personas y un selector de mesa por persona, «Dividir familia» y
+  «Quitar esta mesa».
+- **Alerta con acción**: sugiere la mesa con más lugares libres y su botón «Mover X personas a
+  Mesa N» abre la selección de personas de esa mesa; no mueve a nadie hasta que confirman.
+- **Dividir familia**: la misma selección con las personas de la familia y la mesa destino. La
+  tarjeta de una familia repartida dice «Dividida: 3 en Mesa 5 · 2 en Mesa 12».
+- La selección solo actualiza el botón y el aviso al marcar (no vuelve a pintar la lista, así no se
+  pierde el foco) y no deja mover a más personas de las que caben.
+- **Quitar esta mesa** confirma: «Las X personas de esta mesa quedarán sin mesa. ¿Quitar?».
 - `btn--quitar` (texto vino) sirve para «Quitar de la lista» y «Quitar esta mesa».
+
+### Modelo: personas con mesa propia
+
+- Cada familia tiene `personas: [{ id, nombre, mesaId }]`, una por pase; la mesa ya no es de la
+  familia (`familia.mesaId` desapareció). Así una familia puede quedar repartida en varias mesas.
+- Seed: 49 familias, 120 personas con nombres ficticios generados a partir del nombre de la familia.
+  Para la demo, Familia Villarreal está dividida (3 en Mesa 5 · 2 en Mesa 12); Mesa 4 queda con
+  2 personas de más y en Mesa 9 siguen sentadas 3 personas que no asistirán.
+- Estado de cada persona (`estadoPersona`): si la familia confirmó menos pases de los asignados,
+  asisten las primeras personas de su lista y el resto queda como «No asiste». Pendiente = por
+  confirmar. Quien no asiste no ocupa lugar aunque siga sentado; al responder que no va (o que van
+  menos), `confirmarAsistencia` deja libres sus lugares.
+- API (`src/data/index.js`):
+  - `asignarPersonasMesa(personaIds, mesaId)`: todo o nada; si no caben, no mueve a nadie
+    (`mesa_llena`) y no sienta a quien no asiste (`persona_no_asiste`). `mesaId = null` = sin mesa.
+  - `asignarPersonaMesa(personaId, mesaId)`: una persona.
+  - `asignarMesa(familiaId, mesaId)`: atajo que mueve a toda la familia.
+  - `getMesas` devuelve `personaIds`, `familiaIds` y `ocupados` (personas que ocupan lugar).
+  - `getResumen().mesas` incluye `personasConMesa`, `personasSinMesa` y `familiasSinMesa`.
+  - Al cambiar los pases de una familia se agregan «Invitado N» (en su mesa si toda está en una) o
+    salen las últimas personas.
+- **Reglas compartidas** en `src/data/reglas.js` (funciones puras, exportadas desde `index.js`):
+  `estadoPersona`, `personasDe`, `lugaresOcupados`, `mesasDeFamilia` y `textoCapacidad`. El texto de
+  capacidad es el mismo en la lista, el plano, la hoja, los avisos y el Excel:
+  - más personas que lugares: «X personas de más · faltan X lugares» (alerta roja);
+  - menos: «Quedan X lugares libres» (neutro);
+  - igual: «Mesa completa» (verde discreto). En el plano va la versión corta («2 de más», «3 libres»,
+    «Completa»). El Resumen del panel no muestra mesas.
+- **Migración (storage v6)**: si no hay datos v6 pero sí v5, v4 o v3, `store.local.js` los convierte:
+  cada persona hereda la mesa que tenía su familia, los nombres salen del seed si la familia existe ahí
+  con los mismos pases y si no quedan como «Invitado 1», «Invitado 2»… Guarda v6 y borra la llave
+  vieja. Probado con una familia movida de mesa y una que no está en el seed.
+- Invitados: la mesa de la familia sale de sus personas («Mesa 4», «Mesa 5 (3) · Mesa 12 (2)» o «Sin
+  mesa»). En «Editar datos», una familia dividida muestra «Dividida (sin cambios)» para no juntarla
+  sin querer.
+- Excel «Por mesa»: hoja «Mesas» (cada mesa con sus personas y su capacidad) y hoja «Por mesa» con una
+  fila por persona (mesa, persona, familia, estado, grupo); quienes no asisten no salen.
+
+### En Supabase
+
+```sql
+create table personas (
+  id         uuid primary key default gen_random_uuid(),
+  familia_id uuid not null references familias(id) on delete cascade,
+  nombre     text not null,
+  orden      int  not null,                                -- define quién asiste si confirman menos pases
+  mesa_id    uuid null references mesas(id) on delete set null,
+  unique (familia_id, orden)
+);
+create index personas_mesa_idx on personas (mesa_id);
+```
+
+- `familias` pierde `mesa_id`; la ocupación de una mesa es un `count` de personas por `mesa_id`
+  (vista o consulta) filtrando a quienes ocupan lugar según el RSVP de su familia.
+- `asignarPersonasMesa` es una función RPC que, en una transacción, revisa el cupo de la mesa y hace
+  `update personas set mesa_id = $mesa where id = any($ids)`; `asignarMesa` la llama con las personas
+  de la familia. Borrar una mesa deja a sus personas sin mesa (`on delete set null`).
+- RLS: la pareja solo ve y cambia las personas de las familias de su evento
+  (`familia_id in (select id from familias where evento_id = …)`).
+- El comentario equivalente está junto a `getMesas` en `store.local.js`.
 
 ## Más
 
@@ -102,17 +172,17 @@ El diseño viene en JSX/React; aquí se traduce a JS plano.
   «Mesas» (cada mesa con sus invitados y al final «Sin mesa») y «Lista por mesa». Las hojas de lista
   tienen encabezado fijo y filtros; los anchos salen del contenido (la columna de enlaces no se
   corta) y los enlaces de invitación son clicables.
-- `STORAGE_KEY` subió a v5 por los cambios del seed.
+- `STORAGE_KEY` subió a v5 por los cambios del seed (después a v6 por las personas).
 
 ## Datos
 
-- `src/data/seed/mariana-diego.json` usa los datos ficticios del diseño: 49 familias, 120 pases y
-  12 mesas de 10. Los códigos de familia son nuevos y aleatorios. Cada familia tiene además `grupo` y
+- `src/data/seed/mariana-diego.json` usa los datos ficticios del diseño: 49 familias, 120 pases (una
+  persona por pase, ver «Modelo: personas con mesa propia») y 12 mesas de 10. Los códigos de familia son nuevos y aleatorios. Cada familia tiene además `grupo` y
   `abrioHaceHoras` (que se convierte en `abrioFecha`). El evento tiene `ciudad`,
   `fechaLimiteRsvpDiasAntes: 35` (faltan 23 días para la fecha límite) y un `tema` nuevo
   (`clave`, `acento`, `monograma` «M·D», `colores --ev-*`, `fuentes`).
 - Se conservaron las sedes ficticias del seed porque el diseño usa nombres y direcciones que podrían ser reales.
-- `store.local.js` usa `STORAGE_KEY` v2 y tiene `getFamiliasPendientes`. `getResumen` incluye
+- `store.local.js` usa `STORAGE_KEY` v6 (migra v5, v4 y v3) y tiene `getFamiliasPendientes`. `getResumen` incluye
   `pases.noAsisten`, `familias.sinAbrir` y `diasParaFechaLimite`. Los tipos de actividad son
   `confirmacion`, `no_asiste`, `apertura` y `mensaje`.
 - Las familias de la demo no tienen teléfono, así que «Abrir WhatsApp» abre WhatsApp sin número y con el
