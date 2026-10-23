@@ -21,6 +21,10 @@ export function subvista(destino, { ir }) {
   return el;
 }
 
+// Lo de los últimos minutos se ve como "Ahora" (p. ej. quien acaba de confirmar).
+const AHORA_MS = 5 * 60 * 1000;
+const cuandoActividad = (iso, zona) => (Date.now() - new Date(iso).getTime() < AHORA_MS ? 'Ahora' : hora(iso, zona));
+
 // Lista de actividad agrupada por día ("Hoy", "Ayer", "14/10/2026").
 export function actividadLista(items, zona) {
   let ultimo = null;
@@ -30,7 +34,7 @@ export function actividadLista(items, zona) {
     ultimo = dia;
     const etiqueta = ETIQUETA_ACTIVIDAD[a.tipo];
     return crudo(html`${cabeza}<div class="actividad__fila">
-      <span class="t-meta">${hora(a.fecha, zona)}</span>
+      <span class="t-meta">${cuandoActividad(a.fecha, zona)}</span>
       <div class="actividad__texto"><p class="t-body t-strong">${a.texto}</p>
         ${etiqueta ? crudo(statusTag(...etiqueta)) : ''}</div>
     </div>`);

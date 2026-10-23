@@ -1,5 +1,5 @@
 {
-  "_nota": "DATOS DE DEMO. Ningún nombre (familias y personas) ni teléfono es real; el mapa apunta a un lugar público (Plaza Principal de Reynosa). Fechas relativas: fechaRelativaDias = días desde hoy; cuando = { dias atrás, hora } en la zona del evento.",
+  "_nota": "DATOS DE DEMO. Ningún nombre (familias y personas) ni teléfono es real; el mapa apunta a un lugar público (Plaza Principal de Reynosa). Fechas relativas: fechaRelativaDias = días desde hoy; cuando = { dias atrás, hora } en la zona del evento. Familia del recorrido invitado → panel: fam_demo, código DEMO (?f=demo), 2 pases y sin abrir; es el único código no aleatorio y solo existe en el demo.",
   "eventos": [
     {
       "id": "evt_demo_md",
@@ -1823,6 +1823,34 @@
           "dias": 26,
           "hora": "13:44"
         }
+      }
+    },
+    {
+      "id": "fam_demo",
+      "eventoId": "evt_demo_md",
+      "nombre": "Familia Herrera Luna",
+      "grupo": "Amigos",
+      "telefono": "",
+      "codigo": "DEMO",
+      "pasesAsignados": 2,
+      "personas": [
+        {
+          "id": "per_demo_1",
+          "nombre": "Andrés Herrera",
+          "mesaId": "mesa_12"
+        },
+        {
+          "id": "per_demo_2",
+          "nombre": "Paulina Luna",
+          "mesaId": "mesa_12"
+        }
+      ],
+      "abrioCuando": null,
+      "rsvp": {
+        "estado": "pendiente",
+        "pasesConfirmados": 0,
+        "nota": "",
+        "cuando": null
       }
     }
   ],

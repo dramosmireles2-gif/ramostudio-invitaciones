@@ -6,9 +6,12 @@ import { DEMO_LOGIN_CODE } from '../config.js';
 import { generarCodigo, normalizarCodigo } from './codigos.js';
 import { personasDe } from './reglas.js';
 
-const STORAGE_KEY = 'ramostudio:demo:v6'; // Subir la versión cuando cambie la forma del seed.
-// Versiones anteriores con la misma forma salvo la mesa (familia.mesaId): se migran.
-const KEYS_ANTERIORES = ['ramostudio:demo:v5', 'ramostudio:demo:v4', 'ramostudio:demo:v3'];
+const STORAGE_KEY = 'ramostudio:demo:v7'; // Subir la versión cuando cambie la forma del seed.
+// Versiones anteriores: v3–v5 traen la mesa por familia (familia.mesaId) y a
+// v3–v6 les falta la familia demo (código DEMO). Se migran.
+const KEYS_ANTERIORES = ['ramostudio:demo:v6', 'ramostudio:demo:v5', 'ramostudio:demo:v4', 'ramostudio:demo:v3'];
+// Familia del recorrido invitado → panel (?f=demo). Único código no aleatorio.
+const CODIGO_DEMO = 'DEMO';
 const SESION_KEY = 'ramostudio:demo:sesion';
 const HORA = 60 * 60 * 1000;
 const DIA = 24 * HORA;
@@ -123,6 +126,13 @@ function migrarDatos(viejo) {
       mesaId: f.mesaId ?? null,
     }));
     delete f.mesaId;
+  }
+  // La familia demo llega sin abrir y sin responder; su mesa solo si aún existe.
+  if (!viejo.familias.some((f) => f.codigo === CODIGO_DEMO)) {
+    const { abrioCuando, rsvp: { cuando, ...rsvp }, ...demo } = structuredClone(seed.familias.find((f) => f.codigo === CODIGO_DEMO));
+    const mesas = new Set(viejo.mesas.map((m) => m.id));
+    for (const p of demo.personas) if (!mesas.has(p.mesaId)) p.mesaId = null;
+    viejo.familias.push({ ...demo, abrioFecha: null, rsvp: { ...rsvp, fecha: null } });
   }
   return viejo;
 }
