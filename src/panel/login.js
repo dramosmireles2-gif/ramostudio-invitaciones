@@ -3,12 +3,16 @@
 import * as data from '../data/index.js';
 import { DEMO_EVENT_SLUG, DEMO_LOGIN_CODE } from '../config.js';
 import { leerParametros } from '../lib/links.js';
+import { origenVisita } from '../lib/origen.js';
 import { esDemo } from './demo.js';
 import { aplicarTemaPanel } from '../lib/theme.js';
 import { html, crudo } from '../lib/dom.js';
 import { goldRule, waxSeal, wordmark, statusTag } from '../lib/ui.js';
 
 const app = document.getElementById('app');
+
+// Guarda ?src= antes de redirigir al panel, que se abre sin parámetros.
+origenVisita();
 
 if (await data.getSesion()) location.replace('/panel/app.html');
 
