@@ -3,6 +3,7 @@
 import * as data from '../data/index.js';
 import { DEMO_EVENT_SLUG, DEMO_LOGIN_CODE } from '../config.js';
 import { leerParametros } from '../lib/links.js';
+import { esDemo } from './demo.js';
 import { aplicarTemaPanel } from '../lib/theme.js';
 import { html, crudo } from '../lib/dom.js';
 import { goldRule, waxSeal, wordmark, statusTag } from '../lib/ui.js';
@@ -12,6 +13,14 @@ const app = document.getElementById('app');
 if (await data.getSesion()) location.replace('/panel/app.html');
 
 const evento = await data.getEvento(leerParametros().slug ?? DEMO_EVENT_SLUG);
+
+// Modo demo: el evento demo entra directo, sin login.
+if (esDemo(evento)) {
+  await data.entrarDemo(evento.id);
+  location.replace('/panel/app.html');
+  await new Promise(() => {}); // Detiene el arranque mientras redirige.
+}
+
 const tema = aplicarTemaPanel(evento.tema);
 const CORREO_VALIDO = /\S+@\S+\.\S+/;
 

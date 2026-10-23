@@ -39,14 +39,7 @@
 .panel-cabeza__textos { flex: 1; min-width: 0; }
 .panel-cabeza__evento { letter-spacing: .12em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .panel-cabeza__filete { padding: 0 24px 16px; }
-/* Una sola etiqueta discreta: todo el panel es demo con datos de ejemplo. */
 .panel-cabeza__sello { flex: none; display: flex; flex-direction: column; align-items: center; gap: 6px; }
-.panel-cabeza > .panel-demo { display: none; }
-.panel-demo {
-  flex: none; padding: 2px 8px; border: 1px solid var(--line-field); border-radius: var(--radius-pill);
-  font-family: var(--font-sans); font-size: var(--fs-micro); font-weight: var(--fw-semibold); letter-spacing: .14em; text-transform: uppercase;
-  color: var(--rs-pizarra);
-}
 .panel-vista { display: flex; flex-direction: column; min-width: 0; }
 
 .panel-pestanas {
@@ -62,12 +55,25 @@
 .panel-pestanas__link:hover { color: var(--rs-crema); opacity: 1; }
 .panel-pestanas__link[aria-current="page"] { opacity: 1; border-top-color: var(--rule-color, var(--rs-dorado)); }
 
+/* Modo demo: franja fija arriba (src/panel/demo.js). La barra lateral de
+   escritorio empieza debajo de ella. */
+.con-franja-demo { --franja-alto: 48px; }
+.franja-demo {
+  position: sticky; top: 0; z-index: 20; /* Debajo de las hojas y confirmaciones (30). */
+  min-height: var(--franja-alto); padding: 0 16px 0 20px;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  background: var(--rs-dorado-velo); border-bottom: 1px solid var(--rs-dorado);
+}
+.franja-demo__texto { font-size: 14px; font-weight: var(--fw-medium); color: var(--rs-tinta); }
+.franja-demo__whatsapp { font-weight: var(--fw-semibold); white-space: nowrap; color: var(--rs-pizarra); }
+.franja-demo__reiniciar { min-height: 44px; padding: 0 4px; font-size: 14px; white-space: nowrap; flex: none; }
+
 /* Escritorio: barra lateral de papel y contenido amplio. */
 @media (min-width: 1024px) {
   .panel-app { display: grid; grid-template-columns: 264px minmax(0, 1fr); }
   .panel-pestanas, .panel-cabeza__sello, .panel-cabeza__evento { display: none; }
   .panel-lateral {
-    position: sticky; top: 0; height: 100dvh;
+    position: sticky; top: var(--franja-alto, 0px); height: calc(100dvh - var(--franja-alto, 0px));
     display: flex; flex-direction: column; gap: 24px; padding: 32px 24px;
     background: var(--rs-crema-papel); border-right: 1px solid var(--line-paper);
   }
@@ -90,7 +96,6 @@
   .panel-cabeza__eyebrow { display: block; }
   .panel-cabeza__titulo { font-size: 36px; }
   .panel-cabeza__invitacion { display: inline-flex; flex: none; }
-  .panel-cabeza > .panel-demo { display: inline-block; align-self: center; margin-left: auto; padding: 3px 10px; }
   .panel-cabeza__filete { padding: 0; }
 }
 

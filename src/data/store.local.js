@@ -601,6 +601,13 @@ export async function login(correo, codigo) {
   return copia(sesion);
 }
 
+// Modo demo: abre el panel del evento demo sin pedir correo ni código.
+export async function entrarDemo(eventoId) {
+  const sesion = { correo: null, eventoId: eventoPorId(eventoId).id, demo: true };
+  escribirStorage(SESION_KEY, sesion);
+  return copia(sesion);
+}
+
 export async function getSesion() {
   return leerStorage(SESION_KEY);
 }
@@ -609,8 +616,9 @@ export async function logout() {
   escribirStorage(SESION_KEY, null);
 }
 
-// Borra todos los cambios hechos en la demo y vuelve a los datos de prueba.
+// Borra todos los cambios hechos en la demo (también los de versiones viejas,
+// para que no se vuelvan a migrar) y vuelve a los datos de prueba.
 export async function reiniciarDemo() {
-  escribirStorage(STORAGE_KEY, null);
+  for (const key of [STORAGE_KEY, ...KEYS_ANTERIORES]) escribirStorage(key, null);
   memoria = null;
 }

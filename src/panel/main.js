@@ -6,6 +6,7 @@
 // cruzar ese ancho.
 import * as data from '../data/index.js';
 import { requerirSesion } from './auth.js';
+import { esDemo, montarFranjaDemo } from './demo.js';
 import { aplicarTemaPanel } from '../lib/theme.js';
 import { rutaInvitacion } from '../lib/links.js';
 import { fechaNumerica } from '../lib/fechas.js';
@@ -41,13 +42,11 @@ const evento = await data.getEventoPorId(sesion.eventoId);
 const tema = aplicarTemaPanel(evento.tema);
 const { diasRestantes } = await data.getResumen(evento.id);
 const escritorioMq = matchMedia('(min-width: 1024px)');
+const demo = esDemo(evento);
+if (demo) montarFranjaDemo(data);
 
 const pestanas = (clase) => PESTANAS.map(([id, texto]) =>
   crudo(html`<a class="${clase}" href="#${id}" data-pestana="${id}">${texto}</a>`));
-
-// Una sola etiqueta discreta avisa que todo es demo con datos de ejemplo.
-// Celular: debajo del sello. Escritorio: junto a "Ver mi invitación".
-const demo = html`<span class="panel-demo" title="Esta es una demo con datos de ejemplo">Demo</span>`;
 
 document.getElementById('panel').innerHTML = html`
   <aside class="panel-lateral">
@@ -62,13 +61,12 @@ document.getElementById('panel').innerHTML = html`
   </aside>
   <div class="panel-principal">
     <header class="panel-cabeza">
-      <span class="panel-cabeza__sello">${crudo(waxSeal(tema.monograma, 48))}${crudo(demo)}</span>
+      <span class="panel-cabeza__sello">${crudo(waxSeal(tema.monograma, 48))}</span>
       <div class="panel-cabeza__textos">
         <div class="label panel-cabeza__evento">${evento.titulo} · ${fechaNumerica(evento.fecha, { corta: true })}</div>
         <div class="label panel-cabeza__eyebrow">Su panel de boda</div>
         <h1 class="t-h1 panel-cabeza__titulo"></h1>
       </div>
-      ${crudo(demo)}
       <a class="btn btn--secondary panel-cabeza__invitacion" href="${rutaInvitacion(evento.slug)}" target="_blank" rel="noopener">Ver mi invitación</a>
     </header>
     <div class="panel-cabeza__filete">${crudo(goldRule())}</div>
@@ -98,7 +96,7 @@ async function mostrar() {
   app.innerHTML = '';
   app.dataset.vista = id;
   scrollTo(0, 0);
-  await vista.modulo.montar(app, { sesion, evento, tema, data, params, ir, escritorio: escritorioMq.matches });
+  await vista.modulo.montar(app, { sesion, evento, tema, data, params, ir, demo, escritorio: escritorioMq.matches });
 }
 
 addEventListener('hashchange', mostrar);
