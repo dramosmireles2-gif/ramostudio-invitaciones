@@ -1,0 +1,43 @@
+/* Página de entrada de la demo (raíz del sitio). Celular primero. */
+.entrada__columna {
+  min-height: 100vh; min-height: 100svh;
+  max-width: 480px; margin: 0 auto;
+  padding: 32px var(--gutter-mobile) calc(24px + env(safe-area-inset-bottom, 0px));
+  display: flex; flex-direction: column; gap: 28px;
+}
+.entrada__marca { display: flex; justify-content: center; }
+
+.entrada__hoja { display: flex; flex-direction: column; gap: 16px; }
+.entrada__titulo {
+  font-family: var(--font-serif); font-size: 38px; line-height: var(--lh-tight); color: var(--rs-tinta);
+  text-wrap: balance;
+}
+.entrada__filete { margin: 8px 0 4px; }
+.entrada__botones { display: flex; flex-direction: column; gap: 12px; }
+
+/* "Ver la invitación" todavía no abre: se lee completo, sin la opacidad de disabled. */
+.entrada__pronto:disabled { opacity: 1; border-style: dashed; border-color: var(--line-field); }
+.entrada__pronto { white-space: nowrap; padding: 0 14px; }
+.entrada__pronto .status-tag { height: 24px; padding: 0 10px; font-size: 12px; }
+
+/* Llamado a WhatsApp en una banda pizarra: crema sobre pizarra (7.1:1). */
+.entrada__cta {
+  background: var(--surface-dark); color: var(--text-on-dark);
+  border-radius: var(--radius-lg); padding: 24px 20px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.entrada__cta-titulo { font-family: var(--font-serif); font-size: 26px; line-height: var(--lh-snug); color: var(--rs-crema); }
+.entrada__cta-texto { font-size: var(--fs-body); color: var(--rs-crema); margin-bottom: 8px; }
+.entrada__whatsapp {
+  --btn-bg: var(--rs-crema); --btn-fg: var(--rs-pizarra); --btn-bg-press: var(--rs-crema-sombra); --btn-ring: var(--rs-dorado);
+}
+.entrada__whatsapp:hover { color: var(--rs-tinta); }
+
+.entrada__pie { margin-top: auto; text-align: center; }
+
+@media (min-width: 768px) {
+  .entrada__columna { max-width: 560px; padding-top: 72px; gap: 36px; }
+  .entrada__titulo { font-size: 52px; }
+  .entrada__hoja .t-body { font-size: var(--fs-body-lg); }
+  .entrada__cta { padding: 32px; }
+}

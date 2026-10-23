@@ -1,6 +1,6 @@
 // Arma los enlaces de invitación. Único lugar que combina el dominio con
 // el slug del evento y el código de la familia.
-import { INVITE_BASE_URL } from '../config.js';
+import { INVITE_BASE_URL, WHATSAPP_NUMBER } from '../config.js';
 
 // Formato: https://demo.ramosmkt.lat/invitacion/?e=<slug>&f=<codigo>
 export function enlaceFamilia(slug, codigo) {
@@ -23,6 +23,11 @@ export function enlaceWhatsApp(texto, telefono = '') {
   const numero = digitos.length === 10 ? `52${digitos}` : digitos;
   // encodeURIComponent y no searchParams: WhatsApp no convierte "+" en espacio.
   return `https://wa.me/${numero}?text=${encodeURIComponent(texto)}`;
+}
+
+// "Quiero la mía": abre el chat de RamoStudio con el mensaje ya escrito.
+export function enlaceQuieroLaMia() {
+  return enlaceWhatsApp('Hola, vi el demo y quiero una invitación así', WHATSAPP_NUMBER);
 }
 
 // Para mostrar en textos de ayuda del panel.

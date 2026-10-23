@@ -2,16 +2,53 @@
 <html lang="es-MX">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="robots" content="noindex" />
-    <title>RamoStudio · Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#F4EFE9" />
+    <title>Así se ve tu invitación digital · RamoStudio</title>
+    <meta name="description" content="Mira por dentro una invitación digital de RamoStudio: el panel con el que los novios ven quién confirmó, acomodan sus mesas y mandan recordatorios por WhatsApp. Demo con datos de ejemplo." />
+    <link rel="canonical" href="%INVITE_BASE_URL%/" />
+    <!-- Vista previa al compartir el enlace (WhatsApp, Facebook). La imagen pesa menos de 300 KB. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_MX" />
+    <meta property="og:site_name" content="RamoStudio" />
+    <meta property="og:title" content="Así se ve tu invitación digital · RamoStudio" />
+    <meta property="og:description" content="Entra al panel de los novios: confirmaciones, mesas y recordatorios por WhatsApp. Demo con datos de ejemplo." />
+    <meta property="og:url" content="%INVITE_BASE_URL%/" />
+    <meta property="og:image" content="%INVITE_BASE_URL%/og-demo.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="RamoStudio · Así se ve tu invitación digital" />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="stylesheet" href="/src/styles/base.css" />
+    <link rel="stylesheet" href="/src/styles/entrada.css" />
   </head>
-  <body>
-    <main class="demo-home">
-      <h1>RamoStudio</h1>
-      <p>Demo de invitación digital y panel de novios. Datos ficticios.</p>
-      <ul id="demo-links"></ul>
+  <body class="entrada">
+    <main class="entrada__columna">
+      <header class="entrada__marca" data-wordmark></header>
+
+      <section class="entrada__hoja" aria-labelledby="entrada-titulo">
+        <div class="label">Demo · Datos de ejemplo</div>
+        <h1 class="entrada__titulo" id="entrada-titulo">Así se ve tu invitación digital</h1>
+        <p class="t-body">Entra al panel con el que los novios ven quién ya confirmó, acomodan sus mesas y mandan recordatorios por WhatsApp. Puedes mover lo que quieras: nada es real.</p>
+        <div class="gold-rule gold-rule--ornament entrada__filete" role="separator"><span class="gold-rule__rombo"></span></div>
+        <div class="entrada__botones">
+          <a class="btn btn--lg btn--full" href="/panel/" data-panel>Ver el panel de los novios</a>
+          <button class="btn btn--secondary btn--lg btn--full entrada__pronto" type="button" disabled aria-describedby="entrada-pronto">
+            Ver la invitación <span class="status-tag status-tag--vio" id="entrada-pronto">Próximamente</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="entrada__cta" aria-labelledby="entrada-cta">
+        <h2 class="entrada__cta-titulo" id="entrada-cta">¿Te casas o preparas unos XV?</h2>
+        <p class="entrada__cta-texto">Escríbenos por WhatsApp y te contamos cómo hacemos la tuya.</p>
+        <a class="btn btn--lg btn--full entrada__whatsapp" href="#" target="_blank" rel="noopener" data-whatsapp>Quiero la mía</a>
+      </section>
+
+      <footer class="entrada__pie">
+        <p class="t-meta">RamoStudio · Invitaciones digitales para bodas, XV años y eventos.</p>
+      </footer>
     </main>
     <script type="module" src="/src/home.js"></script>
   </body>
