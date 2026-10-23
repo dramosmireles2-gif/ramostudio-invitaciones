@@ -4,7 +4,7 @@ Diseño de origen: proyecto de Claude Design «Panel de novios»
 (https://claude.ai/design/p/76338a84-ae90-4c5f-99c0-74fa747c6212?file=Panel+de+novios.dc.html).
 El diseño viene en JSX/React; aquí se traduce a JS plano.
 
-## Estado (2026-10-20)
+## Estado (2026-10-22)
 
 - **Entrar**: aprobada.
 - **Resumen**: aprobado (celular y escritorio).
@@ -12,6 +12,8 @@ El diseño viene en JSX/React; aquí se traduce a JS plano.
 - **Mesas**: aprobada; rehecha por persona (cada invitado con su mesa), en revisión.
 - **Más** (Mensajes, Actividad, Mesa de regalos, Datos del evento, Exportar): Mesa de regalos y Exportar aprobados; Mensajes, Actividad y Datos del evento
   con ajustes de mapas, horas y fechas (en revisión).
+- **Página de entrada y modo demo** (ver «Modo demo»): hechos, en revisión. La pantalla de la
+  invitación sigue pendiente hasta que llegue su diseño de Claude Design.
 - Cada pantalla se muestra en el navegador (celular y escritorio) y se espera aprobación antes de
   pasar a la siguiente.
 
@@ -28,6 +30,41 @@ El diseño viene en JSX/React; aquí se traduce a JS plano.
   helpers de marcado en `src/lib/ui.js` y pantallas del panel en `src/styles/panel.css`.
 - `src/lib/theme.js`: `aplicarTema` (tokens `--ev-*` de la invitación) y `aplicarTemaPanel` (el panel
   solo toma del evento el acento y el monograma; el botón usa el acento solo si da 4.5:1 con crema).
+
+## Modo demo
+
+Lo que ve quien llega a `demo.ramosmkt.lat` (por ejemplo desde un flyer).
+
+- **Página de entrada** (`index.html`, `src/home.js`, `src/styles/entrada.css`), celular primero:
+  wordmark, «Así se ve tu invitación digital», «Ver el panel de los novios» (va a `/panel/`),
+  «Ver la invitación» deshabilitado con la etiqueta «Próximamente» y la banda «¿Te casas o preparas
+  unos XV?» con «Quiero la mía» (WhatsApp). Es la única página sin `noindex`.
+- **SEO y vista previa**: title, description, canonical y Open Graph. La imagen es
+  `public/og-demo.jpg` (1200x630, 61 KB; WhatsApp descarta las de más de 300 KB). Las metas usan
+  `%INVITE_BASE_URL%`, que un plugin de `vite.config.js` cambia por el dominio de `src/config.js`.
+- **`DEMO_MODE`** (`src/config.js`): con él, el evento `DEMO_EVENT_SLUG` entra al panel sin login
+  (`entrarDemo` en el store guarda una sesión `{ demo: true }`). Los demás eventos siguen con el
+  login simulado. `esDemo(evento)` vive en `src/panel/demo.js` y llega a las vistas como `ctx.demo`;
+  en el demo, Más no muestra «Cerrar sesión».
+- **Franja fija arriba** (`montarFranjaDemo`): «Estás viendo un demo · Quiero la mía» y «Reiniciar
+  demo», en dorado velo con texto tinta. Reemplaza la etiqueta «Demo» del encabezado. En escritorio
+  la barra lateral empieza debajo (`--franja-alto`); las hojas y confirmaciones la cubren.
+- **Reiniciar demo**: pide confirmación, `reiniciarDemo()` borra los datos del demo en localStorage
+  (la llave actual y las viejas, para que no se vuelvan a migrar; la sesión y el origen se quedan) y
+  recarga en `#resumen` con el seed original.
+- **Origen de visitas** (`src/lib/origen.js`): `?src=` (por ejemplo `?src=flyer-expo`) se lee al
+  entrar, se guarda en sessionStorage y se mantiene al pasar de la entrada al panel (el login lo guarda
+  antes de redirigir). Solo letras, números, «-», «_» y «.»; sin src es «directo».
+- **WhatsApp de RamoStudio**: `WHATSAPP_NUMBER` en `src/config.js` (único lugar). Todos los «Quiero la
+  mía» salen de `enlaceQuieroLaMia()` en `links.js`, con el mensaje «Hola, vi el demo (src) y quiero
+  una invitación así».
+- **Recorrido invitado → panel (solo datos)**: Familia Herrera Luna (`fam_demo`, código `DEMO`, es
+  decir `?f=demo`), 2 pases, sin abrir y sentada en Mesa 12. Es el único código no aleatorio y solo
+  existe en el demo. `confirmarAsistencia()` registra la actividad con la hora actual y la lista de
+  Actividad muestra «Ahora» para lo de los últimos 5 minutos. Falta conectar la pantalla de la
+  invitación cuando llegue su diseño.
+- QA (2026-10-22, 375x812 y 1440x900): `/?src=prueba` → entrada → panel sin login → Reiniciar demo →
+  los dos «Quiero la mía» abren `wa.me/528148078309` con «(prueba)»; sin src, «(directo)».
 
 ## Invitados
 
@@ -75,7 +112,8 @@ El diseño viene en JSX/React; aquí se traduce a JS plano.
 
 - Cada familia tiene `personas: [{ id, nombre, mesaId }]`, una por pase; la mesa ya no es de la
   familia (`familia.mesaId` desapareció). Así una familia puede quedar repartida en varias mesas.
-- Seed: 49 familias, 120 personas con nombres ficticios generados a partir del nombre de la familia.
+- Seed: 50 familias, 122 personas con nombres ficticios generados a partir del nombre de la familia
+  (incluye la familia demo `DEMO`, ver «Modo demo»).
   Para la demo, Familia Villarreal está dividida (3 en Mesa 5 · 2 en Mesa 12); Mesa 4 queda con
   2 personas de más y en Mesa 9 siguen sentadas 3 personas que no asistirán.
 - Estado de cada persona (`estadoPersona`): si la familia confirmó menos pases de los asignados,
@@ -98,9 +136,10 @@ El diseño viene en JSX/React; aquí se traduce a JS plano.
   - menos: «Quedan X lugares libres» (neutro);
   - igual: «Mesa completa» (verde discreto). En el plano va la versión corta («2 de más», «3 libres»,
     «Completa»). El Resumen del panel no muestra mesas.
-- **Migración (storage v6)**: si no hay datos v6 pero sí v5, v4 o v3, `store.local.js` los convierte:
+- **Migración (storage v6, ahora v7)**: si no hay datos actuales pero sí v6, v5, v4 o v3, `store.local.js` los convierte:
   cada persona hereda la mesa que tenía su familia, los nombres salen del seed si la familia existe ahí
-  con los mismos pases y si no quedan como «Invitado 1», «Invitado 2»… Guarda v6 y borra la llave
+  con los mismos pases y si no quedan como «Invitado 1», «Invitado 2»… Desde v7 también agrega la
+  familia demo (sin abrir; sin mesa si su mesa ya no existe). Guarda la versión actual y borra la llave
   vieja. Probado con una familia movida de mesa y una que no está en el seed.
 - Invitados: la mesa de la familia sale de sus personas («Mesa 4», «Mesa 5 (3) · Mesa 12 (2)» o «Sin
   mesa»). En «Editar datos», una familia dividida muestra «Dividida (sin cambios)» para no juntarla
@@ -137,8 +176,8 @@ create index personas_mesa_idx on personas (mesa_id);
   `#datos-evento`, `#exportar`) usa `subvista()` de `componentes.js` («Volver a Más»). El
   encabezado del panel muestra el nombre de la subsección (por ejemplo «Mesa de regalos»).
   En escritorio la columna mide como máximo 640px (1040px en Mesa de regalos).
-- Etiqueta «Demo» única en el encabezado del panel (debajo del sello en celular, junto a «Ver mi
-  invitación» en escritorio). Los textos de la demo no repiten «ficticio».
+- La etiqueta «Demo» del encabezado se quitó: ahora avisa la franja del modo demo. Los textos de la
+  demo no repiten «ficticio».
 - No se pudo copiar el sello «rs» oficial desde el diseño; el pie de Más lleva solo el wordmark.
 - **Mesa de regalos**: `guardarRegalo` y `eliminarRegalo` en el store; tipos `mesa`, `lista` y
   `transferencia`. La lluvia de sobres es `evento.lluviaDeSobres` (ya no es un regalo). Seed: Liverpool
@@ -165,24 +204,25 @@ create index personas_mesa_idx on personas (mesa_id);
   horas siempre quedan entre 8:00 a. m. y 11:00 p. m.; lo de hoy que aún no pasa se acomoda justo antes
   de ahora y antes de las 8:30 a. m. toda la demo se recorre un día. Los textos llevan `{familia}` y
   los mensajes toman el autor de la familia: siempre el nombre actual del seed. Grupos: «Hoy», «Ayer»
-  y luego «Miércoles 14 de octubre» (`diaRelativo`).
+  y luego «Miércoles 14 de octubre» (`diaRelativo`). Lo de los últimos 5 minutos dice «Ahora».
 - **Exportar** (aprobado): `src/lib/xlsx.js` genera un .xlsx real sin librerías (ZIP sin compresión)
   con varias hojas. Toda descarga trae «Resumen» (confirmados, pendientes, no asisten y pases, en
   personas y familias). «Toda la lista» y «Solo confirmados» agregan la lista; «Por mesa» agrega
   «Mesas» (cada mesa con sus invitados y al final «Sin mesa») y «Lista por mesa». Las hojas de lista
   tienen encabezado fijo y filtros; los anchos salen del contenido (la columna de enlaces no se
   corta) y los enlaces de invitación son clicables.
-- `STORAGE_KEY` subió a v5 por los cambios del seed (después a v6 por las personas).
+- `STORAGE_KEY` subió a v5 por los cambios del seed (después a v6 por las personas y a v7 por la
+  familia demo).
 
 ## Datos
 
-- `src/data/seed/mariana-diego.json` usa los datos ficticios del diseño: 49 familias, 120 pases (una
-  persona por pase, ver «Modelo: personas con mesa propia») y 12 mesas de 10. Los códigos de familia son nuevos y aleatorios. Cada familia tiene además `grupo` y
+- `src/data/seed/mariana-diego.json` usa los datos ficticios del diseño: 50 familias, 122 pases (una
+  persona por pase, ver «Modelo: personas con mesa propia») y 12 mesas de 10. Los códigos de familia son nuevos y aleatorios, salvo `DEMO` (familia del recorrido del demo). Cada familia tiene además `grupo` y
   `abrioHaceHoras` (que se convierte en `abrioFecha`). El evento tiene `ciudad`,
   `fechaLimiteRsvpDiasAntes: 35` (faltan 23 días para la fecha límite) y un `tema` nuevo
   (`clave`, `acento`, `monograma` «M·D», `colores --ev-*`, `fuentes`).
 - Se conservaron las sedes ficticias del seed porque el diseño usa nombres y direcciones que podrían ser reales.
-- `store.local.js` usa `STORAGE_KEY` v6 (migra v5, v4 y v3) y tiene `getFamiliasPendientes`. `getResumen` incluye
+- `store.local.js` usa `STORAGE_KEY` v7 (migra v6, v5, v4 y v3) y tiene `getFamiliasPendientes`. `getResumen` incluye
   `pases.noAsisten`, `familias.sinAbrir` y `diasParaFechaLimite`. Los tipos de actividad son
   `confirmacion`, `no_asiste`, `apertura` y `mensaje`.
 - Las familias de la demo no tienen teléfono, así que «Abrir WhatsApp» abre WhatsApp sin número y con el
