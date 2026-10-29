@@ -62,6 +62,31 @@ Capturas en el navegador local a 375x812 y 390x844 (dev), con y sin familia en e
 - Auditoría: 2 señales (la frase de lluvia de sobres sigue siendo propuesta; el corazón
   rojo de emoji dentro de la foto `corazon`, que la pareja eligió).
 
+## Iteración 3 (29 de octubre de 2026): versión final en localhost
+
+Pedido de David: transición suave, fotos sin recorte, confirmación y todas las secciones
+completas. Solo quedan pendientes la base de datos y el dominio.
+
+- **Apertura:** al tocar el sello, una tarjeta del color de la invitación sale del sobre
+  (aparece en 0.6 s mientras sube en 1.1 s) y el sobre se desvanece en 0.7 s sobre una
+  invitación del mismo color. Medido cuadro por cuadro: ya no hay salto de oscuro a
+  claro. Total: 2.45 s.
+- **Fotos completas:** ninguna se recorta. Portada e intermedia a todo lo ancho con su
+  alto natural; galería en filas (una a lo ancho, luego un par con el mismo alto y cada
+  foto con el ancho que le toca por su aspecto).
+- **Confirmación completa:** con enlace personal (aunque el teléfono nunca haya visto a esa
+  familia), sin enlace (escriben su nombre y entran a la lista como familia nueva), "No
+  podremos asistir", y si ya respondieron se ve su respuesta y la pueden cambiar.
+- **Mensajes para los novios:** sección nueva; los mensajes llegan a su panel (Más →
+  Mensajes de sus invitados).
+- **Pruebas con Playwright** (`npm test`): 16 pruebas en Android (Pixel 7, Chrome), iPhone
+  13 (Safari/WebKit) y panel en computadora. Pasan las 16: sobre y apertura, todas las
+  secciones con los datos del brief, 8 fotos sin recorte y a todo lo ancho, confirmación
+  con y sin enlace, mensaje, "reducir movimiento", y que la confirmación y el mensaje
+  aparezcan en el panel.
+- Capturas finales en `capturas/` (invitación completa en iPhone, apertura cuadro por
+  cuadro y el panel).
+
 ## Pendiente antes de enviar (miércoles 4 de noviembre)
 
 1. **Número de WhatsApp** que recibe las confirmaciones (`rsvp.telefono` en evento.json).

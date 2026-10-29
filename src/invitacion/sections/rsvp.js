@@ -1,10 +1,13 @@
 // Confirmación de asistencia por familia.
 // - evento.rsvp.modo "panel" (o sin modo, como el demo): la respuesta se guarda
-//   con data.confirmarAsistencia y la ven los novios en su panel. Solo con el
-//   enlace personal de la familia (?f=); sin él, se les pide usarlo.
+//   con data y la ven los novios en su panel.
+//   · Con enlace personal: "Familia X · 4 lugares", el contador no pasa de sus
+//     pases y, si ya respondieron, se muestra su respuesta y la pueden cambiar.
+//   · Sin enlace: escriben el nombre de su familia y cuántos van; entran a la
+//     lista de los novios como una familia nueva.
 // - evento.rsvp.modo "whatsapp" (respaldo si no hay backend): abre WhatsApp de
 //   los novios con el mensaje ya escrito ("Confirmamos 3 personas de la
-//   familia Hernández."). Sin familia, el invitado escribe su nombre.
+//   familia Hernández."). El invitado solo lo envía.
 import { fechaInvitacion } from '../../lib/fechas.js';
 import { enlaceWhatsApp } from '../../lib/links.js';
 import { html, crudo } from '../../lib/dom.js';
@@ -26,23 +29,26 @@ export function mensajeNoAsiste(nombre) {
   return `Les avisamos con cariño que no podremos asistir (${nombre.trim()}). ¡Muchas felicidades!`;
 }
 
+// Lo que ya respondió la familia, en una frase.
+function respuestaPrevia(familia) {
+  const r = familia?.rsvp;
+  if (!r || r.estado === 'pendiente') return '';
+  return r.estado === 'confirmado'
+    ? `Ya nos confirmaron ${plural(r.pasesConfirmados, 'persona', 'personas')}. Si algo cambió, pueden actualizarlo aquí.`
+    : 'Nos avisaron que no podrán asistir. Si algo cambió, pueden actualizarlo aquí.';
+}
+
 export function montar(contenedor, { evento, familia, data }) {
   contenedor.className = 'rsvp';
   contenedor.id = 'confirmar';
   const porWhatsApp = evento.rsvp?.modo === 'whatsapp';
+  const novios = evento.anfitriones?.join(' y ') ?? 'Los novios';
   const maximo = familia?.pasesAsignados ?? MAX_SIN_FAMILIA;
-  let personas = familia?.pasesAsignados ?? 1;
+  let personas = familia?.rsvp?.estado === 'confirmado' ? familia.rsvp.pasesConfirmados : (familia?.pasesAsignados ?? 1);
   const limite = evento.fechaLimiteRsvp
     ? crudo(html`<p class="rsvp__limite">Les pedimos confirmar antes del <strong>${fechaInvitacion(evento.fechaLimiteRsvp, evento.zonaHoraria).replace(/^./, (c) => c.toLowerCase())}</strong>.</p>`)
     : '';
-
-  if (!porWhatsApp && !familia) {
-    contenedor.innerHTML = html`
-      <h2 class="ev-titulo">Confirmar asistencia</h2>
-      ${limite}
-      <p class="rsvp__pases">Para confirmar, abran el enlace personal que les enviaron ${evento.anfitriones?.join(' y ') ?? 'los novios'}.</p>`;
-    return;
-  }
+  const previa = respuestaPrevia(familia);
 
   contenedor.innerHTML = html`
     <h2 class="ev-titulo">Confirmar asistencia</h2>
@@ -50,7 +56,8 @@ export function montar(contenedor, { evento, familia, data }) {
     <form class="rsvp__form" novalidate>
       ${familia
         ? crudo(html`<p class="rsvp__familia">${familia.nombre}</p>
-          <p class="rsvp__pases">${familia.pasesAsignados === 1 ? 'Tenemos 1 lugar reservado para ustedes.' : `Tenemos ${familia.pasesAsignados} lugares reservados para ustedes.`}</p>`)
+          <p class="rsvp__pases">${familia.pasesAsignados === 1 ? 'Tenemos 1 lugar reservado para ustedes.' : `Tenemos ${familia.pasesAsignados} lugares reservados para ustedes.`}</p>
+          ${previa ? crudo(html`<p class="rsvp__previa">${previa}</p>`) : ''}`)
         : crudo(html`<div class="field">
             <label class="field__label" for="rsvp-nombre">Nombre de su familia</label>
             <input class="field__control" id="rsvp-nombre" name="nombre" autocomplete="family-name" placeholder="Familia Hernández" required>
@@ -64,10 +71,10 @@ export function montar(contenedor, { evento, familia, data }) {
           <button type="button" class="rsvp__paso" data-paso="1" aria-label="Una persona más">+</button>
         </div>
       </div>
-      <button type="submit" class="btn btn--lg btn--full" data-asiste="si">${porWhatsApp ? 'Confirmar por WhatsApp' : 'Confirmar asistencia'}</button>
-      <button type="button" class="btn btn--quiet btn--full" data-asiste="no">No podremos asistir</button>
+      <button type="submit" class="btn btn--lg btn--full">${porWhatsApp ? 'Confirmar por WhatsApp' : 'Confirmar asistencia'}</button>
+      <button type="button" class="btn btn--quiet btn--full" data-no-asiste>No podremos asistir</button>
       ${porWhatsApp ? crudo('<p class="rsvp__nota">Se abre WhatsApp con el mensaje listo. Solo tienen que enviarlo.</p>') : ''}
-      <p class="rsvp__gracias" role="status" hidden></p>
+      <p class="rsvp__gracias" role="status" tabindex="-1" hidden></p>
     </form>`;
 
   const form = contenedor.querySelector('form');
@@ -90,8 +97,7 @@ export function montar(contenedor, { evento, familia, data }) {
     if (familia) return familia.nombre;
     const campo = form.nombre;
     const valor = campo.value.trim();
-    const error = form.querySelector('#rsvp-error');
-    error.hidden = !!valor;
+    form.querySelector('#rsvp-error').hidden = !!valor;
     campo.toggleAttribute('aria-invalid', !valor);
     if (!valor) campo.focus();
     return valor;
@@ -106,18 +112,20 @@ export function montar(contenedor, { evento, familia, data }) {
       window.open(enlaceWhatsApp(texto, evento.rsvp.telefono ?? ''), '_blank', 'noopener');
       return;
     }
-    const novios = evento.anfitriones?.join(' y ') ?? 'Los novios';
     try {
-      await data.confirmarAsistencia(evento.id, familia?.codigo, { asiste, pasesConfirmados: personas });
+      if (familia) await data.confirmarAsistencia(evento.id, familia.codigo, { asiste, pasesConfirmados: personas });
+      else await data.confirmarSinEnlace(evento.id, { nombre, asiste, pasesConfirmados: personas });
       gracias.textContent = asiste
         ? `¡Gracias! ${novios} ya saben que van ${plural(personas, 'persona', 'personas')}.`
         : `Gracias por avisarnos. ${novios} ya lo saben.`;
       for (const n of form.children) n.hidden = n !== gracias;
+      gracias.hidden = false;
+      gracias.focus({ preventScroll: true });
     } catch (err) {
-      gracias.textContent = err.message;
+      gracias.textContent = err.message || 'No pudimos guardar su respuesta. Intenten de nuevo.';
+      gracias.hidden = false;
     }
-    gracias.hidden = false;
   }
   form.addEventListener('submit', (e) => { e.preventDefault(); responder(true); });
-  form.querySelector('[data-asiste="no"]').addEventListener('click', () => responder(false));
+  form.querySelector('[data-no-asiste]').addEventListener('click', () => responder(false));
 }

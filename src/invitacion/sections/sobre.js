@@ -1,11 +1,13 @@
 // Apertura del sobre: el gran momento. Sobre del color del tema con borde de
 // pespunte, solapa curva y el sello con el monograma. Al tocar el sello
-// (el gesto que también arranca la música) la solapa se levanta y el sobre se
-// retira sobre la invitación ya montada. Unos 2 s; sin animación si el
-// invitado pidió reducir movimiento.
+// (el gesto que también arranca la música) la solapa se levanta, una tarjeta
+// del color de la invitación sale del sobre hasta llenar la pantalla y la
+// invitación ya montada aparece debajo: el paso de oscuro a claro es un
+// movimiento, no un corte. Unos 2.5 s; sin animación si el invitado pidió
+// reducir movimiento.
 import { html } from '../../lib/dom.js';
 
-const DURACION_MS = 2000;
+const DURACION_MS = 2450;
 
 export function montar(raiz, { evento, familia, alAbrir }) {
   const nodo = document.createElement('div');
@@ -13,6 +15,7 @@ export function montar(raiz, { evento, familia, alAbrir }) {
   nodo.setAttribute('role', 'dialog');
   nodo.setAttribute('aria-label', `Invitación de ${evento.titulo}`);
   nodo.innerHTML = html`
+    <div class="sobre__tarjeta" aria-hidden="true"></div>
     <svg class="sobre__solapa" viewBox="0 0 100 60" preserveAspectRatio="none" aria-hidden="true">
       <path class="sobre__solapa-papel" d="M0 0H100V30Q50 62 0 30Z" />
       <path class="sobre__solapa-pespunte" d="M0 26Q50 56 100 26" vector-effect="non-scaling-stroke" />

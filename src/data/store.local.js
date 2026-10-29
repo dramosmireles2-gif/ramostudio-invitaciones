@@ -417,6 +417,35 @@ export async function confirmarAsistencia(eventoId, codigo, { asiste, pasesConfi
   return copia(f);
 }
 
+// La familia del enlace personal (?f= y &d= con nombre y pases). En local, si
+// este navegador no la conoce (otro teléfono), se registra aquí para que su
+// confirmación se guarde. Con Supabase solo se busca por código.
+export async function familiaDeEnlace(eventoId, { codigo, nombre, pasesAsignados }) {
+  const c = normalizarCodigo(codigo);
+  const existente = estado().familias.find((x) => x.eventoId === eventoId && x.codigo === c);
+  if (existente) return copia(existente);
+  eventoPorId(eventoId);
+  const f = {
+    id: nuevoId('fam'), eventoId, nombre, grupo: '', telefono: '', codigo: c,
+    pasesAsignados, personas: [], abrioFecha: null,
+    rsvp: { estado: 'pendiente', pasesConfirmados: 0, nota: '', fecha: null },
+  };
+  ajustarPersonas(f);
+  estado().familias.push(f);
+  guardar();
+  return copia(f);
+}
+
+// Invitados que confirman sin enlace personal: escriben su nombre y cuántos
+// van, y entran a la lista de los novios como una familia nueva.
+export async function confirmarSinEnlace(eventoId, { nombre, asiste, pasesConfirmados = 1 }) {
+  const limpio = String(nombre ?? '').trim();
+  if (!limpio) throw new DataError('nombre_requerido', 'Escriban el nombre de su familia.');
+  const pases = asiste ? Math.max(1, Number(pasesConfirmados) || 1) : 1;
+  const f = await crearFamilia(eventoId, { nombre: limpio, pasesAsignados: pases, grupo: 'Confirmó sin enlace' });
+  return confirmarAsistencia(eventoId, f.codigo, { asiste, pasesConfirmados: pases });
+}
+
 // Se llama cuando un invitado abre su invitación (para la vista de actividad).
 export async function registrarApertura(eventoId, codigo) {
   const c = normalizarCodigo(codigo);

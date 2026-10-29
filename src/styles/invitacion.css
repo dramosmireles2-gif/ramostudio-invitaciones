@@ -7,7 +7,7 @@ body.invitacion {
   background: var(--ev-bg); color: var(--ev-text);
   font-family: var(--ev-font-data); font-size: 18px; line-height: 1.55;
 }
-body.con-sobre { overflow: hidden; background: var(--ev-envelope); }
+body.con-sobre { overflow: hidden; }
 #app { max-width: 560px; margin: 0 auto; }
 #app h1:focus { outline: none; }
 
@@ -81,15 +81,29 @@ body.con-sobre { overflow: hidden; background: var(--ev-envelope); }
 .sobre__ayuda { margin-top: 14px; font-size: 15px; letter-spacing: .04em; color: var(--ev-on-band-2, var(--ev-on-band)); }
 
 /* Apertura (unos 2 s): el sello cede, la solapa se levanta, el sobre se retira. */
+/* La tarjeta: del color de la invitación, espera dentro del sobre. */
+.sobre__tarjeta {
+  position: absolute; inset: 0; z-index: 2; background: var(--ev-bg); border-radius: 12px;
+  transform: translateY(62%) scale(.84); opacity: 0; transform-origin: 50% 100%; pointer-events: none;
+}
+
+/* Apertura (unos 2.5 s): el sello cede, la solapa se levanta, la tarjeta sale
+   del sobre y llena la pantalla; al final el sobre se desvanece sobre una
+   invitación del mismo color. */
 .sobre--abriendo .sobre__sello { transition: transform 300ms var(--ease-paper), opacity 300ms; transform: scale(1.08); opacity: 0; }
-.sobre--abriendo .sobre__solapa { transition: transform 900ms var(--ease-paper) 200ms; transform: rotateX(178deg); }
 .sobre--abriendo .sobre__para,
-.sobre--abriendo .sobre__pie { transition: opacity 400ms 200ms; opacity: 0; }
-.sobre--abriendo { transition: transform 800ms var(--ease-paper) 1100ms, opacity 800ms 1100ms; transform: translateY(6%); opacity: 0; }
+.sobre--abriendo .sobre__pie { transition: opacity 350ms 150ms; opacity: 0; }
+.sobre--abriendo .sobre__solapa { transition: transform 800ms var(--ease-paper) 200ms; transform: rotateX(178deg); }
+.sobre--abriendo .sobre__tarjeta {
+  transition: opacity 600ms ease-out 600ms, transform 1100ms cubic-bezier(.45, 0, .2, 1) 600ms, border-radius 1100ms 600ms;
+  opacity: 1; transform: none; border-radius: 0;
+}
+.sobre--abriendo { transition: opacity 700ms ease-in-out 1700ms; opacity: 0; }
 
 /* Portada ----------------------------------------------------------------- */
 .portada { text-align: center; }
-.portada__foto img { width: 100%; height: 58vh; height: 58svh; max-height: 640px; object-fit: cover; }
+/* Fotos siempre con su aspecto completo: nunca se recortan. */
+.portada__foto img { width: 100%; height: auto; }
 .portada__texto { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 32px 24px 8px; }
 .portada__nombres {
   font-family: var(--ev-font-script); font-style: var(--ev-nombres-style, normal); font-weight: 500;
@@ -140,7 +154,7 @@ body.con-sobre { overflow: hidden; background: var(--ev-envelope); }
 .vestimenta__detalle { font-family: var(--ev-font-title); font-style: italic; font-size: 26px; color: var(--ev-on-band); }
 
 /* Foto intermedia --------------------------------------------------------- */
-.foto-intermedia__img img { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; }
+.foto-intermedia__img img { width: 100%; height: auto; }
 
 /* Confirmar asistencia ---------------------------------------------------- */
 .rsvp { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 48px 24px; text-align: center; }
@@ -150,6 +164,8 @@ body.con-sobre { overflow: hidden; background: var(--ev-envelope); }
 .rsvp__form [hidden] { display: none; }
 .rsvp__familia { font-family: var(--ev-font-title); font-size: 30px; line-height: 1.2; color: var(--ev-text); }
 .rsvp__pases { font-size: 17px; color: var(--ev-text-2); }
+.rsvp__previa { font-size: 16px; color: var(--ev-text); padding: 12px 16px; border: 1.5px dashed var(--ev-line); border-radius: 4px; }
+.rsvp__gracias:focus { outline: none; }
 .rsvp .field { text-align: left; }
 .rsvp .field__control { min-height: 52px; font-size: 18px; }
 .rsvp__error { font-size: 15px; color: var(--ev-accent); }
@@ -164,6 +180,16 @@ body.con-sobre { overflow: hidden; background: var(--ev-envelope); }
 .rsvp__nota { font-size: 15px; color: var(--ev-text-2); }
 .rsvp__gracias { font-family: var(--ev-font-title); font-size: 22px; }
 
+/* Mensajes para los novios ------------------------------------------------- */
+.mensajes { display: flex; flex-direction: column; gap: 20px; padding: 40px 24px 48px; margin: 0 24px; padding-inline: 0; border-top: 1.5px dashed var(--ev-line); }
+.mensajes__form { display: flex; flex-direction: column; gap: 16px; }
+.mensajes__form [hidden] { display: none; }
+.mensajes .field__control { min-height: 52px; font-size: 18px; }
+.mensajes__texto { min-height: 132px; padding-top: 12px; resize: vertical; line-height: 1.5; }
+.mensajes__error { font-size: 15px; color: var(--ev-accent); }
+.mensajes__gracias { font-family: var(--ev-font-title); font-size: 22px; text-align: center; }
+.mensajes__gracias:focus { outline: none; }
+
 /* Regalos ----------------------------------------------------------------- */
 .regalos { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 40px 24px 56px; text-align: center; border-top: 1.5px dashed var(--ev-line); margin: 0 24px; padding-inline: 0; }
 .regalos__frase { font-family: var(--ev-font-title); font-style: italic; font-size: 21px; line-height: 1.5; color: var(--ev-text); max-width: 30ch; }
@@ -171,13 +197,12 @@ body.con-sobre { overflow: hidden; background: var(--ev-envelope); }
 .regalo__titulo { font-family: var(--ev-font-title); font-size: 22px; }
 .regalo__detalle { font-size: 16px; color: var(--ev-text-2); }
 
-/* Galería: una a lo ancho, dos lado a lado. -------------------------------- */
+/* Galería: una a lo ancho y luego un par, sin recorte (ver galeria.js). */
 .galeria { padding: 8px 0 0; }
 .galeria__titulo { text-align: center; padding: 0 24px 20px; }
-.galeria__rejilla { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
-.galeria__foto img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; }
-.galeria__foto--ancha { grid-column: 1 / -1; }
-.galeria__foto--ancha img { aspect-ratio: 4 / 5; }
+.galeria__fila { display: flex; gap: 6px; margin-bottom: 6px; }
+.galeria__celda { min-width: 0; }
+.galeria__foto img { width: 100%; height: auto; }
 
 /* Pie --------------------------------------------------------------------- */
 .pie {

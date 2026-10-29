@@ -22,17 +22,18 @@ const SECCIONES = { portada, cuenta, frase, evento, vestimenta, foto, rsvp, rega
 const POR_DEFECTO = ['portada', 'cuenta', 'evento', 'vestimenta', 'rsvp', 'regalos', 'mensajes'];
 const app = document.getElementById('app');
 
-// La familia sale de este navegador (demo) o, en eventos reales sin backend,
-// del enlace (&d=). Un código que no se encuentra no rompe la invitación:
-// se ve la versión general.
+// La familia del enlace personal (?f=, con &d= en eventos reales). Un código
+// que no se encuentra no rompe la invitación: se ve la versión general.
 async function buscarFamilia(ev, codigo, enlace) {
   if (!codigo) return null;
   try {
-    const f = await data.getFamiliaPorCodigo(ev.id, codigo);
-    data.registrarApertura(ev.id, codigo);
+    const f = enlace
+      ? await data.familiaDeEnlace(ev.id, { codigo, ...enlace })
+      : await data.getFamiliaPorCodigo(ev.id, codigo);
+    data.registrarApertura(ev.id, f.codigo);
     return f;
   } catch {
-    return enlace ? { ...enlace, codigo } : null;
+    return null;
   }
 }
 

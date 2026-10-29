@@ -135,3 +135,5 @@ src/panel/views/           resumen, familias, mesas, mensajes, regalos, activida
 - `npm run build`: compila el sitio demo a `dist/` (lo que se publica en GitHub Pages)
 - `npm run build:clientes`: compila el sitio de clientes a `dist-clientes/`
 - `npm run fotos -- <slug>`: optimiza `eventos/<slug>/_originales/` a `fotos/`
+- `npm test`: pruebas de Playwright (`tests/`) en Android, iPhone y el panel en
+  computadora. Correrlas antes de mostrar o publicar una invitación.
