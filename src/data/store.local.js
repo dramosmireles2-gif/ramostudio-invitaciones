@@ -1,8 +1,7 @@
-// Implementación local del módulo de datos: lee el JSON de prueba y guarda los
-// cambios en localStorage. Misma firma que tendrá store.supabase.js.
+// Implementación local del módulo de datos: lee eventos/<slug>/evento.json y
+// guarda los cambios en localStorage. Misma firma que tendrá store.supabase.js.
 // No importar este archivo desde las pantallas: usar src/data/index.js.
-import seed from './seed/mariana-diego.json';
-import { DEMO_LOGIN_CODE } from '../config.js';
+import { DEMO_EVENT_SLUG, DEMO_LOGIN_CODE } from '../config.js';
 import { generarCodigo, normalizarCodigo } from './codigos.js';
 import { personasDe } from './reglas.js';
 
@@ -25,10 +24,22 @@ export class DataError extends Error {
 }
 
 // ---------------------------------------------------------------------------
+// Eventos (uno por carpeta)
+// ---------------------------------------------------------------------------
+
+// Cada evento es un chunk aparte: solo se descarga el que se abre.
+const ARCHIVOS = Object.fromEntries(
+  Object.entries(import.meta.glob('/eventos/*/evento.json', { import: 'default' }))
+    .map(([ruta, cargar]) => [ruta.split('/')[2], cargar]),
+);
+const COLECCIONES = ['eventos', 'familias', 'mesas', 'mensajes', 'regalos', 'actividad'];
+
+// ---------------------------------------------------------------------------
 // Persistencia
 // ---------------------------------------------------------------------------
 
 let memoria = null; // Respaldo si localStorage no está disponible.
+let viejo = null; // Datos de una versión anterior del demo, por migrar al cargar su evento.
 
 function leerStorage(key) {
   try {
@@ -64,9 +75,10 @@ function desfaseMinutos(zona) {
 // Convierte los tiempos del seed ({ dias, hora } en la zona del evento) en
 // fechas reales, para que la actividad de la demo tenga horas creíbles (de
 // 8:00 a. m. a 11:00 p. m.) a cualquier hora que se abra.
-function hidratarSeed() {
+function hidratarSeed(seed) {
   const s = structuredClone(seed);
   delete s._nota;
+  for (const k of COLECCIONES) s[k] ??= [];
   const zona = s.eventos[0].zonaHoraria;
   const [a, m, d] = hoyEnZona(zona).split('-').map(Number);
   const desfase = desfaseMinutos(zona);
@@ -114,7 +126,7 @@ function conNombre(item) {
 // (familia.personas[], cada persona con su mesaId) sin perder asignaciones:
 // cada persona hereda la mesa de su familia. Los nombres salen del seed si la
 // familia existe ahí con los mismos pases; si no, "Invitado 1", "Invitado 2"…
-function migrarDatos(viejo) {
+function migrarDatos(viejo, seed) {
   const delSeed = new Map(seed.familias.map((f) => [f.id, f]));
   for (const f of viejo.familias ?? []) {
     if (Array.isArray(f.personas)) continue;
@@ -137,20 +149,48 @@ function migrarDatos(viejo) {
   return viejo;
 }
 
+// Todos los eventos abiertos en este navegador comparten un solo estado; cada
+// uno entra la primera vez que se pide (cargarEvento).
 function estado() {
   if (!memoria) {
     memoria = leerStorage(STORAGE_KEY);
     if (!memoria) {
       const key = KEYS_ANTERIORES.find((k) => leerStorage(k));
-      if (key) {
-        memoria = migrarDatos(leerStorage(key));
-        escribirStorage(STORAGE_KEY, memoria);
-        escribirStorage(key, null);
-      }
+      if (key) viejo = { key, datos: leerStorage(key) };
+      memoria = {};
     }
-    memoria ??= hidratarSeed();
+    for (const k of COLECCIONES) memoria[k] ??= [];
   }
   return memoria;
+}
+
+async function cargarEvento(slug) {
+  const s = estado();
+  const presente = s.eventos.find((x) => x.slug === slug);
+  if (presente) return presente;
+  // null: el evento es del otro sitio (demo o clientes) y no se publicó aquí.
+  const seed = await ARCHIVOS[slug]?.();
+  if (!seed) throw new DataError('evento_no_encontrado', 'No encontramos este evento.');
+  // Otra llamada pudo cargarlo mientras se descargaba.
+  if (s.eventos.some((x) => x.slug === slug)) return s.eventos.find((x) => x.slug === slug);
+  let datos;
+  if (slug === DEMO_EVENT_SLUG && viejo) {
+    datos = migrarDatos(viejo.datos, seed);
+    escribirStorage(viejo.key, null);
+    viejo = null;
+  } else datos = hidratarSeed(seed);
+  for (const k of COLECCIONES) s[k].push(...(datos[k] ?? []));
+  guardar();
+  return s.eventos.find((x) => x.slug === slug);
+}
+
+// El panel solo conoce el id (lo guarda la sesión): si aún no está, se cargan
+// todos los eventos para encontrarlo.
+async function cargarEventoPorId(eventoId) {
+  if (!estado().eventos.some((x) => x.id === eventoId)) {
+    await Promise.allSettled(Object.keys(ARCHIVOS).map(cargarEvento));
+  }
+  return eventoPorId(eventoId);
 }
 
 function guardar() {
@@ -225,13 +265,11 @@ const plural = (n, uno, varios) => `${n} ${n === 1 ? uno : varios}`;
 // ---------------------------------------------------------------------------
 
 export async function getEvento(slug) {
-  const e = estado().eventos.find((x) => x.slug === slug);
-  if (!e) throw new DataError('evento_no_encontrado', 'No encontramos este evento.');
-  return conFechas(e);
+  return conFechas(await cargarEvento(slug));
 }
 
 export async function getEventoPorId(eventoId) {
-  return conFechas(eventoPorId(eventoId));
+  return conFechas(await cargarEventoPorId(eventoId));
 }
 
 const CAMPOS_EVENTO = [
@@ -598,15 +636,15 @@ export async function getResumen(eventoId) {
 
 const CORREO_VALIDO = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export async function login(correo, codigo) {
+export async function login(correo, codigo, eventoId) {
   if (!CORREO_VALIDO.test(String(correo ?? '').trim())) {
     throw new DataError('correo_invalido', 'Escribe un correo válido.');
   }
   if (String(codigo ?? '').trim() !== DEMO_LOGIN_CODE) {
     throw new DataError('codigo_incorrecto', 'El código no es correcto.');
   }
-  // En la demo, cualquier sesión administra el primer evento.
-  const sesion = { correo: correo.trim(), eventoId: estado().eventos[0].id };
+  // Login simulado: la sesión administra el evento desde el que se entró.
+  const sesion = { correo: correo.trim(), eventoId: (await cargarEventoPorId(eventoId)).id };
   escribirStorage(SESION_KEY, sesion);
   return copia(sesion);
 }
@@ -626,9 +664,16 @@ export async function logout() {
   escribirStorage(SESION_KEY, null);
 }
 
-// Borra todos los cambios hechos en la demo (también los de versiones viejas,
-// para que no se vuelvan a migrar) y vuelve a los datos de prueba.
+// Borra los cambios hechos en el evento demo (también los de versiones viejas,
+// para que no se vuelvan a migrar); los demás eventos no se tocan. Sus datos
+// de prueba vuelven la próxima vez que se pida el evento.
 export async function reiniciarDemo() {
-  for (const key of [STORAGE_KEY, ...KEYS_ANTERIORES]) escribirStorage(key, null);
-  memoria = null;
+  for (const key of KEYS_ANTERIORES) escribirStorage(key, null);
+  viejo = null;
+  const s = estado();
+  const demo = s.eventos.find((x) => x.slug === DEMO_EVENT_SLUG);
+  if (!demo) return;
+  s.eventos = s.eventos.filter((x) => x !== demo);
+  for (const k of COLECCIONES.slice(1)) s[k] = s[k].filter((x) => x.eventoId !== demo.id);
+  guardar();
 }

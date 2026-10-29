@@ -112,7 +112,7 @@ function pasoCodigo() {
     e.preventDefault();
     if (entrar.disabled) return;
     try {
-      await data.login(correo, form.codigo.value);
+      await data.login(correo, form.codigo.value, evento.id);
       location.replace('/panel/app.html');
     } catch {
       decir('Ese código no coincide. Revisen el correo más reciente que les mandamos.', true);

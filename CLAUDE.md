@@ -19,16 +19,27 @@ publica.
 
 ## Dominio
 
-- Este demo se publica en **`demo.ramosmkt.lat`**.
+- Dos sitios desde **este mismo repo**, cada evento en su carpeta:
+  - **Demo** (`npm run build` → `dist/`): solo `mariana-diego`, en **`demo.ramosmkt.lat`**.
+  - **Clientes** (`npm run build:clientes` → `dist-clientes/`): todos los demás eventos, en
+    `CLIENTES_BASE_URL` (**PENDIENTE**: ramostudio.mx o .com, se compra antes de entregar
+    la primera invitación). Aún no se despliega: falta el dominio y el destino de Pages.
+  - Los datos de un evento nunca entran al sitio del otro (`scripts/vite-eventos.js`).
 - **Nunca usar `inv.ramosmkt.lat`**: pertenece a otro repositorio con invitaciones en vivo
   de clientes reales.
 
-## Etapa actual: DEMO
+## Etapa actual: DEMO + primer cliente
 
-- Todo es **demo**, sin backend. Supabase se conecta en una etapa posterior.
-- **Solo datos ficticios.** El evento de prueba es la boda de **Mariana & Diego**. Su
-  fecha se calcula al cargar como *hoy + 58 días*, para que la demo siempre diga
-  "faltan 58 días". Nunca usar nombres, teléfonos, correos ni direcciones reales.
+- Sin backend todavía. Supabase se conecta en paralelo (ver punto de respaldo del RSVP).
+- **El demo usa solo datos ficticios.** El evento demo es la boda de **Mariana & Diego**
+  (`eventos/mariana-diego/`). Su fecha se calcula al cargar como *hoy + 58 días*
+  (`fechaRelativaDias`), para que la demo siempre diga "faltan 58 días". En el demo nunca
+  usar nombres, teléfonos, correos ni direcciones reales.
+- **Eventos de clientes** (primero: Iris & Alex, `eventos/iris-alex/`) llevan sus datos
+  reales y una `fecha` fija. Solo lo que la pareja aprobó para la invitación pública; nada
+  de datos de invitados en el repo (los captura la pareja desde el panel).
+- Los eventos de `inv.ramosmkt.lat` (ivan-gemima, eunice-edher, …) viven en otro repo y no
+  se tocan desde aquí.
 - **Login del panel simulado:** cualquier correo + código `123456`. Es solo para la demo;
   no construir nada que parezca autenticación real ni guardar contraseñas.
 
@@ -46,7 +57,8 @@ publica.
    `localStorage` ni (en el futuro) Supabase directamente; siempre importan de
    `src/data/index.js` (`getEvento`, `getFamilias`, `confirmarAsistencia`, `getMesas`,
    `enviarMensaje`, `getRegalos`, `getActividad`, …).
-   - Hoy: `store.local.js` lee el JSON de `seed/` y guarda los cambios en `localStorage`.
+   - Hoy: `store.local.js` carga `eventos/<slug>/evento.json` por slug (un chunk por
+     evento, con `import.meta.glob`) y guarda los cambios en `localStorage`.
    - Después: se agrega `store.supabase.js` y `index.js` cambia de implementación **sin
      tocar las pantallas**.
    - Todas las funciones son `async` desde ya, para que el cambio no altere su firma.
@@ -55,9 +67,13 @@ publica.
    evento demo va escrito a mano en el HTML o el CSS; todo sale de los datos.
 3. **El tema se aplica con variables CSS** (`src/lib/theme.js`) generadas desde el `tema`
    del evento, encima de los tokens del design system de RamoStudio.
-4. **Dominio en una sola variable.** `INVITE_BASE_URL = "https://demo.ramosmkt.lat"` vive
-   únicamente en `src/config.js`. Ningún otro archivo escribe el dominio.
-5. **Enlaces por familia:** `<INVITE_BASE_URL>/invitacion/?e=<slug>&f=<codigo>`. El código
+4. **Dominios solo en `src/config.js`.** `INVITE_BASE_URL` (demo) y `CLIENTES_BASE_URL`
+   (clientes); `baseUrlEvento(slug)` elige el de cada evento. Ningún otro archivo escribe
+   un dominio.
+5. **Enlaces por familia:** `<dominio del evento>/<slug>/?f=<codigo>`. Cada evento tiene su
+   página real en `/<slug>/` (la genera `scripts/vite-eventos.js` con el título y las metas
+   Open Graph del evento, porque WhatsApp no ejecuta JS); `/invitacion/?e=<slug>&f=<codigo>`
+   sigue funcionando como respaldo. El código
    de familia es **aleatorio, de 6 a 8 caracteres**, sin caracteres ambiguos (0/O, 1/I/L),
    y **nunca se deriva del apellido**, para que no se pueda adivinar el enlace de otra
    familia. Los textos y ejemplos del panel muestran este formato. Los enlaces se arman
@@ -65,6 +81,9 @@ publica.
 6. **Música de la invitación:** solo arranca cuando el invitado toca el sello del sobre
    (nunca en autoplay). Si el invitado la silencia, esa elección se guarda y se respeta
    en visitas siguientes.
+7. **Una carpeta por evento** (ver Estructura). Agregar un evento = crear su carpeta; la
+   invitación y el panel no llevan código por evento. Al entregar uno, agregar su fila en
+   `registro-eventos-ramostudio.md`.
 
 ## Marca y diseño
 
@@ -82,14 +101,23 @@ publica.
 ## Estructura
 
 ```
+registro-eventos-ramostudio.md  Registro de eventos (fuentes, color, apertura) para no repetir
+eventos/<slug>/            Una carpeta por evento:
+  evento.json              Datos y tema (misma forma que el demo: eventos, familias, mesas…)
+  docs/                    BRIEF-EVENTO.md, REFERENCIAS.md, DESIGN.md, REVISION.md
+  fotos/                   Solo optimizadas (AVIF/WebP + JPG); se publican en /eventos/<slug>/fotos/
+  og.jpg                   Vista previa de WhatsApp, 1200x630, menos de 300 KB
+  _originales/             Fotos pesadas; en .gitignore, nunca se suben
+scripts/vite-eventos.js    Página /<slug>/ por evento y copia de fotos/ y og.jpg a dist/
+scripts/fotos.mjs          _originales/ → fotos/ (npm run fotos -- <slug>)
 index.html                 Portada de la demo (enlaces a invitación y panel)
-invitacion/index.html      Invitación (?e=<slug>&f=<codigo>)
+invitacion/index.html      Invitación (plantilla de /<slug>/; respaldo ?e=<slug>&f=<codigo>)
 panel/index.html           Login simulado
 panel/app.html             Panel de novios
 public/fonts/              Fuentes autoalojadas
 public/CNAME               demo.ramosmkt.lat (GitHub Pages)
-src/config.js              INVITE_BASE_URL y constantes de la demo
-src/data/                  ÚNICO acceso a datos (index.js = API, store.local.js, seed/)
+src/config.js              Dominios (demo y clientes) y constantes de la demo
+src/data/                  ÚNICO acceso a datos (index.js = API, store.local.js)
 src/styles/                tokens.css, base.css, components.css
 src/lib/                   theme, links, fechas, dom
 src/invitacion/sections/   sobre, musica, portada, cuenta, evento, rsvp, regalos, mensajes
@@ -100,4 +128,6 @@ src/panel/views/           resumen, familias, mesas, mensajes, regalos, activida
 ## Comandos
 
 - `npm run dev`: servidor local
-- `npm run build`: compila a `dist/` (lo que se publica en GitHub Pages)
+- `npm run build`: compila el sitio demo a `dist/` (lo que se publica en GitHub Pages)
+- `npm run build:clientes`: compila el sitio de clientes a `dist-clientes/`
+- `npm run fotos -- <slug>`: optimiza `eventos/<slug>/_originales/` a `fotos/`

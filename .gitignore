@@ -2,3 +2,7 @@ node_modules/
 dist/
 .DS_Store
 *.local
+
+# Fotos originales de cada evento (pesadas): solo se suben las optimizadas de fotos/
+eventos/*/_originales/
+dist-clientes/

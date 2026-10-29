@@ -40,7 +40,7 @@ Lo que ve quien llega a `demo.ramosmkt.lat` (por ejemplo desde un flyer).
   «Ver la invitación» deshabilitado con la etiqueta «Próximamente» y la banda «¿Te casas o preparas
   unos XV?» con «Quiero la mía» (WhatsApp). Es la única página sin `noindex`.
 - **SEO y vista previa**: title, description, canonical y Open Graph. La imagen es
-  `public/og-demo.jpg` (1200x630, 61 KB; WhatsApp descarta las de más de 300 KB). Las metas usan
+  `eventos/mariana-diego/og.jpg` (1200x630, 61 KB; WhatsApp descarta las de más de 300 KB). Las metas usan
   `%INVITE_BASE_URL%`, que un plugin de `vite.config.js` cambia por el dominio de `src/config.js`.
 - **`DEMO_MODE`** (`src/config.js`): con él, el evento `DEMO_EVENT_SLUG` entra al panel sin login
   (`entrarDemo` en el store guarda una sesión `{ demo: true }`). Los demás eventos siguen con el
@@ -216,7 +216,7 @@ create index personas_mesa_idx on personas (mesa_id);
 
 ## Datos
 
-- `src/data/seed/mariana-diego.json` usa los datos ficticios del diseño: 50 familias, 122 pases (una
+- `eventos/mariana-diego/evento.json` usa los datos ficticios del diseño: 50 familias, 122 pases (una
   persona por pase, ver «Modelo: personas con mesa propia») y 12 mesas de 10. Los códigos de familia son nuevos y aleatorios, salvo `DEMO` (familia del recorrido del demo). Cada familia tiene además `grupo` y
   `abrioHaceHoras` (que se convierte en `abrioFecha`). El evento tiene `ciudad`,
   `fechaLimiteRsvpDiasAntes: 35` (faltan 23 días para la fecha límite) y un `tema` nuevo

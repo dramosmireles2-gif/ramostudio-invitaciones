@@ -1,12 +1,14 @@
 // Arma los enlaces de invitación. Único lugar que combina el dominio con
 // el slug del evento y el código de la familia.
-import { INVITE_BASE_URL, WHATSAPP_NUMBER } from '../config.js';
+import { INVITE_BASE_URL, WHATSAPP_NUMBER, baseUrlEvento } from '../config.js';
 import { origenVisita } from './origen.js';
 
-// Formato: https://demo.ramosmkt.lat/invitacion/?e=<slug>&f=<codigo>
+// Formato: https://<dominio del evento>/<slug>/?f=<codigo>
+// (demo.ramosmkt.lat para el demo; el dominio de clientes para los demás).
+// Cada evento tiene su página en /<slug>/ (con su vista previa de WhatsApp);
+// /invitacion/?e=<slug>&f=<codigo> sigue funcionando como respaldo.
 export function enlaceFamilia(slug, codigo) {
-  const url = new URL('/invitacion/', INVITE_BASE_URL);
-  url.searchParams.set('e', slug);
+  const url = new URL(`/${encodeURIComponent(slug)}/`, baseUrlEvento(slug));
   url.searchParams.set('f', codigo);
   return url.toString();
 }
@@ -14,7 +16,7 @@ export function enlaceFamilia(slug, codigo) {
 // Ruta relativa de la invitación de un evento (sin familia), para abrirla
 // desde el panel en el mismo sitio donde corre la demo.
 export function rutaInvitacion(slug) {
-  return `/invitacion/?e=${encodeURIComponent(slug)}`;
+  return `/${encodeURIComponent(slug)}/`;
 }
 
 // Abre WhatsApp con el mensaje ya escrito; los novios eligen el chat y lo
@@ -33,10 +35,12 @@ export function enlaceQuieroLaMia() {
 }
 
 // Para mostrar en textos de ayuda del panel.
-export const FORMATO_ENLACE = `${INVITE_BASE_URL}/invitacion/?e=<evento>&f=<código>`;
+export const FORMATO_ENLACE = `${INVITE_BASE_URL}/<evento>/?f=<código>`;
 
-// Lee ?e= y ?f= de la URL actual.
+// Lee el evento y ?f= de la URL actual. En /<slug>/ el evento viene en la
+// meta ramostudio:evento de la página; en /invitacion/ y /panel/, en ?e=.
 export function leerParametros(search = location.search) {
   const p = new URLSearchParams(search);
-  return { slug: p.get('e'), codigo: p.get('f') };
+  const pagina = document.querySelector('meta[name="ramostudio:evento"]')?.content;
+  return { slug: pagina ?? p.get('e'), codigo: p.get('f') };
 }
