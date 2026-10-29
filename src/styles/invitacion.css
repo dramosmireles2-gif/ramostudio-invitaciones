@@ -21,7 +21,7 @@ body.con-sobre { overflow: hidden; }
   color: var(--ev-text); text-align: center;
 }
 /* El filete del acento (en Iris & Alex, uno de los 3 rojos). */
-.ev-filete { display: block; width: 56px; height: 2px; margin: 0 auto; background: var(--ev-accent); }
+.ev-filete { display: block; width: 56px; height: 2px; margin: 0 auto; background: var(--ev-filete-color, var(--ev-accent)); }
 .ev-enlace {
   display: inline-flex; align-items: center; justify-content: center; min-height: 48px;
   font-family: var(--ev-font-data); font-size: 16px; font-weight: var(--fw-medium); color: var(--ev-text);
@@ -144,6 +144,36 @@ body.con-sobre { overflow: hidden; }
 .sede__direccion { font-size: 17px; color: var(--ev-text-2); max-width: 30ch; }
 .sede__botones { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 4px; margin-top: 12px; }
 
+/* Guarden la fecha: hoja de calendario --------------------------------------- */
+.calendario { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 0 24px 56px; text-align: center; }
+.calendario__hoja {
+  display: block; width: 100%; max-width: 300px; overflow: hidden; text-decoration: none; color: var(--ev-text);
+  background: var(--ev-surface); border: 1px solid var(--ev-line); border-radius: 4px;
+  /* Hoja apilada sobre otra, como papelería (capa sólida, sin sombra difusa). */
+  box-shadow: 5px 5px 0 0 var(--ev-surface-2), 5px 5px 0 1px var(--ev-line);
+  transition: transform var(--dur-quick) var(--ease-paper);
+}
+.calendario__hoja:hover { color: var(--ev-text); }
+.calendario__hoja:active { transform: translate(2px, 2px); }
+.calendario__hoja:focus-visible { outline: 2px solid var(--ev-text); outline-offset: 4px; }
+.calendario__mes {
+  display: block; padding: 14px 16px 12px; background: var(--ev-band); color: var(--ev-on-band);
+  font-family: var(--ev-font-title); font-style: italic; font-size: 28px; line-height: 1.1;
+}
+.calendario__anio { font-family: var(--ev-font-data); font-style: normal; font-size: 13px; letter-spacing: .22em; color: var(--ev-on-band-2, var(--ev-on-band)); vertical-align: middle; margin-left: 6px; }
+.calendario__rejilla { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); row-gap: 2px; padding: 14px 12px 10px; }
+.calendario__semana { font-size: 12px; font-weight: var(--fw-semibold); letter-spacing: .12em; color: var(--ev-text-2); padding-bottom: 6px; }
+.calendario__dia { position: relative; font-family: var(--ev-font-title); font-size: 18px; line-height: 34px; color: var(--ev-text); }
+.calendario__dia--boda { font-weight: 600; }
+.calendario__circulo { position: absolute; left: 50%; top: 50%; width: 44px; height: 44px; transform: translate(-50%, -52%) rotate(-8deg); overflow: visible; }
+.calendario__circulo path {
+  fill: none; stroke: var(--ev-accent); stroke-width: 2.2; stroke-linecap: round;
+  stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 900ms var(--ease-paper) 200ms;
+}
+.calendario__hoja--vista .calendario__circulo path { stroke-dashoffset: 0; }
+.calendario__pie { display: block; padding: 12px 16px 14px; border-top: 1.5px dashed var(--ev-line); font-size: 16px; color: var(--ev-text); }
+.calendario__accion { font-size: 15px; color: var(--ev-text-2); }
+
 /* Vestimenta: banda del color del tema. */
 .vestimenta {
   display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center;
@@ -191,11 +221,30 @@ body.con-sobre { overflow: hidden; }
 .mensajes__gracias:focus { outline: none; }
 
 /* Regalos ----------------------------------------------------------------- */
-.regalos { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 40px 24px 56px; text-align: center; border-top: 1.5px dashed var(--ev-line); margin: 0 24px; padding-inline: 0; }
+.regalos { display: flex; flex-direction: column; align-items: center; gap: 18px; padding: 40px 0 56px; margin: 0 24px; text-align: center; border-top: 1.5px dashed var(--ev-line); }
 .regalos__frase { font-family: var(--ev-font-title); font-style: italic; font-size: 21px; line-height: 1.5; color: var(--ev-text); max-width: 30ch; }
-.regalo { width: 100%; display: flex; flex-direction: column; gap: 6px; }
-.regalo__titulo { font-family: var(--ev-font-title); font-size: 22px; }
-.regalo__detalle { font-size: 16px; color: var(--ev-text-2); }
+.regalos__tambien { font-size: 16px; color: var(--ev-text-2); margin-top: 6px; }
+.regalo { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 22px 20px; background: var(--ev-surface); border: 1px solid var(--ev-line); border-radius: 4px; }
+/* Transferencia: un sobre (solapa en V con pespunte arriba). */
+.regalo--sobre { position: relative; padding-top: 44px; }
+.regalo--sobre::before {
+  content: ""; position: absolute; inset: 0 0 auto; height: 30px; background: var(--ev-band);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+.regalo--sobre::after {
+  content: ""; position: absolute; left: 50%; top: 18px; width: 22px; height: 22px; margin-left: -11px; border-radius: 50%;
+  border: 1.5px solid var(--ev-on-band-2, var(--ev-on-band)); background: var(--ev-band);
+}
+.regalo__datos { width: 100%; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.regalo__datos dt { font-size: 12px; font-weight: var(--fw-semibold); letter-spacing: .18em; text-transform: uppercase; color: var(--ev-text-2); }
+.regalo__datos dd { margin: 2px 0 0; font-size: 17px; color: var(--ev-text); overflow-wrap: anywhere; }
+.regalo__numero { font-variant-numeric: tabular-nums; letter-spacing: .06em; }
+.regalos__tiendas { width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.regalos__tiendas .regalo { padding: 20px 12px; }
+.regalos__tiendas .regalo:only-child { grid-column: 1 / -1; }
+.regalo__tienda { font-family: var(--ev-font-title); font-size: 26px; line-height: 1.1; color: var(--ev-text); }
+.regalo__detalle { font-size: 15px; line-height: 1.4; color: var(--ev-text-2); }
+.regalos__aviso { font-size: 16px; color: var(--ev-text); }
 
 /* Galería: una a lo ancho y luego un par, sin recorte (ver galeria.js). */
 .galeria { padding: 8px 0 0; }
@@ -222,4 +271,5 @@ body.con-sobre { overflow: hidden; }
 
 @media (prefers-reduced-motion: reduce) {
   .sobre--abriendo { opacity: 0; }
+  .calendario__circulo path { stroke-dashoffset: 0; transition: none; }
 }

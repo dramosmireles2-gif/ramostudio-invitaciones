@@ -11,6 +11,7 @@ import * as evento from './sections/evento.js';
 import * as vestimenta from './sections/vestimenta.js';
 import * as foto from './sections/foto.js';
 import * as frase from './sections/frase.js';
+import * as calendario from './sections/calendario.js';
 import * as galeria from './sections/galeria.js';
 import * as rsvp from './sections/rsvp.js';
 import * as regalos from './sections/regalos.js';
@@ -18,8 +19,8 @@ import * as mensajes from './sections/mensajes.js';
 import * as pie from './sections/pie.js';
 
 // Cada evento elige sus secciones y su orden en evento.secciones.
-const SECCIONES = { portada, cuenta, frase, evento, vestimenta, foto, rsvp, regalos, galeria, mensajes, pie };
-const POR_DEFECTO = ['portada', 'cuenta', 'evento', 'vestimenta', 'rsvp', 'regalos', 'mensajes'];
+const SECCIONES = { portada, cuenta, frase, evento, calendario, vestimenta, foto, rsvp, regalos, galeria, mensajes, pie };
+const POR_DEFECTO = ['portada', 'cuenta', 'evento', 'calendario', 'vestimenta', 'rsvp', 'regalos', 'mensajes', 'pie'];
 const app = document.getElementById('app');
 
 // La familia del enlace personal (?f=, con &d= en eventos reales). Un código

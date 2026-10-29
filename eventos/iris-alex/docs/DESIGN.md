@@ -128,8 +128,9 @@ negro. Dura 2.5 s, solo con transform y opacity, y con versión sin animación.
   único con color.
 - **Fondo:** `camisa`. Lo negro aparece solo en el sobre, en las bandas de toquilla entre
   secciones y en el pie.
-- **El rojo aparece 3 veces en total:** el sello, el botón de confirmar y el filete bajo
-  la fecha.
+- **El rojo aparece 3 veces en total:** el sello, el botón de confirmar y el círculo
+  trazado a mano alrededor del 4 en la hoja de calendario ("Guarden la fecha"). El filete
+  bajo la fecha de la portada va en negro fieltro (cambio del 29 de octubre de 2026).
 - **Personalización:** el sello rojo (su corazón), los bordados de sus bolsas redibujados
   en SVG como esquineros y el nombre de la familia en el sobre.
 

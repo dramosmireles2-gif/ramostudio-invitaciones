@@ -1,9 +1,8 @@
-// Ceremonia y recepción: hora, lugar, dirección, "Cómo llegar" (Google Maps),
-// Waze y "Agregar al calendario". Sin mapa embebido: pesa y en WhatsApp
-// estorba; el botón abre la app de mapas del teléfono.
+// Ceremonia y recepción: hora, lugar, dirección, "Cómo llegar" (Google Maps) y
+// Waze. Sin mapa embebido: pesa y en WhatsApp estorba; el botón abre la app de
+// mapas del teléfono. "Agregar al calendario" vive en la sección calendario.
 import { horaTexto } from '../../lib/fechas.js';
 import { enlaceGoogleMaps, enlaceWaze } from '../../lib/mapas.js';
-import { enlaceGoogleCalendar, activarCalendario } from '../../lib/calendario.js';
 import { html, crudo } from '../../lib/dom.js';
 
 export function montar(contenedor, { evento }) {
@@ -19,7 +18,5 @@ export function montar(contenedor, { evento }) {
         <a class="btn btn--secondary btn--full" href="${enlaceGoogleMaps(s)}" target="_blank" rel="noopener">Cómo llegar</a>
         <a class="ev-enlace" href="${enlaceWaze(s)}" target="_blank" rel="noopener">Abrir en Waze</a>
       </div>
-    </article>`))}
-    <a class="btn btn--secondary btn--full sedes__calendario" href="${enlaceGoogleCalendar(evento)}" target="_blank" rel="noopener">Agregar al calendario</a>`;
-  activarCalendario(contenedor.querySelector('.sedes__calendario'), evento);
+    </article>`))}`;
 }

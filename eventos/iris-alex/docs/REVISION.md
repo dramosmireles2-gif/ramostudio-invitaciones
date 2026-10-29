@@ -87,6 +87,22 @@ completas. Solo quedan pendientes la base de datos y el dominio.
 - Capturas finales en `capturas/` (invitación completa en iPhone, apertura cuadro por
   cuadro y el panel).
 
+## Iteración 4 (29 de octubre de 2026): calendario y regalos
+
+- **"Guarden la fecha":** en vez del botón, una hoja de calendario de diciembre de 2026
+  (banda negra con el mes en Bodoni itálica, hoja apilada como papelería) con el 4
+  encerrado a mano en rojo; el círculo se traza una vez al llegar a la hoja. Toda la hoja
+  agrega la boda al calendario (Google Calendar; .ics en iPhone). HyperFrames no hizo
+  falta: es un SVG de unas líneas.
+- **Regalos:** lluvia de sobres con su frase y, debajo, transferencia en una tarjeta con
+  forma de sobre ("Copiar CLABE" cuando haya número) y Liverpool y Amazon lado a lado.
+  Los datos dicen "por confirmar" hasta que la pareja los dé.
+- **Liga temporal:** `demo.ramosmkt.lat/iris-alex/` mientras se compra el dominio.
+- Playwright: 16 pruebas pasan (calendario con el 4 en la columna del viernes y su enlace,
+  regalos con transferencia, Liverpool y Amazon).
+- Auditoría: 2 señales, las mismas de antes (frase de sobres y corazón de emoji en la
+  foto de la pareja); "por confirmar" en regalos es dato pendiente, no diseño.
+
 ## Pendiente antes de enviar (miércoles 4 de noviembre)
 
 1. **Número de WhatsApp** que recibe las confirmaciones (`rsvp.telefono` en evento.json).

@@ -82,7 +82,10 @@ export function eventos({ baseUrlEvento, demoSlug, clientesBaseUrl }) {
     configResolved(config) {
       outDir = resolve(config.root, config.build.outDir);
       clientes = config.mode === 'clientes';
-      if (config.command === 'build') publicado = (slug) => (slug === demoSlug) !== clientes;
+      // Mientras los clientes usen el mismo dominio que el demo (dominio propio
+      // pendiente), `vite build` publica todos los eventos en un solo sitio.
+      const unSitio = clientesBaseUrl === baseUrlEvento(demoSlug);
+      if (config.command === 'build' && !unSitio) publicado = (slug) => (slug === demoSlug) !== clientes;
     },
 
     // Un evento de otro sitio entra como null: store.local.js lo trata como

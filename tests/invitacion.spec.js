@@ -35,7 +35,7 @@ test('todas las secciones con los datos del brief', async ({ page }) => {
   await page.goto(enlaceFamilia(codigoPrueba(), 'Familia Prueba Datos', 3));
   await abrirSobre(page);
   const secciones = await page.locator('#app > section').evaluateAll((s) => s.map((x) => x.dataset.seccion));
-  expect(secciones).toEqual(['portada', 'cuenta', 'frase', 'evento', 'vestimenta', 'foto', 'rsvp', 'mensajes', 'regalos', 'galeria', 'pie']);
+  expect(secciones).toEqual(['portada', 'cuenta', 'frase', 'evento', 'calendario', 'vestimenta', 'foto', 'rsvp', 'mensajes', 'regalos', 'galeria', 'pie']);
 
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Iris & Alex');
   await expect(page.locator('.portada__fecha')).toHaveText('Viernes 4 de diciembre de 2026');
@@ -53,12 +53,27 @@ test('todas las secciones con los datos del brief', async ({ page }) => {
     .toHaveAttribute('href', 'https://www.google.com/maps/search/?api=1&query=26.0379125,-98.3010376');
   await expect(sedes.nth(1).getByRole('link', { name: 'Abrir en Waze' }))
     .toHaveAttribute('href', /waze\.com\/ul\?ll=26\.0379125%2C-98\.3010376&navigate=yes/);
-  await expect(page.getByRole('link', { name: 'Agregar al calendario' })).toBeVisible();
+  // Guarden la fecha: hoja de diciembre 2026 con el 4 (viernes) marcado; toda la
+  // hoja agrega la boda al calendario.
+  const hoja = page.getByRole('link', { name: /^Agregar la boda a mi calendario: viernes 4 de diciembre de 2026, 6:00 p\. m\./ });
+  await expect(hoja).toBeVisible();
+  await expect(hoja).toHaveAttribute('href', /calendar\.google\.com.*dates=20261205T000000Z%2F20261205T060000Z/);
+  await expect(page.locator('.calendario__mes')).toContainText('Diciembre');
+  await expect(page.locator('.calendario__dia--boda')).toHaveText('4');
+  const columna = await page.locator('.calendario__rejilla > *').evaluateAll((c) => c.findIndex((x) => x.classList.contains('calendario__dia--boda')) % 7);
+  expect(columna).toBe(5); // D L M M J [V] S
+  await hoja.scrollIntoViewIfNeeded();
+  await expect(page.locator('.calendario__hoja')).toHaveClass(/calendario__hoja--vista/);
 
   await expect(page.locator('.vestimenta')).toContainText('Formal');
   await expect(page.locator('.vestimenta')).toContainText('De negro');
   await expect(page.locator('.rsvp__limite')).toContainText('viernes 20 de noviembre de 2026');
-  await expect(page.locator('.regalos')).toContainText('Lluvia de sobres');
+  const regalos = page.locator('.regalos');
+  await expect(regalos).toContainText('Lluvia de sobres');
+  await expect(regalos.locator('.regalo--sobre')).toContainText('Transferencia');
+  await expect(regalos.locator('.regalo--sobre')).toContainText('CLABE');
+  await expect(regalos.getByRole('article', { name: 'Mesa de regalos en Liverpool' })).toBeVisible();
+  await expect(regalos.getByRole('article', { name: 'Lista de regalos en Amazon' })).toBeVisible();
   await expect(page.locator(".galeria img")).toHaveCount(6);
   await expect(page.locator('.pie')).toContainText('Fotos: Dreams Studio by May Torres');
   // Sin música hasta que llegue la canción: no hay control de música.

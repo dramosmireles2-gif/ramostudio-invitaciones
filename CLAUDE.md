@@ -23,8 +23,12 @@ publica.
   - **Demo** (`npm run build` → `dist/`): solo `mariana-diego`, en **`demo.ramosmkt.lat`**.
   - **Clientes** (`npm run build:clientes` → `dist-clientes/`): todos los demás eventos, en
     `CLIENTES_BASE_URL` (**PENDIENTE**: ramostudio.mx o .com, se compra antes de entregar
-    la primera invitación). Aún no se despliega: falta el dominio y el destino de Pages.
+    la primera invitación).
   - Los datos de un evento nunca entran al sitio del otro (`scripts/vite-eventos.js`).
+  - **TEMPORAL:** mientras no hay dominio, `CLIENTES_BASE_URL` es `demo.ramosmkt.lat` y
+    `npm run build` publica todos los eventos en un solo sitio (Iris & Alex en
+    `demo.ramosmkt.lat/iris-alex/`). Al comprar el dominio, cambiar esa línea; los sitios
+    se separan solos y falta crear el destino de Pages del sitio de clientes.
 - **Nunca usar `inv.ramosmkt.lat`**: pertenece a otro repositorio con invitaciones en vivo
   de clientes reales.
 

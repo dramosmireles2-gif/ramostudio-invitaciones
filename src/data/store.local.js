@@ -164,9 +164,10 @@ function estado() {
   return memoria;
 }
 
-// Eventos reales: los datos del evento (fecha, lugares, tema) mandan desde
-// evento.json en cada carga, para que una corrección llegue a quien ya abrió
-// la invitación. Solo sus familias, mesas, etc. quedan en este navegador.
+// Eventos reales: los datos del evento (fecha, lugares, tema) y sus regalos
+// mandan desde evento.json en cada carga, para que una corrección llegue a
+// quien ya abrió la invitación. Solo sus familias, mesas, mensajes y
+// actividad quedan en este navegador.
 const refrescados = new Set();
 
 async function cargarEvento(slug) {
@@ -181,6 +182,7 @@ async function cargarEvento(slug) {
   if (ya) {
     if (slug !== DEMO_EVENT_SLUG && !refrescados.has(slug)) {
       s.eventos[s.eventos.indexOf(ya)] = structuredClone(seed.eventos[0]);
+      s.regalos = [...s.regalos.filter((r) => r.eventoId !== ya.id), ...structuredClone(seed.regalos ?? [])];
       refrescados.add(slug);
       guardar();
     }

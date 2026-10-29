@@ -49,7 +49,7 @@ Solo los dos momentos de arriba. SUPUESTO: no se muestran horas de cena ni baile
 | Dato | Valor | Cómo se muestra |
 |---|---|---|
 | Vestimenta | Formal, negro | "Formal · Negro". Sin script, legible |
-| Regalos | Lluvia de sobres | Frase elegante, **sin cuentas ni datos bancarios** |
+| Regalos | Lluvia de sobres + transferencia, Liverpool y Amazon (David, 29/10/2026) | Frase de sobres; datos de cuenta y números de evento **POR CONFIRMAR** con la pareja |
 | Confirmar antes de | Viernes 20 de noviembre de 2026 | Fecha completa, sin script |
 | Niños | Sin restricción | No se escribe ninguna nota de niños |
 | Pases | Por familia | Los asigna la novia desde el panel |

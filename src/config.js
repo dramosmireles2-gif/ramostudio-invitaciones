@@ -3,9 +3,11 @@
 // Sitio demo: solo el evento DEMO_EVENT_SLUG.
 export const INVITE_BASE_URL = 'https://demo.ramosmkt.lat';
 // Sitio de clientes: todos los demás eventos, cada uno en /<slug>/.
-// PENDIENTE: dominio por comprar (ramostudio.mx o ramostudio.com) antes de
-// entregar la primera invitación real. Cambiar solo esta línea.
-export const CLIENTES_BASE_URL = 'https://ramostudio.mx';
+// TEMPORAL: mientras se compra el dominio (ramostudio.mx o .com), los eventos de
+// clientes se publican junto al demo en demo.ramosmkt.lat (un solo sitio; ver
+// scripts/vite-eventos.js). Con el dominio comprado, cambiar solo esta línea
+// (p. ej. 'https://ramostudio.mx') y los dos sitios vuelven a separarse.
+export const CLIENTES_BASE_URL = 'https://demo.ramosmkt.lat';
 
 // Evento que abre la demo cuando la URL no trae ?e=
 export const DEMO_EVENT_SLUG = 'mariana-diego';
