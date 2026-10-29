@@ -94,7 +94,11 @@ publica.
 - Las pantallas se implementan una por una a partir del diseño enviado desde Claude Design.
 - La invitación se diseña primero para celular (la mayoría la abre desde WhatsApp).
 - Textos en español de México.
-- **Fuentes autoalojadas** en `public/fonts/` (Playfair Display, Montserrat, Great Vibes;
+- **Cada evento arma su invitación desde `evento.json`:** `secciones` (cuáles y en qué
+  orden), `tema` (colores, fuentes y `variables` → `--ev-*`), `fotos` (portada,
+  intermedia), `rsvp.modo: "whatsapp"` (respaldo sin backend) y `creditoFotos`. Las
+  secciones de `src/invitacion/sections/` son las mismas para todos.
+- **Fuentes autoalojadas** en `public/fonts/` (Playfair Display, Montserrat, Great Vibes, Bodoni Moda;
   licencia OFL) y declaradas con `@font-face` en `src/styles/base.css`. No cargar fuentes
   desde Google Fonts ni otros CDN.
 

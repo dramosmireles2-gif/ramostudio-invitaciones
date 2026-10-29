@@ -1,15 +1,180 @@
-/* Invitación (móvil primero). PROVISIONAL hasta el diseño de Claude Design. */
-body.invitacion { background: var(--ev-bg); color: var(--ev-text); }
-
-/* Lugares: ceremonia y recepción. */
-.lugares { display: flex; flex-direction: column; gap: 24px; max-width: 480px; margin: 0 auto; padding: 32px 24px; }
-.lugar {
-  display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center;
-  padding: 28px 20px; background: var(--ev-surface); border: 1px solid var(--ev-line); border-radius: var(--radius-lg);
+/*
+ * Invitación (móvil primero, 375 px). Todos los colores y fuentes vienen del
+ * tema del evento (--ev-*, src/lib/theme.js); aquí no hay nada de una boda en
+ * particular. Movimiento: solo la apertura del sobre (transform y opacity).
+ */
+body.invitacion {
+  background: var(--ev-bg); color: var(--ev-text);
+  font-family: var(--ev-font-data); font-size: 18px; line-height: 1.55;
 }
-.lugar__tipo { font-family: var(--ev-font-data); font-size: 13px; font-weight: var(--fw-semibold); letter-spacing: .2em; text-transform: uppercase; color: var(--ev-text-2); }
-.lugar__nombre { margin: 0; font-family: var(--ev-font-title); font-style: var(--ev-title-style); font-weight: 400; font-size: 28px; line-height: 1.2; color: var(--ev-text); }
-.lugar__hora { margin: 0; font-family: var(--ev-font-title); font-size: 24px; color: var(--ev-text); }
-.lugar__direccion { margin: 0; font-family: var(--ev-font-data); font-size: 18px; line-height: 1.5; color: var(--ev-text-2); }
-.lugar__botones { width: 100%; display: flex; flex-direction: column; gap: 10px; }
-.lugar .btn { min-height: 52px; font-size: 16px; }
+body.con-sobre { overflow: hidden; background: var(--ev-envelope); }
+#app { max-width: 560px; margin: 0 auto; }
+#app h1:focus { outline: none; }
+
+/* Piezas comunes ---------------------------------------------------------- */
+.ev-etiqueta {
+  font-family: var(--ev-font-data); font-size: 13px; font-weight: var(--fw-semibold);
+  letter-spacing: .22em; text-transform: uppercase; color: var(--ev-text-2);
+}
+.ev-titulo {
+  font-family: var(--ev-font-title); font-weight: 500; font-size: 32px; line-height: 1.15;
+  color: var(--ev-text); text-align: center;
+}
+/* El filete del acento (en Iris & Alex, uno de los 3 rojos). */
+.ev-filete { display: block; width: 56px; height: 2px; margin: 0 auto; background: var(--ev-accent); }
+.ev-enlace {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 48px;
+  font-family: var(--ev-font-data); font-size: 16px; font-weight: var(--fw-medium); color: var(--ev-text);
+  text-decoration: underline; text-decoration-color: var(--ev-text-2); text-underline-offset: 4px;
+}
+/* Pespunte: la costura de la mezclilla, como separador entre bloques. */
+.pespunte { border: 0; border-top: 1.5px dashed var(--ev-line); margin: 0; }
+
+/* Botones dentro de la invitación: letra de datos, más grandes. */
+[data-ev-theme] .btn { font-family: var(--ev-font-data); min-height: 52px; font-size: 16px; border-radius: 4px; }
+[data-ev-theme] .btn--secondary { --btn-line: var(--ev-text); color: var(--ev-text); }
+[data-ev-theme] .btn--secondary:hover { color: var(--ev-text); }
+[data-ev-theme] .btn--quiet { --rule-color: var(--ev-text-2); color: var(--ev-text); }
+
+/* Sobre ------------------------------------------------------------------- */
+.sobre {
+  position: fixed; inset: 0; z-index: 10; overflow: hidden;
+  display: grid; grid-template-rows: 46% auto 1fr; justify-items: center;
+  height: 100vh; height: 100svh; background: var(--ev-envelope); color: var(--ev-on-band);
+  perspective: 1200px;
+}
+/* Borde de pespunte por dentro del sobre. */
+.sobre::after {
+  content: ""; position: absolute; inset: 12px; pointer-events: none;
+  border: 1.5px dashed var(--ev-liner-2); border-radius: 6px; opacity: .55;
+}
+.sobre__solapa {
+  position: absolute; inset: 0 0 auto; width: 100%; height: 56%;
+  transform-origin: 50% 0; backface-visibility: hidden;
+}
+.sobre__solapa-papel { fill: var(--ev-liner); }
+.sobre__solapa-pespunte { fill: none; stroke: var(--ev-liner-2); stroke-width: 1.5; stroke-dasharray: 6 5; opacity: .8; }
+.sobre__para { position: relative; align-self: center; text-align: center; padding: 0 32px; margin-top: -8%; }
+.sobre__etiqueta {
+  font-family: var(--ev-font-data); font-size: 13px; font-weight: var(--fw-semibold);
+  letter-spacing: .22em; text-transform: uppercase; color: var(--ev-on-band-2, var(--ev-on-band));
+}
+.sobre__familia {
+  margin-top: 8px; font-family: var(--ev-font-title); font-size: 30px; line-height: 1.2; color: var(--ev-on-band);
+}
+.sobre__sello {
+  position: relative; z-index: 1; margin-top: -54px; width: 108px; height: 108px; border-radius: 50%;
+  border: 0; cursor: pointer; display: grid; place-items: center;
+  background: var(--ev-seal); color: var(--ev-on-seal);
+  /* Relieve de lacre: anillos interiores, sin sombra difusa. */
+  box-shadow: inset 0 0 0 6px rgba(0, 0, 0, .14), inset 0 0 0 7px rgba(255, 255, 255, .16), inset 0 0 0 16px rgba(0, 0, 0, .06);
+  transition: transform var(--dur-quick) var(--ease-paper);
+}
+.sobre__sello:active { transform: scale(.96); }
+.sobre__sello:focus-visible { outline: 2px solid var(--ev-on-band); outline-offset: 6px; }
+.sobre__monograma { font-family: var(--ev-font-title); font-style: italic; font-size: 32px; letter-spacing: .02em; }
+.sobre__pie { position: relative; align-self: center; text-align: center; padding: 0 24px; }
+.sobre__nombres {
+  font-family: var(--ev-font-script); font-style: var(--ev-nombres-style, normal);
+  font-size: 44px; line-height: 1.1; color: var(--ev-on-band);
+}
+.sobre__ayuda { margin-top: 14px; font-size: 15px; letter-spacing: .04em; color: var(--ev-on-band-2, var(--ev-on-band)); }
+
+/* Apertura (unos 2 s): el sello cede, la solapa se levanta, el sobre se retira. */
+.sobre--abriendo .sobre__sello { transition: transform 300ms var(--ease-paper), opacity 300ms; transform: scale(1.08); opacity: 0; }
+.sobre--abriendo .sobre__solapa { transition: transform 900ms var(--ease-paper) 200ms; transform: rotateX(178deg); }
+.sobre--abriendo .sobre__para,
+.sobre--abriendo .sobre__pie { transition: opacity 400ms 200ms; opacity: 0; }
+.sobre--abriendo { transition: transform 800ms var(--ease-paper) 1100ms, opacity 800ms 1100ms; transform: translateY(6%); opacity: 0; }
+
+/* Portada ----------------------------------------------------------------- */
+.portada { text-align: center; }
+.portada__foto img { width: 100%; height: 58vh; height: 58svh; max-height: 640px; object-fit: cover; }
+.portada__texto { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 32px 24px 8px; }
+.portada__nombres {
+  font-family: var(--ev-font-script); font-style: var(--ev-nombres-style, normal); font-weight: 500;
+  font-size: 54px; line-height: 1.05; color: var(--ev-text);
+}
+.portada__fecha { font-family: var(--ev-font-title); font-size: 22px; line-height: 1.3; color: var(--ev-text); }
+.portada__lugar { font-size: 17px; color: var(--ev-text-2); }
+
+/* Cuenta regresiva --------------------------------------------------------- */
+.cuenta { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 28px 24px 40px; }
+.cuenta__numeros { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100%; max-width: 320px; }
+.cuenta__unidad { display: flex; flex-direction: column; align-items: center; }
+.cuenta__unidad + .cuenta__unidad { border-left: 1.5px dashed var(--ev-line); }
+.cuenta__numero { font-family: var(--ev-font-title); font-size: 44px; line-height: 1.1; color: var(--ev-text); font-variant-numeric: lining-nums; }
+.cuenta__texto { font-size: 14px; letter-spacing: .08em; color: var(--ev-text-2); }
+.cuenta__hoy { font-family: var(--ev-font-title); font-style: italic; font-size: 32px; }
+
+/* Bandas: la toquilla del sombrero entre secciones. */
+.sedes, .rsvp { border-top: 10px solid var(--ev-band); }
+
+/* Ceremonia y recepción ---------------------------------------------------- */
+.sedes { display: flex; flex-direction: column; gap: 32px; padding: 48px 24px; }
+.sede { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
+.sede + .sede { padding-top: 32px; border-top: 1.5px dashed var(--ev-line); }
+.sede__hora { font-family: var(--ev-font-title); font-size: 34px; line-height: 1.15; color: var(--ev-text); }
+.sede__nombre { font-family: var(--ev-font-title); font-weight: 500; font-size: 24px; line-height: 1.25; color: var(--ev-text); }
+.sede__direccion { font-size: 17px; color: var(--ev-text-2); max-width: 30ch; }
+.sede__botones { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 4px; margin-top: 12px; }
+
+/* Vestimenta: banda del color del tema. */
+.vestimenta {
+  display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center;
+  padding: 48px 24px; background: var(--ev-band); color: var(--ev-on-band);
+}
+.vestimenta .ev-etiqueta { color: var(--ev-on-band-2, var(--ev-on-band)); }
+.vestimenta__codigo { font-family: var(--ev-font-title); font-weight: 500; font-size: 40px; color: var(--ev-on-band); }
+.vestimenta__detalle { font-family: var(--ev-font-title); font-style: italic; font-size: 26px; color: var(--ev-on-band); }
+
+/* Foto intermedia --------------------------------------------------------- */
+.foto-intermedia__img img { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; }
+
+/* Confirmar asistencia ---------------------------------------------------- */
+.rsvp { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 48px 24px; text-align: center; }
+.rsvp__limite { font-size: 17px; color: var(--ev-text-2); max-width: 32ch; }
+.rsvp__limite strong { color: var(--ev-text); font-weight: var(--fw-semibold); }
+.rsvp__form { width: 100%; display: flex; flex-direction: column; gap: 16px; margin-top: 8px; }
+.rsvp__familia { font-family: var(--ev-font-title); font-size: 30px; line-height: 1.2; color: var(--ev-text); }
+.rsvp__pases { font-size: 17px; color: var(--ev-text-2); }
+.rsvp .field { text-align: left; }
+.rsvp .field__control { min-height: 52px; font-size: 18px; }
+.rsvp__error { font-size: 15px; color: var(--ev-accent); }
+.rsvp__contador { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 8px 0; }
+.rsvp__stepper { display: grid; grid-template-columns: 56px 72px 56px; align-items: center; }
+.rsvp__paso {
+  width: 56px; height: 56px; border-radius: 50%; border: 1.5px solid var(--ev-text); background: transparent;
+  font-size: 26px; line-height: 1; color: var(--ev-text); cursor: pointer;
+}
+.rsvp__paso:disabled { opacity: .3; cursor: default; }
+.rsvp__numero { font-family: var(--ev-font-title); font-size: 40px; color: var(--ev-text); }
+.rsvp__nota { font-size: 15px; color: var(--ev-text-2); }
+.rsvp__gracias { font-family: var(--ev-font-title); font-size: 22px; }
+
+/* Regalos ----------------------------------------------------------------- */
+.regalos { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 40px 24px 56px; text-align: center; border-top: 1.5px dashed var(--ev-line); margin: 0 24px; padding-inline: 0; }
+.regalos__frase { font-family: var(--ev-font-title); font-style: italic; font-size: 21px; line-height: 1.5; color: var(--ev-text); max-width: 30ch; }
+.regalo { width: 100%; display: flex; flex-direction: column; gap: 6px; }
+.regalo__titulo { font-family: var(--ev-font-title); font-size: 22px; }
+.regalo__detalle { font-size: 16px; color: var(--ev-text-2); }
+
+/* Pie --------------------------------------------------------------------- */
+.pie {
+  display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center;
+  padding: 48px 24px calc(40px + env(safe-area-inset-bottom)); background: var(--ev-band); color: var(--ev-on-band);
+}
+.pie__sello {
+  width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; margin-bottom: 8px;
+  border: 1.5px solid var(--ev-on-band-2, var(--ev-on-band)); color: var(--ev-on-band);
+  font-family: var(--ev-font-title); font-style: italic; font-size: 18px;
+}
+.pie__nombres { font-family: var(--ev-font-script); font-style: var(--ev-nombres-style, normal); font-size: 32px; }
+.pie__fecha { font-size: 15px; letter-spacing: .2em; color: var(--ev-on-band-2, var(--ev-on-band)); }
+.pie__credito { font-size: 13px; color: var(--ev-on-band-2, var(--ev-on-band)); }
+
+.error { padding: 48px 24px; text-align: center; }
+
+@media (prefers-reduced-motion: reduce) {
+  .sobre--abriendo { opacity: 0; }
+}

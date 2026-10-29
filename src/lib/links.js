@@ -1,16 +1,44 @@
 // Arma los enlaces de invitación. Único lugar que combina el dominio con
 // el slug del evento y el código de la familia.
-import { INVITE_BASE_URL, WHATSAPP_NUMBER, baseUrlEvento } from '../config.js';
+import { INVITE_BASE_URL, WHATSAPP_NUMBER, DEMO_EVENT_SLUG, baseUrlEvento } from '../config.js';
 import { origenVisita } from './origen.js';
 
 // Formato: https://<dominio del evento>/<slug>/?f=<codigo>
 // (demo.ramosmkt.lat para el demo; el dominio de clientes para los demás).
 // Cada evento tiene su página en /<slug>/ (con su vista previa de WhatsApp);
 // /invitacion/?e=<slug>&f=<codigo> sigue funcionando como respaldo.
-export function enlaceFamilia(slug, codigo) {
+//
+// Mientras no hay backend, el teléfono del invitado no conoce a su familia:
+// en los eventos reales el enlace lleva también &d= con el nombre de la
+// familia y sus pases (para el RSVP por WhatsApp). No es secreto ni está
+// firmado: si alguien lo cambia, solo cambia su propio mensaje a los novios,
+// que lo comparan con su lista. Con Supabase, &d= deja de hacer falta.
+export function enlaceFamilia(slug, codigo, familia = null) {
   const url = new URL(`/${encodeURIComponent(slug)}/`, baseUrlEvento(slug));
   url.searchParams.set('f', codigo);
+  if (familia && slug !== DEMO_EVENT_SLUG) {
+    url.searchParams.set('d', aBase64Url(JSON.stringify({ n: familia.nombre, p: familia.pasesAsignados })));
+  }
   return url.toString();
+}
+
+// Base64 de URL (sin + / =) con UTF-8, para nombres con acentos y ñ.
+function aBase64Url(texto) {
+  const bin = String.fromCharCode(...new TextEncoder().encode(texto));
+  return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+// { nombre, pasesAsignados } de &d=, o null si no viene o no se puede leer.
+function leerDatosFamilia(d) {
+  if (!d) return null;
+  try {
+    const bin = atob(d.replace(/-/g, '+').replace(/_/g, '/'));
+    const { n, p } = JSON.parse(new TextDecoder().decode(Uint8Array.from(bin, (c) => c.charCodeAt(0))));
+    const pases = Math.trunc(Number(p));
+    return n && pases >= 1 && pases <= 30 ? { nombre: String(n).slice(0, 80), pasesAsignados: pases } : null;
+  } catch {
+    return null;
+  }
 }
 
 // Ruta relativa de la invitación de un evento (sin familia), para abrirla
@@ -42,5 +70,5 @@ export const FORMATO_ENLACE = `${INVITE_BASE_URL}/<evento>/?f=<código>`;
 export function leerParametros(search = location.search) {
   const p = new URLSearchParams(search);
   const pagina = document.querySelector('meta[name="ramostudio:evento"]')?.content;
-  return { slug: pagina ?? p.get('e'), codigo: p.get('f') };
+  return { slug: pagina ?? p.get('e'), codigo: p.get('f'), familia: leerDatosFamilia(p.get('d')) };
 }

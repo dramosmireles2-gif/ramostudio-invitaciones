@@ -35,6 +35,10 @@ export function aplicarTema(tema, raiz = document.documentElement) {
   for (const [rol, familia] of Object.entries(tema.fuentes ?? {})) {
     raiz.style.setProperty(`--ev-font-${kebab(rol)}`, `"${familia}"`);
   }
+  // Otros valores del tema (p. ej. "nombres-style": "italic") → --ev-<nombre>.
+  for (const [nombre, valor] of Object.entries(tema.variables ?? {})) {
+    raiz.style.setProperty(`--ev-${nombre}`, valor);
+  }
   if (tema.monograma) raiz.dataset.monograma = tema.monograma;
 }
 

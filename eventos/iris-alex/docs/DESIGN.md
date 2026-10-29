@@ -1,6 +1,6 @@
 # DESIGN · Iris & Alex
 
-Estado: **2 conceptos propuestos. David elige uno.** No se construye nada hasta elegir.
+Estado: **Aprobado el concepto B** (David, 28 de octubre de 2026). Construido; ver REVISION.md.
 
 ## Lo que dicen las fotos (8 fotos de la sesión, Dreams Studio by May Torres)
 
@@ -162,4 +162,4 @@ blanco puro), mucho aire y Bodoni en pesos medios.
   conceptos repite esa combinación.
 - PENDIENTE: comparar con ivan-gemima y eunice-edher (otro repo).
 
-Aprobado por: ___ Concepto: ___ Fecha: ___
+Aprobado por: David · Concepto: B · Fecha: 28 de octubre de 2026

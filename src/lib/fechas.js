@@ -16,6 +16,19 @@ export function hora(iso, zona = 'America/Mexico_City') {
     .replace(/([ap])\.\s?m\./i, (_, l) => `${l.toLowerCase()}. m.`);
 }
 
+// "Viernes 4 de diciembre de 2026": fecha de invitación, con mayúscula y sin coma.
+export function fechaInvitacion(iso, zona = 'America/Mexico_City') {
+  const t = fechaLarga(iso, zona).replace(',', '');
+  return t.charAt(0).toUpperCase() + t.slice(1);
+}
+
+// "18:00" → "6:00 p. m." (la hora tal como la escribieron, sin zonas).
+export function horaTexto(hhmm) {
+  if (!hhmm) return '';
+  const [h, m] = hhmm.split(':').map(Number);
+  return `${h % 12 || 12}:${String(m).padStart(2, '0')} ${h < 12 ? 'a. m.' : 'p. m.'}`;
+}
+
 // "12/12/2026", o "12/12/26" con { corta: true }.
 export function fechaNumerica(iso, { corta = false, zona = 'America/Mexico_City' } = {}) {
   return new Intl.DateTimeFormat(LOCALE, {

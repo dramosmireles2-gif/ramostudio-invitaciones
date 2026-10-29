@@ -53,7 +53,7 @@ export async function montar(destino, ctx) {
 
   const zona = { zona: evento.zonaHoraria };
   const enlace = (f) => {
-    const url = enlaceFamilia(evento.slug, f.codigo);
+    const url = enlaceFamilia(evento.slug, f.codigo, f);
     return { texto: url, enlace: url };
   };
 

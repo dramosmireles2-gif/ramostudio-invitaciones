@@ -1,0 +1,41 @@
+{
+  "abrazo": {
+    "original": "abrazo.jpg",
+    "tamanos": [
+      {
+        "width": 640,
+        "height": 960
+      },
+      {
+        "width": 1024,
+        "height": 1536
+      }
+    ]
+  },
+  "aerea": {
+    "original": "aerea.jpg",
+    "tamanos": [
+      {
+        "width": 640,
+        "height": 864
+      },
+      {
+        "width": 1079,
+        "height": 1457
+      }
+    ]
+  },
+  "atardecer": {
+    "original": "atardecer.jpg",
+    "tamanos": [
+      {
+        "width": 640,
+        "height": 865
+      },
+      {
+        "width": 1079,
+        "height": 1458
+      }
+    ]
+  }
+}

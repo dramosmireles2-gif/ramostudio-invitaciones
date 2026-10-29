@@ -1,11 +1,14 @@
 {
-  "_nota": "EVENTO REAL. Datos aprobados por David el 28/10/2026 (ver docs/BRIEF-EVENTO.md). Sin invitados: los captura la novia desde el panel. El tema es PROVISIONAL (marca RamoStudio) hasta elegir concepto en docs/DESIGN.md. Sin música hasta que llegue la canción.",
+  "_nota": "EVENTO REAL. Datos aprobados por David el 28/10/2026 (ver docs/BRIEF-EVENTO.md). Sin invitados: los captura la novia desde el panel. Concepto B de docs/DESIGN.md. Sin música hasta que llegue la canción.",
   "eventos": [
     {
       "id": "evt_iris_alex",
       "slug": "iris-alex",
       "tipo": "boda",
-      "anfitriones": ["Iris", "Alex"],
+      "anfitriones": [
+        "Iris",
+        "Alex"
+      ],
       "titulo": "Iris & Alex",
       "fecha": "2026-12-05T00:00:00.000Z",
       "hora": "18:00",
@@ -30,42 +33,100 @@
           "direccion": "Prol. Río Purificación #300, col. Luis Donaldo Colosio, Reynosa, Tamps.",
           "hora": "19:00",
           "mapaUrl": "https://www.google.com/maps/search/?api=1&query=26.0379125,-98.3010376",
-          "coordenadas": { "lat": 26.0379125, "lng": -98.3010376 }
+          "coordenadas": {
+            "lat": 26.0379125,
+            "lng": -98.3010376
+          }
         }
       ],
       "itinerario": [
-        { "hora": "18:00", "titulo": "Ceremonia religiosa" },
-        { "hora": "19:00", "titulo": "Recepción" }
+        {
+          "hora": "18:00",
+          "titulo": "Ceremonia religiosa"
+        },
+        {
+          "hora": "19:00",
+          "titulo": "Recepción"
+        }
       ],
       "vestimenta": {
         "codigo": "Formal",
-        "detalle": "Negro."
+        "detalle": "De negro"
       },
       "musica": null,
       "tema": {
-        "_nota": "PROVISIONAL: marca RamoStudio hasta elegir concepto (docs/DESIGN.md).",
-        "clave": "marca",
-        "acento": "#B79A6B",
+        "_nota": "Concepto B \"Blanco y negro, con un punto rojo\" (docs/DESIGN.md). El rojo (accent/action/seal) aparece solo en el sello, el botón de confirmar y el filete bajo la fecha.",
+        "clave": "iris-alex-b",
+        "acento": "#9C1C1C",
         "monograma": "I·A",
         "colores": {
-          "bg": "#F4EFE9",
-          "surface": "#FAF7F2",
-          "surface2": "#DCE3E6",
-          "text": "#2B2A28",
-          "text2": "#3E5266",
-          "accent": "#B79A6B",
-          "action": "#3E5266",
-          "onAction": "#F4EFE9",
-          "band": "#3E5266",
-          "onBand": "#F4EFE9",
-          "envelope": "#FAF7F2",
-          "liner": "#3E5266",
-          "liner2": "#B79A6B",
-          "seal": "#3E5266",
-          "onSeal": "#F4EFE9",
-          "card": "#FDFBF7"
+          "bg": "#F5F4F0",
+          "surface": "#FBFAF7",
+          "surface2": "#E8E7E2",
+          "line": "rgba(26, 26, 28, .18)",
+          "text": "#1A1A1C",
+          "text2": "#5E6466",
+          "accent": "#9C1C1C",
+          "action": "#9C1C1C",
+          "onAction": "#F5F4F0",
+          "band": "#1A1A1C",
+          "onBand": "#F5F4F0",
+          "onBand2": "#B9BEC0",
+          "envelope": "#1A1A1C",
+          "liner": "#26262A",
+          "liner2": "#B9BEC0",
+          "seal": "#9C1C1C",
+          "onSeal": "#F5F4F0",
+          "card": "#FBFAF7"
         },
-        "fuentes": { "title": "Playfair Display", "script": "Great Vibes", "data": "Montserrat" }
+        "fuentes": {
+          "title": "Bodoni Moda",
+          "script": "Bodoni Moda",
+          "data": "Montserrat"
+        },
+        "variables": {
+          "nombres-style": "italic"
+        }
+      },
+      "fraseSobres": "Su compañía es nuestro mejor regalo. Si desean tener un detalle con nosotros, habrá una lluvia de sobres el día de la boda.",
+      "rsvp": {
+        "modo": "whatsapp",
+        "telefono": null
+      },
+      "secciones": [
+        "portada",
+        "cuenta",
+        "evento",
+        "vestimenta",
+        "foto",
+        "rsvp",
+        "regalos",
+        "pie"
+      ],
+      "creditoFotos": "Dreams Studio by May Torres",
+      "fotos": {
+        "portada": {
+          "nombre": "aerea",
+          "anchos": [
+            640,
+            1079
+          ],
+          "ancho": 1079,
+          "alto": 1457,
+          "foco": "50% 45%",
+          "alt": "Iris y Alex caminan de la mano sobre el pasto, vistos desde arriba"
+        },
+        "intermedia": {
+          "nombre": "atardecer",
+          "anchos": [
+            640,
+            1079
+          ],
+          "ancho": 1079,
+          "alto": 1458,
+          "foco": "50% 40%",
+          "alt": "Iris y Alex, de espaldas y tomados de la mano, frente a un mezquite"
+        }
       }
     }
   ],

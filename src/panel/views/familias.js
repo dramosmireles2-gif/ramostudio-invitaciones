@@ -98,7 +98,7 @@ export async function montar(destino, ctx) {
   }
 
   function ficha(f) {
-    const enlace = enlaceFamilia(evento.slug, f.codigo);
+    const enlace = enlaceFamilia(evento.slug, f.codigo, f);
     const dato = (valor, etiqueta) => crudo(html`<div class="ficha__dato">
       <span class="t-body">${etiqueta}</span>
       <span class="ficha__valor${typeof valor === 'number' ? ' ficha__valor--numero' : ''}">${valor}</span>
@@ -270,7 +270,7 @@ export async function montar(destino, ctx) {
   }
 
   function abrirQR(f) {
-    const enlace = enlaceFamilia(evento.slug, f.codigo);
+    const enlace = enlaceFamilia(evento.slug, f.codigo, f);
     const cuerpo = document.createElement('div');
     cuerpo.className = 'qr';
     // PENDIENTE: generar el QR real (necesita una librería; preguntar antes de agregarla).
@@ -332,7 +332,7 @@ export async function montar(destino, ctx) {
     else if (b.hasAttribute('data-editar')) abrirFormulario(abierta);
     else if (b.hasAttribute('data-qr')) abrirQR(abierta);
     else if (b.hasAttribute('data-quitar')) quitar(abierta);
-    else if (b.hasAttribute('data-copiar')) copiar(enlaceFamilia(evento.slug, abierta.codigo));
+    else if (b.hasAttribute('data-copiar')) copiar(enlaceFamilia(evento.slug, abierta.codigo, abierta));
     else if (b.hasAttribute('data-compartir')) toast('Abrimos su WhatsApp con la invitación lista para enviar.');
   });
 

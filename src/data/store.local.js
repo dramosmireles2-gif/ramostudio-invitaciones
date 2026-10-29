@@ -164,15 +164,29 @@ function estado() {
   return memoria;
 }
 
+// Eventos reales: los datos del evento (fecha, lugares, tema) mandan desde
+// evento.json en cada carga, para que una corrección llegue a quien ya abrió
+// la invitación. Solo sus familias, mesas, etc. quedan en este navegador.
+const refrescados = new Set();
+
 async function cargarEvento(slug) {
   const s = estado();
   const presente = s.eventos.find((x) => x.slug === slug);
-  if (presente) return presente;
+  if (presente && (slug === DEMO_EVENT_SLUG || refrescados.has(slug))) return presente;
   // null: el evento es del otro sitio (demo o clientes) y no se publicó aquí.
   const seed = await ARCHIVOS[slug]?.();
   if (!seed) throw new DataError('evento_no_encontrado', 'No encontramos este evento.');
   // Otra llamada pudo cargarlo mientras se descargaba.
-  if (s.eventos.some((x) => x.slug === slug)) return s.eventos.find((x) => x.slug === slug);
+  const ya = s.eventos.find((x) => x.slug === slug);
+  if (ya) {
+    if (slug !== DEMO_EVENT_SLUG && !refrescados.has(slug)) {
+      s.eventos[s.eventos.indexOf(ya)] = structuredClone(seed.eventos[0]);
+      refrescados.add(slug);
+      guardar();
+    }
+    return s.eventos.find((x) => x.slug === slug);
+  }
+  refrescados.add(slug);
   let datos;
   if (slug === DEMO_EVENT_SLUG && viejo) {
     datos = migrarDatos(viejo.datos, seed);

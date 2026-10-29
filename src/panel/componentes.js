@@ -51,7 +51,7 @@ function mensajeRecordatorio(evento, familia) {
     : ' ¿Nos confirman?';
   return `Hola, ${familia.nombre}. Somos ${novios}. Nos encantaría saber si nos acompañan el `
     + `${fechaNumerica(evento.fecha, { zona: evento.zonaHoraria })}.${limite} `
-    + `Aquí está su invitación: ${enlaceFamilia(evento.slug, familia.codigo)}`;
+    + `Aquí está su invitación: ${enlaceFamilia(evento.slug, familia.codigo, familia)}`;
 }
 
 // Hoja "Recordatorios por WhatsApp": una familia a la vez; los novios mandan

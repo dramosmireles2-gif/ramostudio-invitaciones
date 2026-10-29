@@ -2,6 +2,8 @@
 //
 //   npm run fotos -- <slug>                 Todas las fotos de _originales/
 //   npm run fotos -- <slug> --og <archivo>  Además, og.jpg (1200x630) desde ese original
+//   npm run fotos -- <slug> --og <archivo> --og-y 0.4   Recorte del og.jpg centrado a esa altura
+//   npm run fotos -- <slug> --bn            Todo en blanco y negro (si el diseño lo pide)
 //
 // Por cada original salen AVIF, WebP y JPG (respaldo) en varios anchos, sin
 // agrandar nunca la foto, sin metadatos (EXIF, GPS) y con la orientación
@@ -11,7 +13,7 @@ import { existsSync, mkdirSync, readdirSync, statSync, writeFileSync } from 'nod
 import { basename, extname, join, resolve } from 'node:path';
 import sharp from 'sharp';
 
-const ANCHOS = [640, 1280, 1920];
+const ANCHOS = [640, 1280, 1920]; // Nunca más que el original.
 const FORMATOS = [
   ['avif', (img) => img.avif({ quality: 50, effort: 6 })],
   ['webp', (img) => img.webp({ quality: 72 })],
@@ -21,6 +23,12 @@ const ENTRADAS = new Set(['.jpg', '.jpeg', '.png', '.webp', '.tif', '.tiff', '.h
 const OG_MAX_BYTES = 300 * 1024;
 
 const [slug, ...resto] = process.argv.slice(2);
+const bn = resto.includes('--bn');
+// Orientación EXIF aplicada y, con --bn, blanco y negro.
+const abrir = (archivo) => {
+  const img = sharp(archivo).rotate();
+  return bn ? img.grayscale() : img;
+};
 if (!slug) {
   console.error('Uso: npm run fotos -- <slug> [--og <archivo original>]');
   process.exit(1);
@@ -44,7 +52,7 @@ const kb = (bytes) => `${Math.round(bytes / 1024)} KB`;
 const manifiesto = {};
 for (const archivo of readdirSync(originales).filter((f) => ENTRADAS.has(extname(f).toLowerCase())).sort()) {
   const nombre = nombreLimpio(archivo);
-  const base = sharp(join(originales, archivo)).rotate();
+  const base = abrir(join(originales, archivo));
   // autoOrient: el tamaño ya con la orientación EXIF aplicada.
   const m = await base.clone().metadata();
   const { width, height } = m.autoOrient ?? m;
@@ -72,8 +80,20 @@ if (iOg !== -1) {
     process.exit(1);
   }
   const og = join(carpeta, 'og.jpg');
+  // Con --og-y <0 a 1> se recorta a mano a 1200:630 alrededor de esa altura
+  // (0 arriba, 1 abajo); sin él, sharp elige la zona.
+  const iY = resto.indexOf('--og-y');
+  let recorte = null;
+  if (iY !== -1) {
+    const m = await sharp(join(originales, archivo)).metadata();
+    const { width: w, height: h } = m.autoOrient ?? m;
+    const alto = Math.min(h, Math.round((w * 630) / 1200));
+    const top = Math.round(Number(resto[iY + 1]) * h - alto / 2);
+    recorte = { left: 0, width: w, height: alto, top: Math.max(0, Math.min(h - alto, top)) };
+  }
   for (let calidad = 82; calidad >= 50; calidad -= 6) {
-    await sharp(join(originales, archivo)).rotate()
+    const img = abrir(join(originales, archivo));
+    await (recorte ? img.extract(recorte) : img)
       .resize({ width: 1200, height: 630, fit: 'cover', position: 'attention' })
       .jpeg({ quality: calidad, mozjpeg: true }).toFile(og);
     if (statSync(og).size <= OG_MAX_BYTES) break;
