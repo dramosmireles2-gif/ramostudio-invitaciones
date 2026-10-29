@@ -55,7 +55,7 @@ function pasoCorreo() {
       <div class="field">
         <label class="field__label" for="login-correo">Su correo</label>
         <input class="field__control" id="login-correo" name="correo" type="email" autocomplete="email"
-          placeholder="mariana.diego@gmail.com" value="${correo}" />
+          placeholder="nombre@correo.com" value="${correo}" />
       </div>
       <button class="btn btn--lg btn--full" type="submit" disabled>Mandarme el código por correo</button>
       <div class="login__alterno">

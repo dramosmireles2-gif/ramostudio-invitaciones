@@ -1,0 +1,77 @@
+{
+  "_nota": "EVENTO REAL. Datos aprobados por David el 28/10/2026 (ver docs/BRIEF-EVENTO.md). Sin invitados: los captura la novia desde el panel. El tema es PROVISIONAL (marca RamoStudio) hasta elegir concepto en docs/DESIGN.md. Sin música hasta que llegue la canción.",
+  "eventos": [
+    {
+      "id": "evt_iris_alex",
+      "slug": "iris-alex",
+      "tipo": "boda",
+      "anfitriones": ["Iris", "Alex"],
+      "titulo": "Iris & Alex",
+      "fecha": "2026-12-05T00:00:00.000Z",
+      "hora": "18:00",
+      "zonaHoraria": "America/Matamoros",
+      "ciudad": "Reynosa, Tamaulipas",
+      "fechaLimiteRsvpDiasAntes": 14,
+      "lluviaDeSobres": true,
+      "sedes": [
+        {
+          "id": "ceremonia",
+          "tipo": "Ceremonia religiosa",
+          "nombre": "Parroquia San Felipe de Jesús",
+          "direccion": "Francisco Villa #330, col. Aquiles Serdán, C.P. 88540, Reynosa, Tamps.",
+          "hora": "18:00",
+          "mapaUrl": null,
+          "coordenadas": null
+        },
+        {
+          "id": "recepcion",
+          "tipo": "Recepción",
+          "nombre": "Salón de eventos Bellagio",
+          "direccion": "Prol. Río Purificación #300, col. Luis Donaldo Colosio, Reynosa, Tamps.",
+          "hora": "19:00",
+          "mapaUrl": "https://www.google.com/maps/search/?api=1&query=26.0379125,-98.3010376",
+          "coordenadas": { "lat": 26.0379125, "lng": -98.3010376 }
+        }
+      ],
+      "itinerario": [
+        { "hora": "18:00", "titulo": "Ceremonia religiosa" },
+        { "hora": "19:00", "titulo": "Recepción" }
+      ],
+      "vestimenta": {
+        "codigo": "Formal",
+        "detalle": "Negro."
+      },
+      "musica": null,
+      "tema": {
+        "_nota": "PROVISIONAL: marca RamoStudio hasta elegir concepto (docs/DESIGN.md).",
+        "clave": "marca",
+        "acento": "#B79A6B",
+        "monograma": "I·A",
+        "colores": {
+          "bg": "#F4EFE9",
+          "surface": "#FAF7F2",
+          "surface2": "#DCE3E6",
+          "text": "#2B2A28",
+          "text2": "#3E5266",
+          "accent": "#B79A6B",
+          "action": "#3E5266",
+          "onAction": "#F4EFE9",
+          "band": "#3E5266",
+          "onBand": "#F4EFE9",
+          "envelope": "#FAF7F2",
+          "liner": "#3E5266",
+          "liner2": "#B79A6B",
+          "seal": "#3E5266",
+          "onSeal": "#F4EFE9",
+          "card": "#FDFBF7"
+        },
+        "fuentes": { "title": "Playfair Display", "script": "Great Vibes", "data": "Montserrat" }
+      }
+    }
+  ],
+  "familias": [],
+  "mesas": [],
+  "mensajes": [],
+  "regalos": [],
+  "actividad": []
+}
