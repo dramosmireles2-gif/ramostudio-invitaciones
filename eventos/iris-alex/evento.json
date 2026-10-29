@@ -90,17 +90,20 @@
       },
       "fraseSobres": "Su compañía es nuestro mejor regalo. Si desean tener un detalle con nosotros, habrá una lluvia de sobres el día de la boda.",
       "rsvp": {
-        "modo": "whatsapp",
+        "modo": "panel",
+        "respaldo": "whatsapp",
         "telefono": null
       },
       "secciones": [
         "portada",
         "cuenta",
+        "frase",
         "evento",
         "vestimenta",
         "foto",
         "rsvp",
         "regalos",
+        "galeria",
         "pie"
       ],
       "creditoFotos": "Dreams Studio by May Torres",
@@ -126,8 +129,77 @@
           "alto": 1458,
           "foco": "50% 40%",
           "alt": "Iris y Alex, de espaldas y tomados de la mano, frente a un mezquite"
-        }
-      }
+        },
+        "galeria": [
+          {
+            "nombre": "sombreros",
+            "anchos": [
+              640,
+              1174
+            ],
+            "ancho": 1174,
+            "alto": 1600,
+            "foco": "50% 35%",
+            "alt": "Iris y Alex de la mano, se acomodan el sombrero"
+          },
+          {
+            "nombre": "abrazo",
+            "anchos": [
+              640,
+              1024
+            ],
+            "ancho": 1024,
+            "alto": 1536,
+            "foco": "50% 35%",
+            "alt": "Iris y Alex abrazados, vistos desde arriba"
+          },
+          {
+            "nombre": "anillo",
+            "anchos": [
+              640,
+              1138
+            ],
+            "ancho": 1138,
+            "alto": 1600,
+            "foco": "50% 60%",
+            "alt": "La mano de Iris con su anillo, sobre el hombro de Alex"
+          },
+          {
+            "nombre": "corazon",
+            "anchos": [
+              640,
+              1194
+            ],
+            "ancho": 1194,
+            "alto": 1600,
+            "foco": "50% 40%",
+            "alt": "Iris y Alex de espaldas, tomados de la mano, con un corazón rojo entre los dos"
+          },
+          {
+            "nombre": "mirada",
+            "anchos": [
+              640,
+              1106
+            ],
+            "ancho": 1106,
+            "alto": 1600,
+            "foco": "50% 30%",
+            "alt": "Alex mira a Iris mientras ella lo abraza"
+          },
+          {
+            "nombre": "baile",
+            "anchos": [
+              640,
+              1092
+            ],
+            "ancho": 1092,
+            "alto": 1600,
+            "foco": "50% 40%",
+            "alt": "Iris y Alex bailan abrazados bajo los árboles"
+          }
+        ]
+      },
+      "frase": "Después de tantos años caminando juntos, compartiendo sueños y construyendo nuestra historia, ha llegado el momento de dar el paso más bonito de nuestras vidas. Porque nuestro amor no empieza hoy, pero hoy prometemos que será para siempre."
     }
   ],
   "familias": [],

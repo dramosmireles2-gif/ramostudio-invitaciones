@@ -1,9 +1,10 @@
 // Confirmación de asistencia por familia.
-// - evento.rsvp.modo "whatsapp" (eventos reales sin backend): abre WhatsApp de
+// - evento.rsvp.modo "panel" (o sin modo, como el demo): la respuesta se guarda
+//   con data.confirmarAsistencia y la ven los novios en su panel. Solo con el
+//   enlace personal de la familia (?f=); sin él, se les pide usarlo.
+// - evento.rsvp.modo "whatsapp" (respaldo si no hay backend): abre WhatsApp de
 //   los novios con el mensaje ya escrito ("Confirmamos 3 personas de la
-//   familia Hernández."). El invitado solo lo envía.
-// - Sin modo (demo): guarda la respuesta con data.confirmarAsistencia.
-// Sin familia en el enlace, el invitado escribe su nombre y cuántos van.
+//   familia Hernández."). Sin familia, el invitado escribe su nombre.
 import { fechaInvitacion } from '../../lib/fechas.js';
 import { enlaceWhatsApp } from '../../lib/links.js';
 import { html, crudo } from '../../lib/dom.js';
@@ -34,6 +35,14 @@ export function montar(contenedor, { evento, familia, data }) {
   const limite = evento.fechaLimiteRsvp
     ? crudo(html`<p class="rsvp__limite">Les pedimos confirmar antes del <strong>${fechaInvitacion(evento.fechaLimiteRsvp, evento.zonaHoraria).replace(/^./, (c) => c.toLowerCase())}</strong>.</p>`)
     : '';
+
+  if (!porWhatsApp && !familia) {
+    contenedor.innerHTML = html`
+      <h2 class="ev-titulo">Confirmar asistencia</h2>
+      ${limite}
+      <p class="rsvp__pases">Para confirmar, abran el enlace personal que les enviaron ${evento.anfitriones?.join(' y ') ?? 'los novios'}.</p>`;
+    return;
+  }
 
   contenedor.innerHTML = html`
     <h2 class="ev-titulo">Confirmar asistencia</h2>
@@ -97,9 +106,13 @@ export function montar(contenedor, { evento, familia, data }) {
       window.open(enlaceWhatsApp(texto, evento.rsvp.telefono ?? ''), '_blank', 'noopener');
       return;
     }
+    const novios = evento.anfitriones?.join(' y ') ?? 'Los novios';
     try {
       await data.confirmarAsistencia(evento.id, familia?.codigo, { asiste, pasesConfirmados: personas });
-      gracias.textContent = asiste ? `¡Gracias! Confirmaron ${plural(personas, 'persona', 'personas')}.` : 'Gracias por avisarnos.';
+      gracias.textContent = asiste
+        ? `¡Gracias! ${novios} ya saben que van ${plural(personas, 'persona', 'personas')}.`
+        : `Gracias por avisarnos. ${novios} ya lo saben.`;
+      for (const n of form.children) n.hidden = n !== gracias;
     } catch (err) {
       gracias.textContent = err.message;
     }

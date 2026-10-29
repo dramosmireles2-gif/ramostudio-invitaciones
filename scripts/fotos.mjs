@@ -4,6 +4,7 @@
 //   npm run fotos -- <slug> --og <archivo>  Además, og.jpg (1200x630) desde ese original
 //   npm run fotos -- <slug> --og <archivo> --og-y 0.4   Recorte del og.jpg centrado a esa altura
 //   npm run fotos -- <slug> --bn            Todo en blanco y negro (si el diseño lo pide)
+//   npm run fotos -- <slug> --bn --color <archivo>   …menos esa foto
 //
 // Por cada original salen AVIF, WebP y JPG (respaldo) en varios anchos, sin
 // agrandar nunca la foto, sin metadatos (EXIF, GPS) y con la orientación
@@ -24,10 +25,12 @@ const OG_MAX_BYTES = 300 * 1024;
 
 const [slug, ...resto] = process.argv.slice(2);
 const bn = resto.includes('--bn');
+// --color <archivo> (se puede repetir): con --bn, esa foto se queda a color.
+const aColor = new Set(resto.flatMap((v, i) => (resto[i - 1] === '--color' ? [v] : [])));
 // Orientación EXIF aplicada y, con --bn, blanco y negro.
 const abrir = (archivo) => {
   const img = sharp(archivo).rotate();
-  return bn ? img.grayscale() : img;
+  return bn && !aColor.has(basename(archivo)) ? img.grayscale() : img;
 };
 if (!slug) {
   console.error('Uso: npm run fotos -- <slug> [--og <archivo original>]');

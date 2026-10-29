@@ -107,6 +107,17 @@ body.con-sobre { overflow: hidden; background: var(--ev-envelope); }
 .cuenta__texto { font-size: 14px; letter-spacing: .08em; color: var(--ev-text-2); }
 .cuenta__hoy { font-family: var(--ev-font-title); font-style: italic; font-size: 32px; }
 
+/* Frase de la pareja ------------------------------------------------------- */
+.frase { padding: 8px 32px 48px; }
+.frase__texto { margin: 0 auto; max-width: 32ch; text-align: center; }
+.frase__texto p {
+  font-family: var(--ev-font-title); font-style: italic; font-size: 21px; line-height: 1.55; color: var(--ev-text);
+}
+.frase__texto::before, .frase__texto::after {
+  content: ""; display: block; width: 32px; margin: 0 auto 20px; border-top: 1.5px dashed var(--ev-line);
+}
+.frase__texto::after { margin: 20px auto 0; }
+
 /* Bandas: la toquilla del sombrero entre secciones. */
 .sedes, .rsvp { border-top: 10px solid var(--ev-band); }
 
@@ -136,6 +147,7 @@ body.con-sobre { overflow: hidden; background: var(--ev-envelope); }
 .rsvp__limite { font-size: 17px; color: var(--ev-text-2); max-width: 32ch; }
 .rsvp__limite strong { color: var(--ev-text); font-weight: var(--fw-semibold); }
 .rsvp__form { width: 100%; display: flex; flex-direction: column; gap: 16px; margin-top: 8px; }
+.rsvp__form [hidden] { display: none; }
 .rsvp__familia { font-family: var(--ev-font-title); font-size: 30px; line-height: 1.2; color: var(--ev-text); }
 .rsvp__pases { font-size: 17px; color: var(--ev-text-2); }
 .rsvp .field { text-align: left; }
@@ -158,6 +170,14 @@ body.con-sobre { overflow: hidden; background: var(--ev-envelope); }
 .regalo { width: 100%; display: flex; flex-direction: column; gap: 6px; }
 .regalo__titulo { font-family: var(--ev-font-title); font-size: 22px; }
 .regalo__detalle { font-size: 16px; color: var(--ev-text-2); }
+
+/* Galería: una a lo ancho, dos lado a lado. -------------------------------- */
+.galeria { padding: 8px 0 0; }
+.galeria__titulo { text-align: center; padding: 0 24px 20px; }
+.galeria__rejilla { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.galeria__foto img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; }
+.galeria__foto--ancha { grid-column: 1 / -1; }
+.galeria__foto--ancha img { aspect-ratio: 4 / 5; }
 
 /* Pie --------------------------------------------------------------------- */
 .pie {

@@ -10,13 +10,15 @@ import * as cuenta from './sections/cuenta.js';
 import * as evento from './sections/evento.js';
 import * as vestimenta from './sections/vestimenta.js';
 import * as foto from './sections/foto.js';
+import * as frase from './sections/frase.js';
+import * as galeria from './sections/galeria.js';
 import * as rsvp from './sections/rsvp.js';
 import * as regalos from './sections/regalos.js';
 import * as mensajes from './sections/mensajes.js';
 import * as pie from './sections/pie.js';
 
 // Cada evento elige sus secciones y su orden en evento.secciones.
-const SECCIONES = { portada, cuenta, evento, vestimenta, foto, rsvp, regalos, mensajes, pie };
+const SECCIONES = { portada, cuenta, frase, evento, vestimenta, foto, rsvp, regalos, galeria, mensajes, pie };
 const POR_DEFECTO = ['portada', 'cuenta', 'evento', 'vestimenta', 'rsvp', 'regalos', 'mensajes'];
 const app = document.getElementById('app');
 

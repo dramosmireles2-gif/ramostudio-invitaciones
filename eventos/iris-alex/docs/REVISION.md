@@ -43,6 +43,25 @@ Capturas en el navegador local a 375x812 y 390x844 (dev), con y sin familia en e
 - **Build:** `npm run build:clientes` publica `/iris-alex/` con sus metas y fotos; el sitio
   demo no la incluye. ✔
 
+## Iteración 2 (28 de octubre de 2026, pedido de David)
+
+- **Las 8 fotos:** portada (aérea), intermedia (atardecer) y una galería con las otras 6
+  (una a lo ancho y dos lado a lado). Todas en blanco y negro menos `corazon`, que se
+  queda a color por su corazón rojo. Por decisión de David se usan también las que traen
+  la marca de agua de Dreams Studio; se ve en la galería.
+- **Frase de la pareja** después de la cuenta regresiva, en Bodoni itálica.
+- **La confirmación va al panel** (`rsvp.modo: "panel"`): "Confirmar asistencia" guarda la
+  respuesta y la ven en su panel; al confirmar, queda "¡Gracias! Iris y Alex ya saben que
+  van 4 personas.". Hoy funciona en el mismo navegador; entre teléfonos funcionará con
+  Supabase. El respaldo por WhatsApp sigue listo (`respaldo: "whatsapp"`).
+- **Panel de Iris & Alex:** el mismo panel del demo, con su sello I·A y su acento rojo.
+  Probado con 5 familias de prueba (solo en el navegador local, no en el repo): la
+  confirmación hecha desde la invitación aparece en Resumen, Invitados y Actividad.
+- Capturas en `capturas/` (375x812 la invitación y el panel en celular, 1440x900 el panel
+  en computadora).
+- Auditoría: 2 señales (la frase de lluvia de sobres sigue siendo propuesta; el corazón
+  rojo de emoji dentro de la foto `corazon`, que la pareja eligió).
+
 ## Pendiente antes de enviar (miércoles 4 de noviembre)
 
 1. **Número de WhatsApp** que recibe las confirmaciones (`rsvp.telefono` en evento.json).

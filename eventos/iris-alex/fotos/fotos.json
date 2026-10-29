@@ -25,6 +25,19 @@
       }
     ]
   },
+  "anillo": {
+    "original": "anillo.jpg",
+    "tamanos": [
+      {
+        "width": 640,
+        "height": 900
+      },
+      {
+        "width": 1138,
+        "height": 1600
+      }
+    ]
+  },
   "atardecer": {
     "original": "atardecer.jpg",
     "tamanos": [
@@ -35,6 +48,58 @@
       {
         "width": 1079,
         "height": 1458
+      }
+    ]
+  },
+  "baile": {
+    "original": "baile.jpg",
+    "tamanos": [
+      {
+        "width": 640,
+        "height": 938
+      },
+      {
+        "width": 1092,
+        "height": 1600
+      }
+    ]
+  },
+  "corazon": {
+    "original": "corazon.jpg",
+    "tamanos": [
+      {
+        "width": 640,
+        "height": 858
+      },
+      {
+        "width": 1194,
+        "height": 1600
+      }
+    ]
+  },
+  "mirada": {
+    "original": "mirada.jpg",
+    "tamanos": [
+      {
+        "width": 640,
+        "height": 926
+      },
+      {
+        "width": 1106,
+        "height": 1600
+      }
+    ]
+  },
+  "sombreros": {
+    "original": "sombreros.jpg",
+    "tamanos": [
+      {
+        "width": 640,
+        "height": 872
+      },
+      {
+        "width": 1174,
+        "height": 1600
       }
     ]
   }
