@@ -1,4 +1,5 @@
 // La invitación de Iris & Alex en celular (Android y iPhone).
+import { existsSync } from 'node:fs';
 import { test, expect } from '@playwright/test';
 import { SLUG, enlaceFamilia, codigoPrueba, abrirSobre, sinDesbordeHorizontal } from './ayudas.js';
 
@@ -139,8 +140,6 @@ test('todas las secciones con los datos del brief', async ({ page }) => {
   await expect(regalos.getByRole('article', { name: 'Lista de regalos en Amazon' })).toBeVisible();
   await expect(page.locator(".galeria img")).toHaveCount(6);
   await expect(page.locator('.pie')).toContainText('Fotos: Dreams Studio by May Torres');
-  // Sin música hasta que llegue la canción: no hay control de música.
-  await expect(page.getByRole('button', { name: /música|silenciar/i })).toHaveCount(0);
   await sinDesbordeHorizontal(page);
 });
 
@@ -263,4 +262,26 @@ test('fondo de sombras: se mueve, casi transparente y no estorba los toques', as
   const caja = await boton.boundingBox();
   const encima = await page.evaluate(([x, y]) => document.elementFromPoint(x, y)?.closest('button')?.textContent?.trim(), [caja.x + caja.width / 2, caja.y + caja.height / 2]);
   expect(encima).toBe('Confirmar asistencia');
+});
+
+// La canción no se sube a git (sin licencia para publicarla): esta prueba
+// solo corre donde está el archivo.
+const CANCION = 'eventos/iris-alex/musica/a-thousand-years.mp3';
+
+test('música: arranca con el sello, se silencia y se recuerda', async ({ page }) => {
+  test.skip(!existsSync(CANCION), 'La canción no está en este equipo (eventos/*/musica/ no se sube).');
+  await page.goto(`/${SLUG}/`);
+  // Nunca suena antes del sello y no hay botón.
+  await expect(page.locator('.musica')).toHaveCount(0);
+  await abrirSobre(page);
+  const boton = page.getByRole('button', { name: 'Silenciar música' });
+  await expect(boton).toBeVisible();
+  await expect(boton).toHaveAttribute('aria-pressed', 'true');
+  await boton.click();
+  await expect(page.getByRole('button', { name: 'Activar música' })).toHaveAttribute('aria-pressed', 'false');
+  // La elección se respeta en la siguiente visita.
+  await page.reload();
+  await abrirSobre(page);
+  await expect(page.getByRole('button', { name: 'Activar música' })).toBeVisible();
+  expect(await page.evaluate(() => [...document.querySelectorAll('audio')].every((a) => a.paused))).toBe(true);
 });

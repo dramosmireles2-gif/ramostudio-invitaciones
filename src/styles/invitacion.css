@@ -33,6 +33,28 @@ body.con-sobre { overflow: hidden; }
   background: var(--ev-accent); transform: scaleX(0); transform-origin: 0 50%;
 }
 
+/* Botón de música (ver musica.js): sello pequeño abajo a la derecha. */
+.musica {
+  position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 20;
+  width: 52px; height: 52px; border-radius: 50%; border: 1.5px solid var(--ev-hilo-sobre, var(--ev-on-band));
+  display: grid; place-items: center; cursor: pointer;
+  background: var(--ev-band); color: var(--ev-on-band);
+}
+.musica[hidden] { display: none; }
+.musica[aria-pressed="false"] svg { opacity: .55; }
+.musica[aria-pressed="false"]::after {
+  content: ""; position: absolute; width: 26px; height: 1.6px; background: currentColor; transform: rotate(-45deg);
+}
+.musica:focus-visible { outline: 2px solid var(--ev-text); outline-offset: 3px; }
+/* Tres barras que se mueven mientras suena. */
+.musica__barras { position: absolute; bottom: 9px; display: none; gap: 2px; align-items: flex-end; height: 7px; }
+.musica--sonando .musica__barras { display: flex; }
+.musica__barras i { width: 2px; height: 100%; background: var(--ev-accent); animation: barra 900ms ease-in-out infinite alternate; transform-origin: bottom; }
+.musica__barras i:nth-child(2) { animation-delay: -300ms; }
+.musica__barras i:nth-child(3) { animation-delay: -600ms; }
+@keyframes barra { from { transform: scaleY(.3); } to { transform: scaleY(1); } }
+.musica--sonando svg { transform: translateY(-3px); }
+
 /* Piezas comunes ---------------------------------------------------------- */
 .ev-etiqueta {
   font-family: var(--ev-font-data); font-size: 13px; font-weight: var(--fw-semibold);
@@ -432,4 +454,5 @@ body.con-sobre { overflow: hidden; }
   .sobre__carta, .sobre__punto, .invitacion--abierta .portada__texto > * { animation: none; }
   .calendario__circulo path { stroke-dashoffset: 0; transition: none; }
   .fondo-sombras { animation: none; }
+  .musica__barras i { animation: none; }
 }

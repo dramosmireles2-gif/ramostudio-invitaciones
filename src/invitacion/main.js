@@ -3,7 +3,7 @@ import { DEMO_EVENT_SLUG } from '../config.js';
 import { leerParametros } from '../lib/links.js';
 import { aplicarTema } from '../lib/theme.js';
 import { html } from '../lib/dom.js';
-import { crearMusica } from './sections/musica.js';
+import { crearMusica, montarBotonMusica } from './sections/musica.js';
 import { montarFondo } from './fondo.js';
 import { montarProgreso } from './progreso.js';
 import * as sobre from './sections/sobre.js';
@@ -57,6 +57,7 @@ async function iniciar() {
     ...ctx,
     alAbrir: async () => {
       musica.iniciar();
+      montarBotonMusica(musica);
       montarProgreso();
       app.innerHTML = '';
       for (const nombre of ev.secciones ?? POR_DEFECTO) {

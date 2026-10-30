@@ -10,3 +10,6 @@ dist-clientes/
 # Resultados de Playwright
 test-results/
 playwright-report/
+
+# Música de cada evento: no se sube sin licencia (repo y sitio públicos)
+eventos/*/musica/
