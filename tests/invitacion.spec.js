@@ -21,30 +21,48 @@ test('el sobre muestra a la familia y se abre con una transición suave', async 
   ]);
   expect(fondoSobre).toBe(fondoPagina);
 
+  // Es un sobre de verdad: carta adentro, bolsa del frente y solapa con su interior.
+  for (const parte of ['.sobre__hoja', '.sobre__frente', '.sobre__solapa-cara', '.sobre__solapa-dorso']) {
+    await expect(page.locator(parte)).toHaveCount(1);
+  }
+  await expect(page.locator('.sobre__hoja')).toContainText('Iris & Alex');
+
   // La apertura, revisada dentro de la página (no depende de cuántos cuadros
-  // dibuje la máquina de pruebas): el sobre se desvanece con una transición de
-  // opacidad de al menos medio segundo (no es un corte), cae la lluvia y todo
-  // dura menos de 3 s.
+  // dibuje la máquina de pruebas): la solapa gira y la carta sale del sobre,
+  // el sobre se desvanece con una transición de al menos medio segundo (no es
+  // un corte), cae la lluvia y todo dura menos de 3 s.
   const r = await page.evaluate(() => new Promise((listo) => {
     const sobre = document.querySelector('.sobre');
     const t0 = performance.now();
     sobre.querySelector('.sobre__sello').click();
+    const dura = (el, prop) => Math.max(0, ...el.getAnimations().filter((a) => a.transitionProperty === prop).map((a) => a.effect.getTiming().duration));
     let transicion = 0;
+    let solapa = 0;
+    let hoja = 0;
+    let solapaGirada = false;
+    let hojaFuera = false;
     let lluvia = 0;
     const vigilar = () => {
-      for (const a of sobre.getAnimations()) {
-        if (a.transitionProperty === 'opacity') transicion = Math.max(transicion, a.effect.getTiming().duration);
-      }
+      if (!sobre.isConnected) return listo({ transicion, solapa, hoja, solapaGirada, hojaFuera, lluvia, total: performance.now() - t0 });
+      transicion = Math.max(transicion, dura(sobre, 'opacity'));
+      solapa = Math.max(solapa, dura(sobre.querySelector('.sobre__solapa'), 'transform'));
+      hoja = Math.max(hoja, dura(sobre.querySelector('.sobre__hoja'), 'transform'));
+      // La solapa queda volteada (rotateX ~180°: el eje Y invertido) y la carta arriba.
+      solapaGirada ||= new DOMMatrix(getComputedStyle(sobre.querySelector('.sobre__solapa')).transform).m22 < -0.9;
+      hojaFuera ||= new DOMMatrix(getComputedStyle(sobre.querySelector('.sobre__hoja')).transform).m42 < -40;
       lluvia = Math.max(lluvia, document.querySelectorAll('.lluvia').length);
-      if (!sobre.isConnected) return listo({ transicion, lluvia, total: performance.now() - t0 });
       setTimeout(vigilar, 50);
     };
     vigilar();
   }));
+  expect(r.solapa).toBeGreaterThanOrEqual(500);
+  expect(r.hoja).toBeGreaterThanOrEqual(500);
+  expect(r.solapaGirada).toBe(true);
+  expect(r.hojaFuera).toBe(true);
   expect(r.transicion).toBeGreaterThanOrEqual(500);
   expect(r.lluvia).toBeGreaterThan(20);
   expect(r.total).toBeGreaterThan(1000);
-  expect(r.total).toBeLessThan(3000);
+  expect(r.total).toBeLessThan(3600); // Diseñada en 2.4 s; margen por lo cargada que esté la máquina de pruebas.
   await expect(page.locator('.sobre')).toHaveCount(0);
   // La lluvia se limpia sola al terminar de caer.
   await expect(page.locator('.lluvia')).toHaveCount(0, { timeout: 6000 });

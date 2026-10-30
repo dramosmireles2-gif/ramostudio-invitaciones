@@ -166,6 +166,20 @@ completas. Solo quedan pendientes la base de datos y el dominio.
 - Playwright: 22 pruebas pasan (nuevas: sobre flotante, mismo color de fondo, lluvia,
   segundos, barra de avance, mapas y foto de la parroquia). Captura: `capturas/11`.
 
+## Iteración 9 (30 de octubre de 2026): el sobre sí abre como sobre
+
+- David: "no actúa como sobre". Se grabó la apertura en video con Playwright y se revisó
+  cuadro por cuadro: la solapa desaparecía de golpe (el 3D no se aplicaba porque el
+  sobre flotaba y además recortaba lo que salía de su orilla) y no salía nada del sobre.
+- Ahora es un sobre por capas: fondo, **carta adentro** (con "Nos casamos", los nombres y
+  la fecha), bolsa del frente con su V y solapa con cara e interior. Al tocar el sello:
+  el sello cede, la solapa se levanta en 3D mostrando su interior gris con pespunte, la
+  carta sale del sobre, el sobre se desvanece y la carta se funde con la portada. 2.4 s.
+- La cara y el dorso de la solapa se cambian a medio giro (Chrome no respetaba
+  backface-visibility y mostraba "Para Familia…" al revés).
+- Revisado en video en Chrome (Android) y WebKit (iPhone). Nueva prueba: la solapa queda
+  volteada y la carta sale. 22 pruebas pasan. Captura: `capturas/12`.
+
 ## Pendiente antes de enviar (miércoles 4 de noviembre)
 
 1. **Número de WhatsApp** que recibe las confirmaciones (`rsvp.telefono` en evento.json).
