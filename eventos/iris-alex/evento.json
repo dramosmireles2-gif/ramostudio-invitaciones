@@ -1,5 +1,5 @@
 {
-  "_nota": "EVENTO REAL. Datos aprobados por David el 28/10/2026 (ver docs/BRIEF-EVENTO.md). Sin invitados: los captura la novia desde el panel. Concepto B de docs/DESIGN.md. Música: A Thousand Years (solo en local; falta licencia para publicarla). Regalos: datos de transferencia, Liverpool y Amazon POR CONFIRMAR con la pareja (no inventar).",
+  "_nota": "EVENTO REAL. Datos aprobados por David el 28/10/2026 (ver docs/BRIEF-EVENTO.md). Sin invitados: los captura la novia desde el panel. Concepto B de docs/DESIGN.md. Música: A Thousand Years, video oficial en el reproductor de YouTube. Regalos: datos de transferencia, Liverpool y Amazon POR CONFIRMAR con la pareja (no inventar).",
   "eventos": [
     {
       "id": "evt_iris_alex",
@@ -66,10 +66,10 @@
         "detalle": "De negro"
       },
       "musica": {
+        "youtube": "rtOvBOTyX00",
         "titulo": "A Thousand Years",
         "artista": "Christina Perri",
-        "src": "/eventos/iris-alex/musica/a-thousand-years.mp3",
-        "_nota": "Archivo fuera de git (eventos/*/musica/ en .gitignore): canción comercial sin licencia para publicar. En la liga publicada no suena y el botón no aparece."
+        "_nota": "Video oficial del canal de Christina Perri en el reproductor de YouTube (legal: no se sube el audio). La copia local en eventos/iris-alex/musica/ queda fuera de git y ya no se usa."
       },
       "tema": {
         "_nota": "Concepto B \"Blanco y negro, con un punto rojo\" (docs/DESIGN.md), con el hilo rojo (29/10/2026): el rojo es el hilo de sus costuras (pespuntes, orilla de la toquilla, etiquetas en versalitas) y sus sellos (sobre, carta, transferencia, pie). Lo grande sigue siendo blanco y negro; el único bloque rojo es el botón de confirmar.",
@@ -125,6 +125,7 @@
         "portada",
         "cuenta",
         "frase",
+        "cancion",
         "evento",
         "calendario",
         "vestimenta",

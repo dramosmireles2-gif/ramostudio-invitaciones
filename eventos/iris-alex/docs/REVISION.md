@@ -180,6 +180,21 @@ completas. Solo quedan pendientes la base de datos y el dominio.
 - Revisado en video en Chrome (Android) y WebKit (iPhone). Nueva prueba: la solapa queda
   volteada y la carta sale. 22 pruebas pasan. Captura: `capturas/12`.
 
+## Iteración 10 (30 de octubre de 2026): música
+
+- Canción: "A Thousand Years" de Christina Perri. El MP3 que mandó David es la
+  grabación comercial (bajada de YouTube): no se publica sin licencia.
+- Solución legal: el **video oficial** (canal de Christina Perri, rtOvBOTyX00) en el
+  reproductor de YouTube, en la sección "Nuestra canción" (a la vista, como pide
+  YouTube). Arranca al tocar el sello y sigue mientras bajan; vuelve a empezar al
+  terminar; botón flotante "Silenciar música" / "Activar música" que se recuerda; se
+  pausa al salir de la pestaña.
+- Para que el sello pueda arrancarla, las secciones se montan desde el principio debajo
+  del sobre (el navegador solo deja sonar música dentro del toque).
+- **iPhone:** Safari a veces no deja que la página arranque un video de YouTube; ahí el
+  invitado toca play en "Nuestra canción". Falta probarlo en un iPhone real.
+- Playwright: 24 pruebas pasan (nueva: reproductor oficial, botón, silencio recordado).
+
 ## Pendiente antes de enviar (miércoles 4 de noviembre)
 
 1. **Número de WhatsApp** que recibe las confirmaciones (`rsvp.telefono` en evento.json).

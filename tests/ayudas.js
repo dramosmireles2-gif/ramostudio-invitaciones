@@ -18,7 +18,9 @@ export function codigoPrueba() {
 
 export async function abrirSobre(page) {
   await page.getByRole('button', { name: 'Abrir la invitación' }).click({ force: true });
-  await expect(page.locator('.sobre')).toHaveCount(0, { timeout: 4000 });
+  // La apertura dura 2.4 s; margen por lo cargada que esté la máquina (y el
+  // reproductor de YouTube cargando al mismo tiempo).
+  await expect(page.locator('.sobre')).toHaveCount(0, { timeout: 10_000 });
 }
 
 // Login simulado del panel (solo localhost): cualquier correo + 123456.

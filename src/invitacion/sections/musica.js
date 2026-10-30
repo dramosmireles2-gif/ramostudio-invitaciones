@@ -1,6 +1,10 @@
 // Música de fondo. Nunca hay autoplay: solo arranca con iniciar(), que se llama
 // cuando el invitado toca el sello del sobre. Si el invitado la silencia, esa
 // elección se guarda y se respeta en visitas siguientes.
+// Dos fuentes, con la misma interfaz:
+//  - { src }: un archivo de audio propio o con licencia.
+//  - { youtube }: el video oficial en el reproductor de YouTube (la sección
+//    "cancion" lo muestra; YouTube pide que el reproductor esté a la vista).
 const SILENCIO_KEY = 'ramostudio:musica:silenciada';
 
 function leerSilencio() {
@@ -11,7 +15,93 @@ function guardarSilencio(valor) {
   try { localStorage.setItem(SILENCIO_KEY, valor ? '1' : '0'); } catch { /* sin almacenamiento */ }
 }
 
-export function crearMusica({ src } = {}) {
+// La API del reproductor de YouTube se carga una sola vez.
+let apiYouTube = null;
+function cargarApiYouTube() {
+  apiYouTube ??= new Promise((listo, falla) => {
+    if (window.YT?.Player) return listo(window.YT);
+    const anterior = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = () => { anterior?.(); listo(window.YT); };
+    const s = Object.assign(document.createElement('script'), { src: 'https://www.youtube.com/iframe_api', async: true });
+    s.onerror = falla;
+    document.head.append(s);
+  });
+  return apiYouTube;
+}
+
+function crearMusicaYouTube({ youtube, inicio = 0 }) {
+  let silenciada = leerSilencio();
+  let iniciada = false;
+  let disponible = true;
+  let sonando = false;
+  let reproductor = null;
+  let listo = false;
+  const oyentes = new Set();
+  const avisar = () => oyentes.forEach((fn) => fn({ silenciada, iniciada, disponible, sonando }));
+  const tocar = () => { if (listo && !silenciada) reproductor.playVideo(); };
+
+  document.addEventListener('visibilitychange', () => {
+    if (!listo || !iniciada) return;
+    if (document.hidden) reproductor.pauseVideo();
+    else tocar();
+  });
+
+  return {
+    get silenciada() { return silenciada; },
+    get disponible() { return disponible; },
+    get sonando() { return sonando; },
+
+    // La sección "cancion" entrega el lugar donde va el reproductor.
+    async montarReproductor(lugar) {
+      try {
+        const YT = await cargarApiYouTube();
+        reproductor = new YT.Player(lugar, {
+          host: 'https://www.youtube-nocookie.com',
+          videoId: youtube,
+          playerVars: { playsinline: 1, rel: 0, start: inicio },
+          events: {
+            onReady: () => { listo = true; if (iniciada) tocar(); },
+            onStateChange: (e) => {
+              // Al terminar vuelve a empezar, como música de fondo.
+              if (e.data === YT.PlayerState.ENDED) { reproductor.seekTo(inicio); tocar(); }
+              sonando = e.data === YT.PlayerState.PLAYING;
+              avisar();
+            },
+            onError: () => { disponible = false; avisar(); },
+          },
+        });
+      } catch {
+        disponible = false;
+        avisar();
+      }
+    },
+
+    // Llamar SOLO desde el toque del sello (gesto del usuario).
+    async iniciar() {
+      iniciada = true;
+      tocar();
+      avisar();
+    },
+
+    async alternar() {
+      silenciada = !silenciada;
+      guardarSilencio(silenciada);
+      if (listo) {
+        if (silenciada) reproductor.pauseVideo();
+        else if (iniciada) reproductor.playVideo();
+      }
+      avisar();
+    },
+
+    alCambiar(fn) { oyentes.add(fn); return () => oyentes.delete(fn); },
+  };
+}
+
+export function crearMusica(config = {}) {
+  return config.youtube ? crearMusicaYouTube(config) : crearMusicaAudio(config);
+}
+
+function crearMusicaAudio({ src } = {}) {
   let audio = src ? Object.assign(new Audio(src), { loop: true, preload: 'none' }) : null;
   let silenciada = leerSilencio();
   let iniciada = false;

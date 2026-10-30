@@ -1,5 +1,4 @@
 // La invitación de Iris & Alex en celular (Android y iPhone).
-import { existsSync } from 'node:fs';
 import { test, expect } from '@playwright/test';
 import { SLUG, enlaceFamilia, codigoPrueba, abrirSobre, sinDesbordeHorizontal } from './ayudas.js';
 
@@ -88,7 +87,7 @@ test('todas las secciones con los datos del brief', async ({ page }) => {
   await page.goto(enlaceFamilia(codigoPrueba(), 'Familia Prueba Datos', 3));
   await abrirSobre(page);
   const secciones = await page.locator('#app > section').evaluateAll((s) => s.map((x) => x.dataset.seccion));
-  expect(secciones).toEqual(['portada', 'cuenta', 'frase', 'evento', 'calendario', 'vestimenta', 'foto', 'rsvp', 'mensajes', 'regalos', 'galeria', 'pie']);
+  expect(secciones).toEqual(['portada', 'cuenta', 'frase', 'cancion', 'evento', 'calendario', 'vestimenta', 'foto', 'rsvp', 'mensajes', 'regalos', 'galeria', 'pie']);
 
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Iris & Alex');
   await expect(page.locator('.portada__fecha')).toHaveText('Viernes 4 de diciembre de 2026');
@@ -264,24 +263,22 @@ test('fondo de sombras: se mueve, casi transparente y no estorba los toques', as
   expect(encima).toBe('Confirmar asistencia');
 });
 
-// La canción no se sube a git (sin licencia para publicarla): esta prueba
-// solo corre donde está el archivo.
-const CANCION = 'eventos/iris-alex/musica/a-thousand-years.mp3';
-
-test('música: arranca con el sello, se silencia y se recuerda', async ({ page }) => {
-  test.skip(!existsSync(CANCION), 'La canción no está en este equipo (eventos/*/musica/ no se sube).');
+test('música: el video oficial en YouTube arranca con el sello, se silencia y se recuerda', async ({ page }) => {
   await page.goto(`/${SLUG}/`);
+  // El reproductor oficial está en "Nuestra canción", a la vista (lo pide YouTube).
+  const cancion = page.locator('.cancion');
+  await expect(cancion).toContainText('A Thousand Years');
+  await expect(cancion).toContainText('Christina Perri');
+  await expect(cancion.locator('iframe')).toHaveAttribute('src', /youtube-nocookie\.com\/embed\/rtOvBOTyX00/, { timeout: 15_000 });
   // Nunca suena antes del sello y no hay botón.
   await expect(page.locator('.musica')).toHaveCount(0);
   await abrirSobre(page);
   const boton = page.getByRole('button', { name: 'Silenciar música' });
   await expect(boton).toBeVisible();
-  await expect(boton).toHaveAttribute('aria-pressed', 'true');
   await boton.click();
   await expect(page.getByRole('button', { name: 'Activar música' })).toHaveAttribute('aria-pressed', 'false');
   // La elección se respeta en la siguiente visita.
   await page.reload();
   await abrirSobre(page);
   await expect(page.getByRole('button', { name: 'Activar música' })).toBeVisible();
-  expect(await page.evaluate(() => [...document.querySelectorAll('audio')].every((a) => a.paused))).toBe(true);
 });

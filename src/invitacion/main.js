@@ -14,6 +14,7 @@ import * as vestimenta from './sections/vestimenta.js';
 import * as foto from './sections/foto.js';
 import * as frase from './sections/frase.js';
 import * as calendario from './sections/calendario.js';
+import * as cancion from './sections/cancion.js';
 import * as galeria from './sections/galeria.js';
 import * as rsvp from './sections/rsvp.js';
 import * as regalos from './sections/regalos.js';
@@ -21,7 +22,7 @@ import * as mensajes from './sections/mensajes.js';
 import * as pie from './sections/pie.js';
 
 // Cada evento elige sus secciones y su orden en evento.secciones.
-const SECCIONES = { portada, cuenta, frase, evento, calendario, vestimenta, foto, rsvp, regalos, galeria, mensajes, pie };
+const SECCIONES = { portada, cuenta, frase, cancion, evento, calendario, vestimenta, foto, rsvp, regalos, galeria, mensajes, pie };
 const POR_DEFECTO = ['portada', 'cuenta', 'evento', 'calendario', 'vestimenta', 'rsvp', 'regalos', 'mensajes', 'pie'];
 const app = document.getElementById('app');
 
@@ -51,23 +52,26 @@ async function iniciar() {
   const musica = crearMusica(ev.musica ?? {});
   const ctx = { evento: ev, familia, musica, data };
 
-  // Las secciones se montan debajo del sobre al tocar el sello, para que el
-  // sobre se abra sobre la invitación ya lista.
+  // Las secciones se montan desde el principio, debajo del sobre: así el sobre
+  // se abre sobre la invitación ya lista y el reproductor de la canción ya
+  // existe cuando el invitado toca el sello (el navegador solo deja sonar
+  // música si arranca dentro de ese toque).
+  app.innerHTML = '';
+  for (const nombre of ev.secciones ?? POR_DEFECTO) {
+    const s = SECCIONES[nombre];
+    if (!s) continue;
+    const nodo = document.createElement('section');
+    nodo.dataset.seccion = nombre;
+    app.append(nodo);
+    s.montar(nodo, ctx);
+  }
+
   sobre.montar(document.body, {
     ...ctx,
     alAbrir: async () => {
       musica.iniciar();
       montarBotonMusica(musica);
       montarProgreso();
-      app.innerHTML = '';
-      for (const nombre of ev.secciones ?? POR_DEFECTO) {
-        const s = SECCIONES[nombre];
-        if (!s) continue;
-        const nodo = document.createElement('section');
-        nodo.dataset.seccion = nombre;
-        app.append(nodo);
-        s.montar(nodo, ctx);
-      }
     },
   });
 }

@@ -102,6 +102,9 @@ publica.
   orden), `tema` (colores, fuentes, `variables` → `--ev-*`, `portada: "hoja"`, `frase: "cita"`, `vestimenta: "sombrero"`, `fondo: "sombras"`), `fotos` (portada,
   intermedia), `rsvp.modo: "whatsapp"` (respaldo sin backend) y `creditoFotos`. Las
   secciones de `src/invitacion/sections/` son las mismas para todos.
+- **Música sin derechos no se sube** (repo y sitio públicos): `evento.musica` puede ser
+  `{ src }` (audio propio o con licencia) o `{ youtube: <id del video oficial> }` (sección
+  "cancion" con el reproductor de YouTube a la vista). `eventos/*/musica/` está en .gitignore.
 - **Fuentes autoalojadas** en `public/fonts/` (Playfair Display, Montserrat, Great Vibes, Bodoni Moda;
   licencia OFL) y declaradas con `@font-face` en `src/styles/base.css`. No cargar fuentes
   desde Google Fonts ni otros CDN.
