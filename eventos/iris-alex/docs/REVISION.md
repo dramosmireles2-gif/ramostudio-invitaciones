@@ -113,6 +113,18 @@ completas. Solo quedan pendientes la base de datos y el dominio.
   cumple AA. 18 pruebas pasan.
 - Se quitó el foco automático del sello (en iPhone dibujaba un anillo blanco).
 
+## Iteración 6 (29 de octubre de 2026): portada en hoja y frase como cita
+
+- Se evaluó poner el texto de la portada sobre la foto: se descartó (blanco sobre la
+  foto aérea baja a 1.9:1 junto a la pareja; los trazos finos de Bodoni se pierden en el
+  pasto; habría que oscurecer o recortar la foto).
+- En su lugar, `tema.portada: "hoja"`: el texto va en una hoja con pespunte rojo montada
+  48 px sobre la orilla de la foto (sin recortarla).
+- Para no tener dos hojas seguidas, `tema.frase: "cita"`: la frase sin hoja, con comillas
+  rojas grandes, firma "— Iris & Alex" y sello de lacre. Se compararon maquetas con
+  Playwright (cita vs. mover la carta antes de la galería); la carta movida dejaba la zona
+  de regalos llena de cajas. Captura: `capturas/09`. 18 pruebas pasan.
+
 ## Pendiente antes de enviar (miércoles 4 de noviembre)
 
 1. **Número de WhatsApp** que recibe las confirmaciones (`rsvp.telefono` en evento.json).

@@ -111,6 +111,19 @@ body.con-sobre { overflow: hidden; }
 }
 .portada__fecha { font-family: var(--ev-font-title); font-size: 22px; line-height: 1.3; color: var(--ev-text); }
 .portada__lugar { font-size: 17px; color: var(--ev-text-2); }
+/* Portada "hoja": el texto en una hoja con pespunte montada sobre la orilla de la foto. */
+.portada--hoja .portada__texto {
+  position: relative; z-index: 1; margin: -48px 20px 0; padding: 28px 20px 26px;
+  background: var(--ev-surface); border: 1px solid var(--ev-line); border-radius: 4px;
+  box-shadow: 5px 5px 0 0 var(--ev-surface-2), 5px 5px 0 1px var(--ev-line);
+}
+.portada--hoja .portada__texto::after {
+  content: ""; position: absolute; inset: 9px; pointer-events: none;
+  border: 1.5px dashed var(--ev-hilo, var(--ev-line)); border-radius: 2px;
+}
+.portada--hoja .portada__nombres { font-size: 50px; }
+.portada--hoja .portada__fecha { font-size: 20px; }
+.portada--hoja + .cuenta { padding-top: 36px; }
 
 /* Cuenta regresiva --------------------------------------------------------- */
 .cuenta { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 28px 24px 40px; }
@@ -150,6 +163,19 @@ body.con-sobre { overflow: hidden; }
   margin-top: 18px; text-align: right;
   font-family: var(--ev-font-script); font-style: var(--ev-nombres-style, normal); font-size: 30px; color: var(--ev-text);
 }
+/* Frase "cita": sin hoja, abierta con comillas del acento y firmada con su sello. */
+.frase--cita { padding: 8px 28px 56px; }
+.frase--cita .frase__carta { background: none; border: 0; box-shadow: none; padding: 0; max-width: 340px; text-align: center; }
+.frase--cita .frase__carta::after { display: none; }
+.frase__comillas {
+  display: block; height: 56px; overflow: hidden;
+  font-family: var(--ev-font-title); font-size: 120px; line-height: 1; color: var(--ev-accent);
+}
+.frase--cita .frase__historia { text-align: center; }
+.frase--cita .frase__promesa { margin-top: 20px; font-size: 26px; text-align: center; }
+.frase--cita .frase__firma { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 22px; }
+.frase--cita .frase__firma::before { content: ""; width: 32px; border-top: 1.5px solid var(--ev-accent); }
+.frase--cita .frase__sello { position: static; margin: 14px auto 0; }
 
 /* Bandas: la toquilla del sombrero entre secciones. */
 .sedes, .rsvp { border-top: 10px solid var(--ev-band); box-shadow: inset 0 3px 0 0 var(--ev-toquilla-hilo, transparent); }

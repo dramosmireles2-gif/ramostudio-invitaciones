@@ -1,7 +1,9 @@
-// La frase de la pareja (evento.frase) como una carta: hoja de papel con
-// pespunte (la misma hoja apilada del calendario), la historia en letra
-// normal, la última oración (la promesa) más grande en itálica, firmada con
-// sus nombres y cerrada con su sello de lacre. El texto va tal como lo escribieron.
+// La frase de la pareja (evento.frase), tal como la escribieron: la historia
+// en letra normal, la última oración (la promesa) más grande en itálica,
+// firmada con sus nombres y su sello de lacre. Dos formas (tema.frase):
+//  - "carta" (por defecto): en una hoja de papel con pespunte.
+//  - "cita": sin hoja, abierta con comillas grandes del acento; para cuando
+//    la portada ya es una hoja y no se quieren dos hojas seguidas.
 import { html, crudo } from '../../lib/dom.js';
 
 // "Uno. Dos. Tres." → ["Uno. Dos.", "Tres."]; con una sola oración, todo es promesa.
@@ -14,10 +16,13 @@ function separar(frase) {
 export function montar(contenedor, { evento }) {
   if (!evento.frase) return contenedor.remove();
   const [historia, promesa] = separar(evento.frase);
-  contenedor.className = 'frase';
+  const cita = evento.tema?.frase === 'cita';
+  contenedor.className = `frase${cita ? ' frase--cita' : ''}`;
   contenedor.innerHTML = html`
     <figure class="frase__carta">
-      <p class="ev-etiqueta frase__etiqueta">Unas palabras nuestras</p>
+      ${cita
+        ? crudo('<span class="frase__comillas" aria-hidden="true">“</span>')
+        : crudo('<p class="ev-etiqueta frase__etiqueta">Unas palabras nuestras</p>')}
       <blockquote class="frase__texto">
         ${historia ? crudo(html`<p class="frase__historia">${historia}</p>`) : ''}
         <p class="frase__promesa">${promesa}</p>

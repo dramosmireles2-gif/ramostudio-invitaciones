@@ -99,7 +99,7 @@ publica.
 - La invitación se diseña primero para celular (la mayoría la abre desde WhatsApp).
 - Textos en español de México.
 - **Cada evento arma su invitación desde `evento.json`:** `secciones` (cuáles y en qué
-  orden), `tema` (colores, fuentes y `variables` → `--ev-*`), `fotos` (portada,
+  orden), `tema` (colores, fuentes, `variables` → `--ev-*`, `portada: "hoja"`, `frase: "cita"`), `fotos` (portada,
   intermedia), `rsvp.modo: "whatsapp"` (respaldo sin backend) y `creditoFotos`. Las
   secciones de `src/invitacion/sections/` son las mismas para todos.
 - **Fuentes autoalojadas** en `public/fonts/` (Playfair Display, Montserrat, Great Vibes, Bodoni Moda;

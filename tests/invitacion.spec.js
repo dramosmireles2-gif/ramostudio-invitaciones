@@ -41,6 +41,11 @@ test('todas las secciones con los datos del brief', async ({ page }) => {
   await expect(page.locator('.portada__fecha')).toHaveText('Viernes 4 de diciembre de 2026');
   await expect(page.locator('.portada__lugar')).toHaveText('6:00 p. m. · Reynosa, Tamaulipas');
   await expect(page.locator('.frase')).toContainText('nuestro amor no empieza hoy, pero hoy prometemos que será para siempre.');
+  // Portada en hoja sobre la foto y frase como cita (no dos hojas seguidas).
+  await expect(page.locator('.portada')).toHaveClass(/portada--hoja/);
+  await expect(page.locator('.frase')).toHaveClass(/frase--cita/);
+  await expect(page.locator('.frase__promesa')).toHaveText('Porque nuestro amor no empieza hoy, pero hoy prometemos que será para siempre.');
+  await expect(page.locator('.frase__firma')).toHaveText('Iris & Alex');
 
   const sedes = page.locator('.sede');
   await expect(sedes.nth(0)).toContainText('Ceremonia religiosa');
