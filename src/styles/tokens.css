@@ -66,6 +66,6 @@
 [data-ev-theme] {
   --btn-bg: var(--ev-action); --btn-fg: var(--ev-on-action); --btn-bg-press: var(--ev-action); --btn-ring: var(--ev-accent);
   --btn-line: var(--ev-text-2); --btn-press-2: var(--ev-surface-2);
-  --field-bg: var(--ev-surface); --field-fg: var(--ev-text); --field-label: var(--ev-text-2); --field-line: var(--ev-line);
+  --field-bg: var(--ev-surface); --field-fg: var(--ev-text); --field-label: var(--ev-etiqueta-color, var(--ev-text-2)); --field-line: var(--ev-line);
   --rule-color: var(--ev-accent);
 }

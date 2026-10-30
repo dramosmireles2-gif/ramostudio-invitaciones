@@ -1,7 +1,7 @@
 // La frase de la pareja (evento.frase) como una carta: hoja de papel con
 // pespunte (la misma hoja apilada del calendario), la historia en letra
-// normal, la última oración (la promesa) más grande en itálica y firmada con
-// sus nombres. El texto va tal como lo escribieron.
+// normal, la última oración (la promesa) más grande en itálica, firmada con
+// sus nombres y cerrada con su sello de lacre. El texto va tal como lo escribieron.
 import { html, crudo } from '../../lib/dom.js';
 
 // "Uno. Dos. Tres." → ["Uno. Dos.", "Tres."]; con una sola oración, todo es promesa.
@@ -23,5 +23,6 @@ export function montar(contenedor, { evento }) {
         <p class="frase__promesa">${promesa}</p>
       </blockquote>
       <figcaption class="frase__firma">${evento.titulo}</figcaption>
+      <span class="frase__sello" aria-hidden="true">${evento.tema?.monograma ?? ''}</span>
     </figure>`;
 }

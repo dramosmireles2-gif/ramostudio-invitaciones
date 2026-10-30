@@ -55,7 +55,7 @@
       },
       "musica": null,
       "tema": {
-        "_nota": "Concepto B \"Blanco y negro, con un punto rojo\" (docs/DESIGN.md). El rojo (accent/action/seal) aparece solo en el sello, el círculo de la fecha en el calendario y el botón de confirmar.",
+        "_nota": "Concepto B \"Blanco y negro, con un punto rojo\" (docs/DESIGN.md), con el hilo rojo (29/10/2026): el rojo es el hilo de sus costuras (pespuntes, orilla de la toquilla, etiquetas en versalitas) y sus sellos (sobre, carta, transferencia, pie). Lo grande sigue siendo blanco y negro; el único bloque rojo es el botón de confirmar.",
         "clave": "iris-alex-b",
         "acento": "#9C1C1C",
         "monograma": "I·A",
@@ -86,7 +86,11 @@
         },
         "variables": {
           "nombres-style": "italic",
-          "filete-color": "#1A1A1C"
+          "etiqueta-color": "#9C1C1C",
+          "hilo": "rgba(156, 28, 28, .45)",
+          "hilo-sobre": "#B8423F",
+          "toquilla-hilo": "#9C1C1C",
+          "sello-chico": "#9C1C1C"
         }
       },
       "fraseSobres": "Su compañía es nuestro mejor regalo. Si desean tener un detalle con nosotros, habrá una lluvia de sobres el día de la boda.",

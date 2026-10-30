@@ -128,9 +128,12 @@ negro. Dura 2.5 s, solo con transform y opacity, y con versión sin animación.
   único con color.
 - **Fondo:** `camisa`. Lo negro aparece solo en el sobre, en las bandas de toquilla entre
   secciones y en el pie.
-- **El rojo aparece 3 veces en total:** el sello, el botón de confirmar y el círculo
-  trazado a mano alrededor del 4 en la hoja de calendario ("Guarden la fecha"). El filete
-  bajo la fecha de la portada va en negro fieltro (cambio del 29 de octubre de 2026).
+- **El hilo rojo** (pedido de David, 29 de octubre de 2026: "más acentos rojos, no tan
+  plana"). El rojo deja de ser solo 3 puntos y se vuelve el hilo de sus costuras, como el
+  cinto rojo de Iris y la pluma de Alex: etiquetas en versalitas, pespuntes punteados, la
+  orilla de la toquilla negra, el filete bajo la fecha y los sellos (sobre, carta,
+  transferencia, pie). Lo grande sigue en blanco y negro; el único bloque rojo es el
+  botón de confirmar. Todo el texto rojo cumple AA (7.4:1, prueba de Playwright).
 - **Personalización:** el sello rojo (su corazón), los bordados de sus bolsas redibujados
   en SVG como esquineros y el nombre de la familia en el sobre.
 

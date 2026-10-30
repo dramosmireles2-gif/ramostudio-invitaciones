@@ -14,7 +14,7 @@ body.con-sobre { overflow: hidden; }
 /* Piezas comunes ---------------------------------------------------------- */
 .ev-etiqueta {
   font-family: var(--ev-font-data); font-size: 13px; font-weight: var(--fw-semibold);
-  letter-spacing: .22em; text-transform: uppercase; color: var(--ev-text-2);
+  letter-spacing: .22em; text-transform: uppercase; color: var(--ev-etiqueta-color, var(--ev-text-2));
 }
 .ev-titulo {
   font-family: var(--ev-font-title); font-weight: 500; font-size: 32px; line-height: 1.15;
@@ -28,7 +28,7 @@ body.con-sobre { overflow: hidden; }
   text-decoration: underline; text-decoration-color: var(--ev-text-2); text-underline-offset: 4px;
 }
 /* Pespunte: la costura de la mezclilla, como separador entre bloques. */
-.pespunte { border: 0; border-top: 1.5px dashed var(--ev-line); margin: 0; }
+.pespunte { border: 0; border-top: 1.5px dashed var(--ev-hilo, var(--ev-line)); margin: 0; }
 
 /* Botones dentro de la invitación: letra de datos, más grandes. */
 [data-ev-theme] .btn { font-family: var(--ev-font-data); min-height: 52px; font-size: 16px; border-radius: 4px; }
@@ -46,14 +46,14 @@ body.con-sobre { overflow: hidden; }
 /* Borde de pespunte por dentro del sobre. */
 .sobre::after {
   content: ""; position: absolute; inset: 12px; pointer-events: none;
-  border: 1.5px dashed var(--ev-liner-2); border-radius: 6px; opacity: .55;
+  border: 1.5px dashed var(--ev-hilo-sobre, var(--ev-liner-2)); border-radius: 6px; opacity: .55;
 }
 .sobre__solapa {
   position: absolute; inset: 0 0 auto; width: 100%; height: 56%;
   transform-origin: 50% 0; backface-visibility: hidden;
 }
 .sobre__solapa-papel { fill: var(--ev-liner); }
-.sobre__solapa-pespunte { fill: none; stroke: var(--ev-liner-2); stroke-width: 1.5; stroke-dasharray: 6 5; opacity: .8; }
+.sobre__solapa-pespunte { fill: none; stroke: var(--ev-hilo-sobre, var(--ev-liner-2)); stroke-width: 1.5; stroke-dasharray: 6 5; opacity: .8; }
 .sobre__para { position: relative; align-self: center; text-align: center; padding: 0 32px; margin-top: -8%; }
 .sobre__etiqueta {
   font-family: var(--ev-font-data); font-size: 13px; font-weight: var(--fw-semibold);
@@ -116,7 +116,7 @@ body.con-sobre { overflow: hidden; }
 .cuenta { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 28px 24px 40px; }
 .cuenta__numeros { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100%; max-width: 320px; }
 .cuenta__unidad { display: flex; flex-direction: column; align-items: center; }
-.cuenta__unidad + .cuenta__unidad { border-left: 1.5px dashed var(--ev-line); }
+.cuenta__unidad + .cuenta__unidad { border-left: 1.5px dashed var(--ev-hilo, var(--ev-line)); }
 .cuenta__numero { font-family: var(--ev-font-title); font-size: 44px; line-height: 1.1; color: var(--ev-text); font-variant-numeric: lining-nums; }
 .cuenta__texto { font-size: 14px; letter-spacing: .08em; color: var(--ev-text-2); }
 .cuenta__hoy { font-family: var(--ev-font-title); font-style: italic; font-size: 32px; }
@@ -131,7 +131,7 @@ body.con-sobre { overflow: hidden; }
 }
 .frase__carta::after {
   content: ""; position: absolute; inset: 9px; pointer-events: none;
-  border: 1.5px dashed var(--ev-line); border-radius: 2px;
+  border: 1.5px dashed var(--ev-hilo, var(--ev-line)); border-radius: 2px;
 }
 .frase__etiqueta { text-align: center; margin-bottom: 18px; }
 .frase__texto { margin: 0; }
@@ -140,18 +140,24 @@ body.con-sobre { overflow: hidden; }
   margin-top: 16px; font-family: var(--ev-font-title); font-style: italic; font-weight: 500;
   font-size: 24px; line-height: 1.3; color: var(--ev-text);
 }
+.frase__sello {
+  position: absolute; left: 22px; bottom: -22px; width: 48px; height: 48px; border-radius: 50%;
+  display: grid; place-items: center; background: var(--ev-seal); color: var(--ev-on-seal);
+  font-family: var(--ev-font-title); font-style: italic; font-size: 15px;
+  box-shadow: inset 0 0 0 4px rgba(0, 0, 0, .14), inset 0 0 0 5px rgba(255, 255, 255, .16);
+}
 .frase__firma {
   margin-top: 18px; text-align: right;
   font-family: var(--ev-font-script); font-style: var(--ev-nombres-style, normal); font-size: 30px; color: var(--ev-text);
 }
 
 /* Bandas: la toquilla del sombrero entre secciones. */
-.sedes, .rsvp { border-top: 10px solid var(--ev-band); }
+.sedes, .rsvp { border-top: 10px solid var(--ev-band); box-shadow: inset 0 3px 0 0 var(--ev-toquilla-hilo, transparent); }
 
 /* Ceremonia y recepción ---------------------------------------------------- */
 .sedes { display: flex; flex-direction: column; gap: 32px; padding: 48px 24px; }
 .sede { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
-.sede + .sede { padding-top: 32px; border-top: 1.5px dashed var(--ev-line); }
+.sede + .sede { padding-top: 32px; border-top: 1.5px dashed var(--ev-hilo, var(--ev-line)); }
 .sede__hora { font-family: var(--ev-font-title); font-size: 34px; line-height: 1.15; color: var(--ev-text); }
 .sede__nombre { font-family: var(--ev-font-title); font-weight: 500; font-size: 24px; line-height: 1.25; color: var(--ev-text); }
 .sede__direccion { font-size: 17px; color: var(--ev-text-2); max-width: 30ch; }
@@ -184,7 +190,7 @@ body.con-sobre { overflow: hidden; }
   stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 900ms var(--ease-paper) 200ms;
 }
 .calendario__hoja--vista .calendario__circulo path { stroke-dashoffset: 0; }
-.calendario__pie { display: block; padding: 12px 16px 14px; border-top: 1.5px dashed var(--ev-line); font-size: 16px; color: var(--ev-text); }
+.calendario__pie { display: block; padding: 12px 16px 14px; border-top: 1.5px dashed var(--ev-hilo, var(--ev-line)); font-size: 16px; color: var(--ev-text); }
 .calendario__accion { font-size: 15px; color: var(--ev-text-2); }
 
 /* Vestimenta: banda del color del tema. */
@@ -207,7 +213,7 @@ body.con-sobre { overflow: hidden; }
 .rsvp__form [hidden] { display: none; }
 .rsvp__familia { font-family: var(--ev-font-title); font-size: 30px; line-height: 1.2; color: var(--ev-text); }
 .rsvp__pases { font-size: 17px; color: var(--ev-text-2); }
-.rsvp__previa { font-size: 16px; color: var(--ev-text); padding: 12px 16px; border: 1.5px dashed var(--ev-line); border-radius: 4px; }
+.rsvp__previa { font-size: 16px; color: var(--ev-text); padding: 12px 16px; border: 1.5px dashed var(--ev-hilo, var(--ev-line)); border-radius: 4px; }
 .rsvp__gracias:focus { outline: none; }
 .rsvp .field { text-align: left; }
 .rsvp .field__control { min-height: 52px; font-size: 18px; }
@@ -224,7 +230,7 @@ body.con-sobre { overflow: hidden; }
 .rsvp__gracias { font-family: var(--ev-font-title); font-size: 22px; }
 
 /* Mensajes para los novios ------------------------------------------------- */
-.mensajes { display: flex; flex-direction: column; gap: 20px; padding: 40px 24px 48px; margin: 0 24px; padding-inline: 0; border-top: 1.5px dashed var(--ev-line); }
+.mensajes { display: flex; flex-direction: column; gap: 20px; padding: 40px 24px 48px; margin: 0 24px; padding-inline: 0; border-top: 1.5px dashed var(--ev-hilo, var(--ev-line)); }
 .mensajes__form { display: flex; flex-direction: column; gap: 16px; }
 .mensajes__form [hidden] { display: none; }
 .mensajes .field__control { min-height: 52px; font-size: 18px; }
@@ -234,7 +240,7 @@ body.con-sobre { overflow: hidden; }
 .mensajes__gracias:focus { outline: none; }
 
 /* Regalos ----------------------------------------------------------------- */
-.regalos { display: flex; flex-direction: column; align-items: center; gap: 18px; padding: 40px 0 56px; margin: 0 24px; text-align: center; border-top: 1.5px dashed var(--ev-line); }
+.regalos { display: flex; flex-direction: column; align-items: center; gap: 18px; padding: 40px 0 56px; margin: 0 24px; text-align: center; border-top: 1.5px dashed var(--ev-hilo, var(--ev-line)); }
 .regalos__frase { font-family: var(--ev-font-title); font-style: italic; font-size: 21px; line-height: 1.5; color: var(--ev-text); max-width: 30ch; }
 .regalos__tambien { font-size: 16px; color: var(--ev-text-2); margin-top: 6px; }
 .regalo { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 22px 20px; background: var(--ev-surface); border: 1px solid var(--ev-line); border-radius: 4px; }
@@ -246,10 +252,10 @@ body.con-sobre { overflow: hidden; }
 }
 .regalo--sobre::after {
   content: ""; position: absolute; left: 50%; top: 18px; width: 22px; height: 22px; margin-left: -11px; border-radius: 50%;
-  border: 1.5px solid var(--ev-on-band-2, var(--ev-on-band)); background: var(--ev-band);
+  border: 1.5px solid var(--ev-on-band-2, var(--ev-on-band)); background: var(--ev-sello-chico, var(--ev-band));
 }
 .regalo__datos { width: 100%; margin: 0; display: flex; flex-direction: column; gap: 8px; }
-.regalo__datos dt { font-size: 12px; font-weight: var(--fw-semibold); letter-spacing: .18em; text-transform: uppercase; color: var(--ev-text-2); }
+.regalo__datos dt { font-size: 12px; font-weight: var(--fw-semibold); letter-spacing: .18em; text-transform: uppercase; color: var(--ev-etiqueta-color, var(--ev-text-2)); }
 .regalo__datos dd { margin: 2px 0 0; font-size: 17px; color: var(--ev-text); overflow-wrap: anywhere; }
 .regalo__numero { font-variant-numeric: tabular-nums; letter-spacing: .06em; }
 .regalos__tiendas { width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
@@ -273,7 +279,8 @@ body.con-sobre { overflow: hidden; }
 }
 .pie__sello {
   width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; margin-bottom: 8px;
-  border: 1.5px solid var(--ev-on-band-2, var(--ev-on-band)); color: var(--ev-on-band);
+  border: 1.5px solid var(--ev-sello-chico, var(--ev-on-band-2, var(--ev-on-band))); color: var(--ev-on-band);
+  background: var(--ev-sello-chico, transparent);
   font-family: var(--ev-font-title); font-style: italic; font-size: 18px;
 }
 .pie__nombres { font-family: var(--ev-font-script); font-style: var(--ev-nombres-style, normal); font-size: 32px; }

@@ -33,7 +33,6 @@ export function montar(raiz, { evento, familia, alAbrir }) {
     </div>`;
   raiz.append(nodo);
   document.body.classList.add('con-sobre');
-  nodo.querySelector('.sobre__sello').focus({ preventScroll: true });
 
   nodo.querySelector('.sobre__sello').addEventListener('click', async () => {
     await alAbrir();

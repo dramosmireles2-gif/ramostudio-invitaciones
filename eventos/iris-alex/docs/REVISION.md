@@ -103,6 +103,16 @@ completas. Solo quedan pendientes la base de datos y el dominio.
 - Auditoría: 2 señales, las mismas de antes (frase de sobres y corazón de emoji en la
   foto de la pareja); "por confirmar" en regalos es dato pendiente, no diseño.
 
+## Iteración 5 (29 de octubre de 2026): carta y hilo rojo
+
+- La frase de la pareja como **carta firmada** con su sello de lacre.
+- **Hilo rojo:** más acentos rojos sin perder el blanco y negro (ver DESIGN.md). Se
+  comparó con Playwright la invitación completa en iPhone, antes y después, pantalla por
+  pantalla (`capturas/06` a `08`): el después tiene ritmo y jerarquía y los bloques
+  grandes siguen en blanco y negro. Nueva prueba de contraste: todo el texto en color
+  cumple AA. 18 pruebas pasan.
+- Se quitó el foco automático del sello (en iPhone dibujaba un anillo blanco).
+
 ## Pendiente antes de enviar (miércoles 4 de noviembre)
 
 1. **Número de WhatsApp** que recibe las confirmaciones (`rsvp.telefono` en evento.json).

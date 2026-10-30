@@ -149,6 +149,31 @@ test('dejar un mensaje a los novios', async ({ page }) => {
   await expect(m.locator('.mensajes__gracias')).toHaveText('Su mensaje ya está con Iris y Alex. ¡Gracias!');
 });
 
+test('todo el texto en color (rojo incluido) se lee: contraste AA', async ({ page }) => {
+  await page.goto(enlaceFamilia(codigoPrueba(), 'Familia Prueba Contraste', 3));
+  await abrirSobre(page);
+  const fallas = await page.evaluate(() => {
+    const rgb = (c) => (c.match(/[\d.]+/g) ?? []).map(Number);
+    const lum = ([r, g, b]) => [r, g, b].map((v) => v / 255)
+      .map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4))
+      .reduce((a, v, i) => a + v * [0.2126, 0.7152, 0.0722][i], 0);
+    const fondo = (el) => {
+      for (let n = el; n; n = n.parentElement) {
+        const c = rgb(getComputedStyle(n).backgroundColor);
+        if (c.length === 3 || (c.length === 4 && c[3] > 0.9)) return c.slice(0, 3);
+      }
+      return [245, 244, 240];
+    };
+    const sel = '.ev-etiqueta, .field__label, .regalo__datos dt, .rsvp__limite, .portada__lugar, .sede__direccion, .cuenta__texto, .calendario__accion, .btn';
+    return [...document.querySelectorAll(sel)].filter((el) => el.offsetParent).map((el) => {
+      const [a, b] = [lum(rgb(getComputedStyle(el).color).slice(0, 3)), lum(fondo(el))];
+      const r = (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+      return { texto: el.textContent.trim().slice(0, 30), r: Math.round(r * 100) / 100 };
+    }).filter((x) => x.r < 4.5);
+  });
+  expect(fallas).toEqual([]);
+});
+
 test('con "reducir movimiento" el sobre abre sin animación', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto(`/${SLUG}/`);
