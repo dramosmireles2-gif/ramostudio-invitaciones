@@ -121,16 +121,29 @@ body.con-sobre { overflow: hidden; }
 .cuenta__texto { font-size: 14px; letter-spacing: .08em; color: var(--ev-text-2); }
 .cuenta__hoy { font-family: var(--ev-font-title); font-style: italic; font-size: 32px; }
 
-/* Frase de la pareja ------------------------------------------------------- */
-.frase { padding: 8px 32px 48px; }
-.frase__texto { margin: 0 auto; max-width: 32ch; text-align: center; }
-.frase__texto p {
-  font-family: var(--ev-font-title); font-style: italic; font-size: 21px; line-height: 1.55; color: var(--ev-text);
+/* Frase de la pareja: una carta firmada ------------------------------------- */
+.frase { padding: 8px 24px 56px; }
+.frase__carta {
+  position: relative; margin: 0 auto; max-width: 340px; padding: 30px 24px 26px;
+  background: var(--ev-surface); border: 1px solid var(--ev-line); border-radius: 4px;
+  /* La misma hoja apilada del calendario, con pespunte por dentro. */
+  box-shadow: 5px 5px 0 0 var(--ev-surface-2), 5px 5px 0 1px var(--ev-line);
 }
-.frase__texto::before, .frase__texto::after {
-  content: ""; display: block; width: 32px; margin: 0 auto 20px; border-top: 1.5px dashed var(--ev-line);
+.frase__carta::after {
+  content: ""; position: absolute; inset: 9px; pointer-events: none;
+  border: 1.5px dashed var(--ev-line); border-radius: 2px;
 }
-.frase__texto::after { margin: 20px auto 0; }
+.frase__etiqueta { text-align: center; margin-bottom: 18px; }
+.frase__texto { margin: 0; }
+.frase__historia { font-family: var(--ev-font-title); font-size: 18px; line-height: 1.6; color: var(--ev-text); }
+.frase__promesa {
+  margin-top: 16px; font-family: var(--ev-font-title); font-style: italic; font-weight: 500;
+  font-size: 24px; line-height: 1.3; color: var(--ev-text);
+}
+.frase__firma {
+  margin-top: 18px; text-align: right;
+  font-family: var(--ev-font-script); font-style: var(--ev-nombres-style, normal); font-size: 30px; color: var(--ev-text);
+}
 
 /* Bandas: la toquilla del sombrero entre secciones. */
 .sedes, .rsvp { border-top: 10px solid var(--ev-band); }
