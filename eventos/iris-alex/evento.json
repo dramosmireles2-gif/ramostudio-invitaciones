@@ -93,7 +93,9 @@
           "sello-chico": "#9C1C1C"
         },
         "portada": "hoja",
-        "frase": "cita"
+        "frase": "cita",
+        "fondo": "sombras",
+        "vestimenta": "sombrero"
       },
       "fraseSobres": "Su compañía es nuestro mejor regalo. Si desean tener un detalle con nosotros, habrá una lluvia de sobres el día de la boda.",
       "rsvp": {

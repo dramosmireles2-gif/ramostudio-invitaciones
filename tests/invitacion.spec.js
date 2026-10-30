@@ -90,7 +90,8 @@ test('las 8 fotos se ven completas, sin recorte', async ({ page }, info) => {
   await page.goto(`/${SLUG}/`);
   await abrirSobre(page);
   // Recorre la página para que carguen las fotos diferidas.
-  for (let y = 0; y < 20; y++) {
+  // Hasta el final de la página, mida lo que mida.
+  while (await page.evaluate(() => window.scrollY + window.innerHeight < document.documentElement.scrollHeight - 2)) {
     await page.evaluate(() => window.scrollBy(0, 900));
     await page.waitForTimeout(120);
   }
@@ -184,4 +185,22 @@ test('con "reducir movimiento" el sobre abre sin animación', async ({ page }) =
   await page.goto(`/${SLUG}/`);
   await page.getByRole('button', { name: 'Abrir la invitación' }).click();
   await expect(page.locator('.sobre')).toHaveCount(0, { timeout: 500 });
+  // Las sombras de fondo se quedan quietas.
+  await expect(page.locator('.fondo-sombras')).toHaveCSS('animation-name', 'none');
+});
+
+test('fondo de sombras: se mueve, casi transparente y no estorba los toques', async ({ page }) => {
+  await page.goto(`/${SLUG}/`);
+  await abrirSobre(page);
+  const fondo = page.locator('.fondo-sombras');
+  await expect(fondo).toHaveCount(1);
+  await expect(fondo).toHaveCSS('pointer-events', 'none');
+  await expect(fondo).toHaveCSS('animation-name', 'mecerse');
+  expect(Number(await fondo.evaluate((el) => getComputedStyle(el).opacity))).toBeLessThanOrEqual(0.1);
+  // Los botones siguen recibiendo el toque (no lo tapa la capa de sombras).
+  await page.locator('.rsvp').scrollIntoViewIfNeeded();
+  const boton = page.getByRole('button', { name: 'Confirmar asistencia' });
+  const caja = await boton.boundingBox();
+  const encima = await page.evaluate(([x, y]) => document.elementFromPoint(x, y)?.closest('button')?.textContent?.trim(), [caja.x + caja.width / 2, caja.y + caja.height / 2]);
+  expect(encima).toBe('Confirmar asistencia');
 });

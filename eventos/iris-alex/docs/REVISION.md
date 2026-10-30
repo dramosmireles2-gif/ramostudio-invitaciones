@@ -125,6 +125,23 @@ completas. Solo quedan pendientes la base de datos y el dominio.
   Playwright (cita vs. mover la carta antes de la galería); la carta movida dejaba la zona
   de regalos llena de cajas. Captura: `capturas/09`. 18 pruebas pasan.
 
+## Iteración 7 (29 de octubre de 2026): remate, títulos, sombrero y fondo
+
+- **Separador:** la banda negra con orilla roja parecía corte de PDF. Ahora es un remate
+  de costura: dos puntadas y un rombo rojo.
+- **Títulos de sección** de 32 a 42 px.
+- **Vestimenta:** sombrero vaquero dibujado a una línea, con pespunte en el ala y la
+  toquilla roja (`tema.vestimenta: "sombrero"`); "Formal" a 48 px y "De negro" a 30 px.
+- **Fondo con movimiento** (`tema.fondo: "sombras"`). Se buscaron opciones en la web
+  (loops de video de papel, acuarela, partículas doradas y bokeh, luz entre hojas). Se
+  eligió la luz entre hojas: sale de la foto aérea con sombras de mezquite, y las otras
+  son pesadas (video) o cliché de plantilla (brillos, bokeh). Ramas de mezquite en SVG
+  generado en el código, difuminadas y al 7 %, que se mecen en 14 s solo con transform;
+  quietas con "reducir movimiento". Se quitó `mix-blend-mode` para no forzar a WebKit a
+  recomponer la página en cada scroll.
+- Playwright: 20 pruebas pasan (nuevas: el fondo existe, se mueve, es casi transparente,
+  no tapa los botones y se queda quieto con "reducir movimiento"). Captura: `capturas/10`.
+
 ## Pendiente antes de enviar (miércoles 4 de noviembre)
 
 1. **Número de WhatsApp** que recibe las confirmaciones (`rsvp.telefono` en evento.json).

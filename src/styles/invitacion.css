@@ -11,13 +11,28 @@ body.con-sobre { overflow: hidden; }
 #app { max-width: 560px; margin: 0 auto; }
 #app h1:focus { outline: none; }
 
+/* Fondo con movimiento: sombras de ramas (ver fondo.js). Encima del papel y de
+   las fotos, debajo del sobre; casi transparente y sin recibir toques. */
+.fondo-sombras {
+  position: fixed; inset: -12%; z-index: 5; pointer-events: none;
+  color: var(--ev-text); opacity: .07;
+  filter: blur(3.5px); will-change: transform;
+  animation: mecerse 14s ease-in-out infinite alternate;
+}
+.fondo-sombras svg { width: 100%; height: 100%; }
+@keyframes mecerse {
+  0% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50% { transform: translate3d(-1.2%, .8%, 0) rotate(.6deg); }
+  100% { transform: translate3d(.8%, -.6%, 0) rotate(-.4deg) scale(1.01); }
+}
+
 /* Piezas comunes ---------------------------------------------------------- */
 .ev-etiqueta {
   font-family: var(--ev-font-data); font-size: 13px; font-weight: var(--fw-semibold);
   letter-spacing: .22em; text-transform: uppercase; color: var(--ev-etiqueta-color, var(--ev-text-2));
 }
 .ev-titulo {
-  font-family: var(--ev-font-title); font-weight: 500; font-size: 32px; line-height: 1.15;
+  font-family: var(--ev-font-title); font-weight: 500; font-size: 42px; line-height: 1.08;
   color: var(--ev-text); text-align: center;
 }
 /* El filete del acento (en Iris & Alex, uno de los 3 rojos). */
@@ -178,7 +193,13 @@ body.con-sobre { overflow: hidden; }
 .frase--cita .frase__sello { position: static; margin: 14px auto 0; }
 
 /* Bandas: la toquilla del sombrero entre secciones. */
-.sedes, .rsvp { border-top: 10px solid var(--ev-band); box-shadow: inset 0 3px 0 0 var(--ev-toquilla-hilo, transparent); }
+/* Remate entre bloques: dos puntadas y un rombo del acento, como el final de una
+   costura (en lugar de una banda que parecía corte de PDF). */
+.sedes::before, .rsvp::before {
+  content: ""; display: block; align-self: center; width: 132px; height: 12px; margin-bottom: 8px;
+  background: var(--ev-accent);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 132 12'%3E%3Cpath d='M0 6h52M80 6h52' stroke='black' stroke-width='1.5' stroke-dasharray='5 4'/%3E%3Cpath d='M66 1l5 5-5 5-5-5z'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 132 12'%3E%3Cpath d='M0 6h52M80 6h52' stroke='black' stroke-width='1.5' stroke-dasharray='5 4'/%3E%3Cpath d='M66 1l5 5-5 5-5-5z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
 
 /* Ceremonia y recepción ---------------------------------------------------- */
 .sedes { display: flex; flex-direction: column; gap: 32px; padding: 48px 24px; }
@@ -225,8 +246,12 @@ body.con-sobre { overflow: hidden; }
   padding: 48px 24px; background: var(--ev-band); color: var(--ev-on-band);
 }
 .vestimenta .ev-etiqueta { color: var(--ev-on-band-2, var(--ev-on-band)); }
-.vestimenta__codigo { font-family: var(--ev-font-title); font-weight: 500; font-size: 40px; color: var(--ev-on-band); }
-.vestimenta__detalle { font-family: var(--ev-font-title); font-style: italic; font-size: 26px; color: var(--ev-on-band); }
+.vestimenta__sombrero { width: 200px; height: auto; margin: 4px 0 6px; overflow: visible; }
+.vestimenta__sombrero .linea { fill: none; stroke: var(--ev-on-band); stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round; }
+.vestimenta__sombrero .pespunte { fill: none; stroke: var(--ev-on-band-2, var(--ev-on-band)); stroke-width: 1.2; stroke-dasharray: 4 4; opacity: .7; }
+.vestimenta__sombrero .toquilla { fill: none; stroke: var(--ev-toquilla-hilo, var(--ev-accent)); stroke-width: 5; stroke-linecap: round; }
+.vestimenta__codigo { font-family: var(--ev-font-title); font-weight: 500; font-size: 48px; line-height: 1.05; color: var(--ev-on-band); }
+.vestimenta__detalle { font-family: var(--ev-font-title); font-style: italic; font-size: 30px; color: var(--ev-on-band); }
 
 /* Foto intermedia --------------------------------------------------------- */
 .foto-intermedia__img img { width: 100%; height: auto; }
@@ -318,4 +343,5 @@ body.con-sobre { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .sobre--abriendo { opacity: 0; }
   .calendario__circulo path { stroke-dashoffset: 0; transition: none; }
+  .fondo-sombras { animation: none; }
 }

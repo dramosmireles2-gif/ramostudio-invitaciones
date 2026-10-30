@@ -4,6 +4,7 @@ import { leerParametros } from '../lib/links.js';
 import { aplicarTema } from '../lib/theme.js';
 import { html } from '../lib/dom.js';
 import { crearMusica } from './sections/musica.js';
+import { montarFondo } from './fondo.js';
 import * as sobre from './sections/sobre.js';
 import * as portada from './sections/portada.js';
 import * as cuenta from './sections/cuenta.js';
@@ -42,6 +43,7 @@ async function iniciar() {
   const { slug, codigo, familia: enlace } = leerParametros();
   const ev = await data.getEvento(slug || DEMO_EVENT_SLUG);
   aplicarTema(ev.tema);
+  montarFondo(ev.tema);
   document.title = `${ev.titulo} · Invitación`;
 
   const familia = await buscarFamilia(ev, codigo, enlace);
