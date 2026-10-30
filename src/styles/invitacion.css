@@ -110,7 +110,9 @@ body.con-sobre { overflow: hidden; }
 /* Cara y dorso se cambian justo a medio giro (cuando la solapa está de canto y no
    se ve): más confiable que backface-visibility, que Chrome no respeta aquí. */
 .sobre__solapa-cara, .sobre__solapa-dorso { position: absolute; inset: 0; }
-.sobre__solapa-dorso { transform: rotateX(180deg); opacity: 0; }
+/* El dorso no lleva giro propio: al voltearse la solapa ya se ve "de espaldas",
+   con la bisagra pegada al sobre y la curva hacia arriba. */
+.sobre__solapa-dorso { opacity: 0; }
 .sobre__solapa-forma { display: block; width: 100%; height: 100%; overflow: visible; }
 .sobre__solapa-papel { fill: var(--ev-envelope); }
 .sobre__solapa-forma--dorso .sobre__solapa-papel { fill: var(--ev-liner-2); }
