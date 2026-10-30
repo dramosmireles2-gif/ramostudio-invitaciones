@@ -5,6 +5,7 @@ import { aplicarTema } from '../lib/theme.js';
 import { html } from '../lib/dom.js';
 import { crearMusica } from './sections/musica.js';
 import { montarFondo } from './fondo.js';
+import { montarProgreso } from './progreso.js';
 import * as sobre from './sections/sobre.js';
 import * as portada from './sections/portada.js';
 import * as cuenta from './sections/cuenta.js';
@@ -56,6 +57,7 @@ async function iniciar() {
     ...ctx,
     alAbrir: async () => {
       musica.iniciar();
+      montarProgreso();
       app.innerHTML = '';
       for (const nombre of ev.secciones ?? POR_DEFECTO) {
         const s = SECCIONES[nombre];

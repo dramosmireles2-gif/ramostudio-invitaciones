@@ -23,8 +23,19 @@
           "nombre": "Parroquia San Felipe de Jesús",
           "direccion": "Francisco Villa #330, col. Aquiles Serdán, C.P. 88540, Reynosa, Tamps.",
           "hora": "18:00",
-          "mapaUrl": null,
-          "coordenadas": null
+          "mapaUrl": "https://www.google.com/maps?cid=13500069162586686198",
+          "coordenadas": null,
+          "mapaEmbed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3583.1156314559594!2d-98.29580461319463!3d26.095143835827987!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x866508b6e02f37d9%3A0xbb59e1607f2f42f6!2sParroquia%20San%20Felipe%20de%20Jesus!5e0!3m2!1ses-419!2smx!4v1793337094819!5m2!1ses-419!2smx",
+          "foto": {
+            "nombre": "parroquia",
+            "anchos": [
+              408
+            ],
+            "ancho": 408,
+            "alto": 306,
+            "foco": "50% 50%",
+            "alt": "La Parroquia San Felipe de Jesús, de fachada azul claro, con un arcoíris en el cielo"
+          }
         },
         {
           "id": "recepcion",
@@ -36,7 +47,8 @@
           "coordenadas": {
             "lat": 26.0379125,
             "lng": -98.3010376
-          }
+          },
+          "mapaEmbed": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3584.8669901198205!2d-98.30322630321044!3d26.037907699999984!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x86650f1d4c00146b%3A0xcc6ee50464c3580e!2sSal%C3%B3n%20de%20eventos%20%22Bellagio%22!5e0!3m2!1ses-419!2smx!4v1793337071350!5m2!1ses-419!2smx"
         }
       ],
       "itinerario": [
@@ -95,7 +107,8 @@
         "portada": "hoja",
         "frase": "cita",
         "fondo": "sombras",
-        "vestimenta": "sombrero"
+        "vestimenta": "sombrero",
+        "motas": true
       },
       "fraseSobres": "Su compañía es nuestro mejor regalo. Si desean tener un detalle con nosotros, habrá una lluvia de sobres el día de la boda.",
       "rsvp": {

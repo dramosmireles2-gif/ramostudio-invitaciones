@@ -17,7 +17,7 @@ export function codigoPrueba() {
 }
 
 export async function abrirSobre(page) {
-  await page.getByRole('button', { name: 'Abrir la invitación' }).click();
+  await page.getByRole('button', { name: 'Abrir la invitación' }).click({ force: true });
   await expect(page.locator('.sobre')).toHaveCount(0, { timeout: 4000 });
 }
 

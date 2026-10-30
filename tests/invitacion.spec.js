@@ -11,24 +11,58 @@ test('el sobre muestra a la familia y se abre con una transición suave', async 
   await sinDesbordeHorizontal(page);
   await page.screenshot({ path: `${CAPTURAS}/${info.project.name}-00-sobre.png` });
 
-  // Cuadros de la apertura: la tarjeta clara crece dentro del sobre antes de
-  // que aparezca la invitación (no hay salto de oscuro a claro).
-  await page.getByRole('button', { name: 'Abrir la invitación' }).click();
-  const fondos = [];
-  let antes = 0;
-  for (const ms of [400, 900, 1300, 1700, 2100]) {
-    await page.waitForTimeout(ms - antes);
-    antes = ms;
-    fondos.push(await page.evaluate(() => {
-      const t = document.querySelector('.sobre__tarjeta');
-      return t ? Number(getComputedStyle(t).opacity) : 1;
-    }));
-    await page.screenshot({ path: `${CAPTURAS}/${info.project.name}-0${fondos.length}-apertura-${ms}ms.png` });
-  }
-  // La tarjeta aparece poco a poco (no de golpe) y la apertura dura menos de 3 s.
-  expect(fondos[0]).toBeLessThan(0.5);
-  expect(fondos.at(-1)).toBe(1);
-  await expect(page.locator('.sobre')).toHaveCount(0, { timeout: 1500 });
+  // El sobre flota mientras espera (como la invitación de Ivan & Gemima).
+  await expect(page.locator('.sobre__carta')).toHaveCSS('animation-name', 'flotar');
+  // La pantalla del sobre es del color de la invitación: no hay salto de
+  // oscuro a claro al abrir.
+  const [fondoSobre, fondoPagina] = await page.evaluate(() => [
+    getComputedStyle(document.querySelector('.sobre')).backgroundColor,
+    getComputedStyle(document.body).backgroundColor,
+  ]);
+  expect(fondoSobre).toBe(fondoPagina);
+
+  // La apertura, revisada dentro de la página (no depende de cuántos cuadros
+  // dibuje la máquina de pruebas): el sobre se desvanece con una transición de
+  // opacidad de al menos medio segundo (no es un corte), cae la lluvia y todo
+  // dura menos de 3 s.
+  const r = await page.evaluate(() => new Promise((listo) => {
+    const sobre = document.querySelector('.sobre');
+    const t0 = performance.now();
+    sobre.querySelector('.sobre__sello').click();
+    let transicion = 0;
+    let lluvia = 0;
+    const vigilar = () => {
+      for (const a of sobre.getAnimations()) {
+        if (a.transitionProperty === 'opacity') transicion = Math.max(transicion, a.effect.getTiming().duration);
+      }
+      lluvia = Math.max(lluvia, document.querySelectorAll('.lluvia').length);
+      if (!sobre.isConnected) return listo({ transicion, lluvia, total: performance.now() - t0 });
+      setTimeout(vigilar, 50);
+    };
+    vigilar();
+  }));
+  expect(r.transicion).toBeGreaterThanOrEqual(500);
+  expect(r.lluvia).toBeGreaterThan(20);
+  expect(r.total).toBeGreaterThan(1000);
+  expect(r.total).toBeLessThan(3000);
+  await expect(page.locator('.sobre')).toHaveCount(0);
+  // La lluvia se limpia sola al terminar de caer.
+  await expect(page.locator('.lluvia')).toHaveCount(0, { timeout: 6000 });
+});
+
+test('cuenta regresiva con segundos y barra de avance al bajar', async ({ page }) => {
+  await page.goto(`/${SLUG}/`);
+  await abrirSobre(page);
+  const unidades = page.locator('.cuenta__unidad');
+  await expect(unidades).toHaveCount(4);
+  await expect(unidades.nth(3)).toContainText(/segundos?/);
+  const antes = await unidades.nth(3).locator('.cuenta__numero').textContent();
+  await expect.poll(() => unidades.nth(3).locator('.cuenta__numero').textContent(), { timeout: 3000 }).not.toBe(antes);
+
+  const avance = () => page.locator('.progreso').evaluate((b) => new DOMMatrix(getComputedStyle(b).transform).a);
+  expect(await avance()).toBeLessThan(0.05);
+  await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+  await expect.poll(avance).toBeGreaterThan(0.95);
 });
 
 test('todas las secciones con los datos del brief', async ({ page }) => {
@@ -54,6 +88,12 @@ test('todas las secciones con los datos del brief', async ({ page }) => {
   await expect(sedes.nth(0)).toContainText('Francisco Villa #330, col. Aquiles Serdán, C.P. 88540');
   await expect(sedes.nth(1)).toContainText('7:00 p. m.');
   await expect(sedes.nth(1)).toContainText('Salón de eventos Bellagio');
+  // Mapas a la vista (insertados de Google Maps) y la foto de la parroquia.
+  await expect(sedes.nth(0).locator('iframe')).toHaveAttribute('src', /google\.com\/maps\/embed.*Parroquia%20San%20Felipe/);
+  await expect(sedes.nth(1).locator('iframe')).toHaveAttribute('src', /google\.com\/maps\/embed.*Bellagio/);
+  await expect(sedes.nth(0).getByRole('img', { name: /Parroquia San Felipe de Jesús/ })).toBeVisible();
+  await expect(sedes.nth(0).getByRole('link', { name: 'Cómo llegar' }))
+    .toHaveAttribute('href', 'https://www.google.com/maps?cid=13500069162586686198');
   await expect(sedes.nth(1).getByRole('link', { name: 'Cómo llegar' }))
     .toHaveAttribute('href', 'https://www.google.com/maps/search/?api=1&query=26.0379125,-98.3010376');
   await expect(sedes.nth(1).getByRole('link', { name: 'Abrir en Waze' }))
@@ -86,22 +126,24 @@ test('todas las secciones con los datos del brief', async ({ page }) => {
   await sinDesbordeHorizontal(page);
 });
 
-test('las 8 fotos se ven completas, sin recorte', async ({ page }, info) => {
+test('las 9 fotos se ven completas, sin recorte', async ({ page }, info) => {
+  test.setTimeout(180_000); // Los mapas de Google cargan junto con las fotos.
   await page.goto(`/${SLUG}/`);
   await abrirSobre(page);
-  // Recorre la página para que carguen las fotos diferidas.
-  // Hasta el final de la página, mida lo que mida.
-  while (await page.evaluate(() => window.scrollY + window.innerHeight < document.documentElement.scrollHeight - 2)) {
-    await page.evaluate(() => window.scrollBy(0, 900));
-    await page.waitForTimeout(120);
+  // Lleva cada foto a la vista (como quien las va viendo) para que cargue la
+  // diferida; WebKit no carga las que se pasan de largo al desplazarse rápido.
+  const imagenes = page.locator('#app img');
+  for (let i = 0; i < await imagenes.count(); i++) {
+    const img = imagenes.nth(i);
+    await img.evaluate((el) => el.scrollIntoView({ block: 'center' }));
+    await expect.poll(() => img.evaluate((el) => el.complete && el.naturalWidth > 0), { timeout: 20_000 }).toBe(true);
   }
-  await page.waitForFunction(() => [...document.images].every((i) => i.complete && i.naturalWidth > 0));
   const fotos = await page.locator('#app img').evaluateAll((imgs) => imgs.map((i) => ({
     src: i.currentSrc.split('/').pop(),
     natural: i.naturalWidth / i.naturalHeight,
     visto: i.clientWidth / i.clientHeight,
   })));
-  expect(fotos).toHaveLength(8);
+  expect(fotos).toHaveLength(9);
   for (const f of fotos) expect(Math.abs(f.visto - f.natural) / f.natural, f.src).toBeLessThan(0.01);
   // Las fotos solas en su fila ocupan todo el ancho de la pantalla.
   const anchas = await page.locator('.galeria__fila:has(> .galeria__celda:only-child) img, .portada img, .foto-intermedia img')
@@ -183,7 +225,7 @@ test('todo el texto en color (rojo incluido) se lee: contraste AA', async ({ pag
 test('con "reducir movimiento" el sobre abre sin animación', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto(`/${SLUG}/`);
-  await page.getByRole('button', { name: 'Abrir la invitación' }).click();
+  await page.getByRole('button', { name: 'Abrir la invitación' }).click({ force: true });
   await expect(page.locator('.sobre')).toHaveCount(0, { timeout: 500 });
   // Las sombras de fondo se quedan quietas.
   await expect(page.locator('.fondo-sombras')).toHaveCSS('animation-name', 'none');

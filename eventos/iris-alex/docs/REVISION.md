@@ -142,6 +142,30 @@ completas. Solo quedan pendientes la base de datos y el dominio.
 - Playwright: 20 pruebas pasan (nuevas: el fondo existe, se mueve, es casi transparente,
   no tapa los botones y se queda quieto con "reducir movimiento"). Captura: `capturas/10`.
 
+## Iteración 8 (29 de octubre de 2026): mapas, parroquia y apertura tipo Ivan & Gemima
+
+- **Mapas a la vista** en ceremonia y recepción (los "Insertar un mapa" que mandó David),
+  en blanco y negro y con carga diferida. "Cómo llegar" de la parroquia abre su ficha
+  exacta de Google Maps (cid del mapa insertado).
+- **Foto de la parroquia** (con arcoíris) en su marco de papel, a color: en blanco y negro
+  se perdía el arcoíris. Es chica (408x306): en celular se ve un poco suave.
+- **Apertura como la de Ivan & Gemima** (inv.ramosmkt.lat, solo se leyó): el sobre flota
+  despacio sobre el papel; "Toquen el sello para abrir" con dos puntos rojos que laten; al
+  tocar, el sello cede, la solapa se levanta, cae una lluvia de rombos rojos, puntos y
+  puntadas, el sobre crece y se desvanece y la portada sube suave. Toda la pantalla ya es
+  del color de la invitación (no hay salto de oscuro a claro). 1.8 s. Ivan & Gemima es en
+  San Nicolás de los Garza y esta en Reynosa: no se cruzan invitados.
+- **Cuenta regresiva con segundos.**
+- **Fondo dinámico:** además de las sombras de mezquite, motas de luz que suben despacio
+  (gris y algo de rojo), en canvas, a medio ritmo, pausadas con la pestaña oculta.
+- **Barra de avance** arriba, una línea roja sin brillo que crece al bajar.
+- **Rendimiento:** medido con Playwright, el difuminado de las sombras con CSS bajaba la
+  página a 48 cuadros/s en Chrome; ahora es una imagen ya difuminada que solo se mueve:
+  54–61 cuadros/s. El motor de Safari en Windows no tiene aceleración gráfica y no sirve
+  para medir un iPhone real: **falta probar en un iPhone**.
+- Playwright: 22 pruebas pasan (nuevas: sobre flotante, mismo color de fondo, lluvia,
+  segundos, barra de avance, mapas y foto de la parroquia). Captura: `capturas/11`.
+
 ## Pendiente antes de enviar (miércoles 4 de noviembre)
 
 1. **Número de WhatsApp** que recibe las confirmaciones (`rsvp.telefono` en evento.json).

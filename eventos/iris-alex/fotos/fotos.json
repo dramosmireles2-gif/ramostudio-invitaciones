@@ -90,6 +90,15 @@
       }
     ]
   },
+  "parroquia": {
+    "original": "parroquia.png",
+    "tamanos": [
+      {
+        "width": 408,
+        "height": 306
+      }
+    ]
+  },
   "sombreros": {
     "original": "sombreros.jpg",
     "tamanos": [
