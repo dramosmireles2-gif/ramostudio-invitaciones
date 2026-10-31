@@ -1,5 +1,5 @@
 {
-  "_nota": "DATOS DE DEMO. Ningún nombre (familias y personas) ni teléfono es real; el mapa apunta a un lugar público (Plaza Principal de Reynosa). Fechas relativas: fechaRelativaDias = días desde hoy; cuando = { dias atrás, hora } en la zona del evento. Familia del recorrido invitado → panel: fam_demo, código DEMO (?f=demo), 2 pases y sin abrir; es el único código no aleatorio y solo existe en el demo.",
+  "_nota": "DATOS DE DEMO. Ningún nombre (familias y personas) ni teléfono es real; el mapa apunta a un lugar público (Plaza Principal de Reynosa). Fechas relativas: fechaRelativaDias = días desde hoy; cuando = { dias atrás, hora } en la zona del evento. Familia del recorrido invitado → panel: fam_demo (Familia Ramos), código DEMO (?f=demo), 2 pases y sin abrir; es el único código no aleatorio y solo existe en el demo.",
   "eventos": [
     {
       "id": "evt_demo_md",
@@ -16,7 +16,7 @@
       "ciudad": "Reynosa, Tamaulipas",
       "fechaLimiteRsvpDiasAntes": 35,
       "lluviaDeSobres": true,
-      "frase": "Y en medio de todo, nos encontramos.",
+      "frase": "Nos conocimos sin buscarnos y, desde entonces, cada atardecer se siente como volver a casa. Queremos que estén con nosotros el día que lo hagamos para siempre.",
       "padres": {
         "novia": [
           "Laura Fernández",
@@ -84,35 +84,141 @@
         "src": null
       },
       "tema": {
-        "_nota": "Tema del evento sobre los tokens --ev-* del design system de RamoStudio (src/styles/tokens.css). acento = filetes, sello y anillo del botón del panel. colores = tokens --ev-* de la invitación (claves en camelCase sin el prefijo).",
-        "clave": "marca",
-        "acento": "#B79A6B",
+        "_nota": "Paleta del demo medida en las fotos de muestra (sesión al atardecer de Jakob Owens en Unsplash): olivo de las palmeras en sombra, marfil del cielo y el vestido, trigo de la luz dorada. Contraste sobre el fondo: texto 13.4:1, texto secundario 6.9:1, botón marfil sobre olivo 11.1:1. El trigo (3.1:1) va solo en filetes, pespuntes y motas, nunca en texto.",
+        "clave": "demo-olivo",
+        "acento": "#A9824F",
         "monograma": "M·D",
         "colores": {
-          "bg": "#F4EFE9",
-          "surface": "#FAF7F2",
-          "surface2": "#DCE3E6",
-          "text": "#2B2A28",
-          "text2": "#3E5266",
-          "accent": "#B79A6B",
-          "action": "#3E5266",
-          "onAction": "#F4EFE9",
-          "band": "#3E5266",
-          "onBand": "#F4EFE9",
-          "envelope": "#FAF7F2",
-          "onEnvelope": "#2B2A28",
-          "onEnvelope2": "#3E5266",
-          "liner": "#3E5266",
-          "liner2": "#B79A6B",
-          "seal": "#3E5266",
-          "onSeal": "#F4EFE9",
-          "card": "#FDFBF7"
+          "bg": "#F4EFE4",
+          "surface": "#FBF8F1",
+          "surface2": "#E8E0CF",
+          "line": "rgba(47, 53, 33, .2)",
+          "text": "#22261D",
+          "text2": "#4E5443",
+          "accent": "#A9824F",
+          "action": "#2F3521",
+          "onAction": "#F4EFE4",
+          "band": "#2F3521",
+          "onBand": "#F4EFE4",
+          "onBand2": "#CFC6B2",
+          "envelope": "#FBF8F1",
+          "onEnvelope": "#22261D",
+          "onEnvelope2": "#4E5443",
+          "liner": "#2F3521",
+          "liner2": "#A9824F",
+          "seal": "#2F3521",
+          "onSeal": "#E9D9B8",
+          "card": "#FBF8F1"
         },
         "fuentes": {
           "title": "Playfair Display",
-          "script": "Great Vibes",
+          "script": "Playfair Display",
           "data": "Montserrat"
-        }
+        },
+        "variables": {
+          "nombres-style": "italic",
+          "etiqueta-color": "#4E5443",
+          "hilo": "rgba(169, 130, 79, .55)",
+          "hilo-sobre": "#A9824F",
+          "sello-chico": "#2F3521",
+          "filete-color": "#A9824F"
+        },
+        "portada": "hoja",
+        "frase": "cita",
+        "fondo": "sombras",
+        "motas": true
+      },
+      "fotos": {
+        "_nota": "TODO-FOTO-REAL: fotos de muestra de Unsplash (Jakob Owens, Licencia de Unsplash). En un evento real van las fotos de la pareja.",
+        "portada": {
+          "nombre": "caminando",
+          "anchos": [
+            640,
+            1280
+          ],
+          "ancho": 1280,
+          "alto": 1920,
+          "foco": "50% 40%",
+          "alt": "Los novios caminan riendo bajo una palmera, al atardecer"
+        },
+        "intermedia": {
+          "nombre": "atardecer",
+          "anchos": [
+            640,
+            1280
+          ],
+          "ancho": 1280,
+          "alto": 1920,
+          "foco": "50% 45%",
+          "alt": "Los novios de espaldas, caminando hacia el sol entre los árboles"
+        },
+        "galeria": [
+          {
+            "nombre": "velo",
+            "anchos": [
+              640,
+              1280
+            ],
+            "ancho": 1280,
+            "alto": 1920,
+            "foco": "50% 30%",
+            "alt": "Los novios juntan la frente, envueltos en el velo"
+          },
+          {
+            "nombre": "luz",
+            "anchos": [
+              640,
+              1280
+            ],
+            "ancho": 1280,
+            "alto": 1920,
+            "foco": "50% 35%",
+            "alt": "La novia con su ramo junto al novio, con la luz dorada entre los dos"
+          },
+          {
+            "nombre": "abrazo",
+            "anchos": [
+              640,
+              1280
+            ],
+            "ancho": 1280,
+            "alto": 1920,
+            "foco": "50% 35%",
+            "alt": "La novia abraza al novio por el cuello, con el ramo en la mano"
+          },
+          {
+            "nombre": "novio",
+            "anchos": [
+              640,
+              1280
+            ],
+            "ancho": 1280,
+            "alto": 1920,
+            "foco": "50% 30%",
+            "alt": "El novio se acomoda la corbata frente a un muro de piedra"
+          }
+        ]
+      },
+      "secciones": [
+        "portada",
+        "cuenta",
+        "frase",
+        "evento",
+        "calendario",
+        "vestimenta",
+        "foto",
+        "rsvp",
+        "regalos",
+        "mensajes",
+        "galeria",
+        "pie"
+      ],
+      "fraseSobres": "Lo más importante es que estén con nosotros. Si desean tener un detalle, el día de la boda habrá una caja para sobres en la recepción.",
+      "creditoFotos": "Jakob Owens en Unsplash (fotos de muestra)",
+      "rsvp": {
+        "modo": "panel",
+        "respaldo": "whatsapp",
+        "telefono": null
       }
     }
   ],
@@ -164,7 +270,7 @@
     {
       "id": "fam_02",
       "eventoId": "evt_demo_md",
-      "nombre": "Familia Ramos",
+      "nombre": "Familia Rangel",
       "grupo": "Familia de la novia",
       "telefono": "",
       "codigo": "WB3REKRT",
@@ -172,17 +278,17 @@
       "personas": [
         {
           "id": "per_02_1",
-          "nombre": "Mateo Ramos",
+          "nombre": "Mateo Rangel",
           "mesaId": "mesa_01"
         },
         {
           "id": "per_02_2",
-          "nombre": "Valentina Ramos",
+          "nombre": "Valentina Rangel",
           "mesaId": "mesa_01"
         },
         {
           "id": "per_02_3",
-          "nombre": "Santiago Ramos",
+          "nombre": "Santiago Rangel",
           "mesaId": "mesa_01"
         }
       ],
@@ -1830,7 +1936,7 @@
     {
       "id": "fam_demo",
       "eventoId": "evt_demo_md",
-      "nombre": "Familia Herrera Luna",
+      "nombre": "Familia Ramos",
       "grupo": "Amigos",
       "telefono": "",
       "codigo": "DEMO",
@@ -1838,12 +1944,12 @@
       "personas": [
         {
           "id": "per_demo_1",
-          "nombre": "Andrés Herrera",
+          "nombre": "Andrés Ramos",
           "mesaId": "mesa_12"
         },
         {
           "id": "per_demo_2",
-          "nombre": "Paulina Luna",
+          "nombre": "Paulina Ramos",
           "mesaId": "mesa_12"
         }
       ],
@@ -2020,7 +2126,7 @@
       "eventoId": "evt_demo_md",
       "tipo": "transferencia",
       "titulo": "Banco Ejemplo",
-      "detalle": "Titular: Mariana Solís · cuenta 0000 0000 0000 0000",
+      "detalle": "Titular: Mariana Solís · Cuenta: 0000 0000 0000 0000",
       "url": null
     }
   ],

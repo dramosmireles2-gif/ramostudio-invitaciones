@@ -1,0 +1,80 @@
+{
+  "abrazo": {
+    "original": "abrazo.jpg",
+    "tamanos": [
+      {
+        "width": 640,
+        "height": 960
+      },
+      {
+        "width": 1280,
+        "height": 1920
+      }
+    ]
+  },
+  "atardecer": {
+    "original": "atardecer.jpg",
+    "tamanos": [
+      {
+        "width": 640,
+        "height": 960
+      },
+      {
+        "width": 1280,
+        "height": 1920
+      }
+    ]
+  },
+  "caminando": {
+    "original": "caminando.jpg",
+    "tamanos": [
+      {
+        "width": 640,
+        "height": 960
+      },
+      {
+        "width": 1280,
+        "height": 1920
+      }
+    ]
+  },
+  "luz": {
+    "original": "luz.jpg",
+    "tamanos": [
+      {
+        "width": 640,
+        "height": 960
+      },
+      {
+        "width": 1280,
+        "height": 1920
+      }
+    ]
+  },
+  "novio": {
+    "original": "novio.jpg",
+    "tamanos": [
+      {
+        "width": 640,
+        "height": 960
+      },
+      {
+        "width": 1280,
+        "height": 1920
+      }
+    ]
+  },
+  "velo": {
+    "original": "velo.jpg",
+    "tamanos": [
+      {
+        "width": 640,
+        "height": 960
+      },
+      {
+        "width": 1280,
+        "height": 1920
+      }
+    ]
+  }
+}

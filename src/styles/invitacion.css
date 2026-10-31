@@ -128,7 +128,7 @@ body.con-sobre { overflow: hidden; }
 /* Filete con rombo (el de la lluvia) entre el sello y los nombres. */
 .sobre__filete { position: relative; width: 62%; height: 1px; margin-bottom: 26px; background: linear-gradient(90deg, transparent, var(--ev-hilo-sobre, var(--ev-liner-2)) 30%, var(--ev-hilo-sobre, var(--ev-liner-2)) 70%, transparent); }
 .sobre__filete::after { content: ""; position: absolute; left: 50%; top: 50%; width: 7px; height: 7px; background: var(--ev-hilo-sobre, var(--ev-liner-2)); transform: translate(-50%, -50%) rotate(45deg); }
-.sobre__nombres { font-family: var(--ev-font-script); font-style: var(--ev-nombres-style, normal); font-size: 42px; line-height: 1.1; color: var(--ev-on-envelope, var(--ev-on-band)); }
+.sobre__nombres { font-family: var(--ev-font-script); font-style: var(--ev-nombres-style, normal); font-size: 42px; line-height: 1.1; text-align: center; text-wrap: balance; color: var(--ev-on-envelope, var(--ev-on-band)); }
 .sobre__fecha { margin-top: 10px; font-size: 13px; letter-spacing: .26em; color: var(--ev-on-envelope-2, var(--ev-on-band-2, var(--ev-on-band))); }
 .sobre__ciudad { margin-top: 14px; font-size: 11px; font-weight: var(--fw-semibold); letter-spacing: .22em; text-transform: uppercase; color: var(--ev-on-envelope-2, var(--ev-on-band-2, var(--ev-on-band))); }
 /* La solapa: gira desde su orilla de arriba; cara con "Para …" y dorso (el interior). */
@@ -228,6 +228,7 @@ body.con-sobre { overflow: hidden; }
 .portada__foto img { width: 100%; height: auto; }
 .portada__texto { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 32px 24px 8px; }
 .portada__nombres {
+  text-wrap: balance;
   font-family: var(--ev-font-script); font-style: var(--ev-nombres-style, normal); font-weight: 500;
   font-size: 54px; line-height: 1.05; color: var(--ev-text);
 }
@@ -459,7 +460,7 @@ body.con-sobre { overflow: hidden; }
   background: var(--ev-sello-chico, transparent);
   font-family: var(--ev-font-title); font-style: italic; font-size: 18px;
 }
-.pie__nombres { font-family: var(--ev-font-script); font-style: var(--ev-nombres-style, normal); font-size: 32px; }
+.pie__nombres { text-wrap: balance; font-family: var(--ev-font-script); font-style: var(--ev-nombres-style, normal); font-size: 32px; }
 .pie__fecha { font-size: 15px; letter-spacing: .2em; color: var(--ev-on-band-2, var(--ev-on-band)); }
 .pie__credito { font-size: 13px; color: var(--ev-on-band-2, var(--ev-on-band)); }
 

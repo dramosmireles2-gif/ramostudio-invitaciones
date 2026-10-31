@@ -58,8 +58,8 @@ Lo que ve quien llega a `demo.ramosmkt.lat` (por ejemplo desde un flyer).
 - **WhatsApp de RamoStudio**: `WHATSAPP_NUMBER` en `src/config.js` (único lugar). Todos los «Quiero la
   mía» salen de `enlaceQuieroLaMia()` en `links.js`, con el mensaje «Hola, vi el demo (src) y quiero
   una invitación así».
-- **Recorrido invitado → panel (solo datos)**: Familia Herrera Luna (`fam_demo`, código `DEMO`, es
-  decir `?f=demo`), 2 pases, sin abrir y sentada en Mesa 12. Es el único código no aleatorio y solo
+- **Recorrido invitado → panel (solo datos)**: Familia Ramos (`fam_demo`, código `DEMO`, es
+  decir `?f=demo`; antes se llamaba «Familia Herrera Luna» y la Ramos anterior es ahora Familia Rangel), 2 pases, sin abrir y sentada en Mesa 12. Es el único código no aleatorio y solo
   existe en el demo. `confirmarAsistencia()` registra la actividad con la hora actual y la lista de
   Actividad muestra «Ahora» para lo de los últimos 5 minutos. Falta conectar la pantalla de la
   invitación cuando llegue su diseño.

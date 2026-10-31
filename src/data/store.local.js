@@ -164,6 +164,26 @@ function estado() {
   return memoria;
 }
 
+// Lo que en la demo no se edita desde el panel y siempre sale del evento.json.
+const CAMPOS_DISENO = ['tema', 'fotos', 'secciones', 'frase', 'fraseSobres', 'creditoFotos', 'rsvp'];
+
+// La familia del recorrido (código DEMO) se llamaba "Familia Herrera Luna" y la
+// Familia Ramos de antes ahora es "Familia Rangel". Solo cambia los nombres que
+// siguen como venían del seed; lo que la pareja haya editado se respeta.
+const NOMBRES_ANTERIORES = { fam_demo: 'Familia Herrera Luna', fam_02: 'Familia Ramos' };
+function renombrarFamiliasDemo(s, seed) {
+  for (const [id, anterior] of Object.entries(NOMBRES_ANTERIORES)) {
+    const f = s.familias.find((x) => x.id === id);
+    const nueva = seed.familias.find((x) => x.id === id);
+    if (!f || !nueva || f.nombre !== anterior) continue;
+    f.nombre = nueva.nombre;
+    for (const p of f.personas ?? []) {
+      const base = nueva.personas.find((x) => x.id === p.id);
+      if (base) p.nombre = base.nombre;
+    }
+  }
+}
+
 // Eventos reales: los datos del evento (fecha, lugares, tema) y sus regalos
 // mandan desde evento.json en cada carga, para que una corrección llegue a
 // quien ya abrió la invitación. Solo sus familias, mesas, mensajes y
@@ -186,9 +206,12 @@ async function cargarEvento(slug) {
       refrescados.add(slug);
       guardar();
     } else if (slug === DEMO_EVENT_SLUG && !refrescados.has(slug)) {
-      // En la demo los datos se pueden editar desde el panel, pero el tema no:
-      // se trae del evento.json para que una corrección de diseño llegue.
-      ya.tema = structuredClone(seed.eventos[0].tema);
+      // En la demo los datos se pueden editar desde el panel, pero el diseño
+      // no: se trae del evento.json para que una corrección de diseño llegue.
+      for (const k of CAMPOS_DISENO) {
+        if (k in seed.eventos[0]) ya[k] = structuredClone(seed.eventos[0][k]);
+      }
+      renombrarFamiliasDemo(s, seed);
       refrescados.add(slug);
       guardar();
     }
@@ -198,6 +221,11 @@ async function cargarEvento(slug) {
   let datos;
   if (slug === DEMO_EVENT_SLUG && viejo) {
     datos = migrarDatos(viejo.datos, seed);
+    renombrarFamiliasDemo(datos, seed);
+    const demo = datos.eventos?.find((x) => x.slug === slug);
+    for (const k of CAMPOS_DISENO) {
+      if (demo && k in seed.eventos[0]) demo[k] = structuredClone(seed.eventos[0][k]);
+    }
     escribirStorage(viejo.key, null);
     viejo = null;
   } else datos = hidratarSeed(seed);

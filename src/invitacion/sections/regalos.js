@@ -23,7 +23,7 @@ function transferencia(r) {
     <dl class="regalo__datos">${datos(r.detalle).map(([k, v]) => crudo(html`<div>
       ${k ? crudo(html`<dt>${k}</dt>`) : ''}<dd class="${/clabe|cuenta|tarjeta/i.test(k) ? 'regalo__numero' : ''}">${v}</dd>
     </div>`))}</dl>
-    ${cuenta ? crudo(html`<button type="button" class="btn btn--secondary btn--full" data-copiar="${cuenta}">Copiar CLABE</button>`) : ''}
+    ${cuenta ? crudo(html`<button type="button" class="btn btn--secondary btn--full" data-copiar="${cuenta}">${cuenta.length === 18 ? 'Copiar CLABE' : 'Copiar cuenta'}</button>`) : ''}
   </article>`;
 }
 
