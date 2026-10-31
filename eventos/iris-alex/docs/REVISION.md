@@ -224,6 +224,9 @@ completas. Solo quedan pendientes la base de datos y el dominio.
   suena de fondo sin reproductor y arranca igual en iPhone.
 - 24 pruebas pasan.
 
+- Ajuste (31/10/2026): a petición de David, el reproductor regresa a su tamaño anterior
+  (a todo lo ancho), y se queda al final de la invitación.
+
 ## Pendiente antes de enviar (miércoles 4 de noviembre)
 
 1. **Número de WhatsApp** que recibe las confirmaciones (`rsvp.telefono` en evento.json).

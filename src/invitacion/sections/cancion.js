@@ -1,7 +1,8 @@
-// Música de fondo: el reproductor oficial de YouTube, discreto y al tamaño
-// mínimo que permite YouTube (200 x 200 px, a la vista; más chico o escondido
-// rompe sus condiciones y puede dejar de sonar). Suena desde que el invitado
-// toca el sello; el botón de música la silencia. Solo si evento.musica.youtube.
+// Música de fondo: el reproductor oficial de YouTube a todo lo ancho (YouTube
+// pide al menos 200 x 200 px a la vista; más chico o escondido rompe sus
+// condiciones y puede dejar de sonar). Cada evento elige dónde va en
+// evento.secciones. Suena desde que el invitado toca el sello; el botón de
+// música la silencia. Solo si evento.musica.youtube.
 import { html, crudo } from '../../lib/dom.js';
 
 export function montar(contenedor, { evento, musica }) {

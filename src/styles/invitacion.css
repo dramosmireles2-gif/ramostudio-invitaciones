@@ -292,14 +292,14 @@ body.con-sobre { overflow: hidden; }
 .frase--cita .frase__firma::before { content: ""; width: 32px; border-top: 1.5px solid var(--ev-accent); }
 .frase--cita .frase__sello { position: static; margin: 14px auto 0; }
 
-/* Música de fondo: el reproductor oficial de YouTube, discreto al final de la
-   invitación, al tamaño mínimo que permite YouTube (200 x 200 px, a la vista). */
+/* Música de fondo: el reproductor oficial de YouTube al final de la invitación,
+   a todo lo ancho (YouTube pide al menos 200 x 200 px a la vista). */
 .cancion { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 40px 24px 48px; text-align: center; }
 .cancion .ev-etiqueta { font-size: 11px; }
 .cancion__titulo { font-size: 14px; color: var(--ev-text-2); }
 .cancion__titulo em { font-family: var(--ev-font-title); font-size: 16px; color: var(--ev-text); }
-.cancion__marco { margin-top: 10px; padding: 6px; background: var(--ev-surface); border: 1px solid var(--ev-line); border-radius: 4px; }
-.cancion__video, .cancion__marco iframe { display: block; width: 200px; height: 200px; border: 0; border-radius: 2px; }
+.cancion__marco { width: 100%; margin-top: 10px; padding: 8px; background: var(--ev-surface); border: 1px solid var(--ev-line); border-radius: 4px; }
+.cancion__video, .cancion__marco iframe { display: block; width: 100%; height: auto; min-height: 200px; aspect-ratio: 16 / 10; border: 0; border-radius: 2px; }
 
 /* Bandas: la toquilla del sombrero entre secciones. */
 /* Remate entre bloques: dos puntadas y un rombo del acento, como el final de una

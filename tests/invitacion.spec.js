@@ -259,14 +259,15 @@ test('fondo de sombras: se mueve, casi transparente y no estorba los toques', as
   expect(encima).toBe('Confirmar asistencia');
 });
 
-test('música: arranca sola al abrir el sobre (video oficial de YouTube, discreto al final), se silencia y se recuerda', async ({ page }) => {
+test('música: arranca sola al abrir el sobre (video oficial de YouTube al final), se silencia y se recuerda', async ({ page }) => {
   await page.goto(`/${SLUG}/`);
   // El reproductor oficial está en "Nuestra canción", a la vista (lo pide YouTube).
   const cancion = page.locator('.cancion');
   await expect(cancion).toContainText('A Thousand Years');
-  // Discreto, al final, al tamaño mínimo que permite YouTube (200 x 200 a la vista).
-  const caja = await cancion.locator('.cancion__marco').boundingBox();
-  expect(Math.round(caja.width)).toBeLessThanOrEqual(216);
+  // Al final, a todo lo ancho y nunca menos de lo que pide YouTube (200 x 200).
+  const caja = await cancion.locator('iframe').boundingBox();
+  expect(caja.width).toBeGreaterThanOrEqual(200);
+  expect(caja.height).toBeGreaterThanOrEqual(200);
   await expect(cancion).toContainText('Christina Perri');
   await expect(cancion.locator('iframe')).toHaveAttribute('src', /youtube-nocookie\.com\/embed\/rtOvBOTyX00/, { timeout: 15_000 });
   // Nunca suena antes del sello y no hay botón.
