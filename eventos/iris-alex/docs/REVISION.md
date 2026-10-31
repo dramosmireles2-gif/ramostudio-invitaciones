@@ -195,6 +195,22 @@ completas. Solo quedan pendientes la base de datos y el dominio.
   invitado toca play en "Nuestra canción". Falta probarlo en un iPhone real.
 - Playwright: 24 pruebas pasan (nueva: reproductor oficial, botón, silencio recordado).
 
+## Iteración 11 (31 de octubre de 2026): sin regalos y paleta de Ivan & Gemima
+
+- **La clienta quitó la sección de regalos** (lluvia de sobres, transferencia, Liverpool
+  y Amazon). Los datos siguen en evento.json por si la quiere de vuelta: basta con agregar
+  "regalos" a `secciones`.
+- **Paleta de la invitación de Ivan & Gemima** (pedido de la clienta): fondo casi negro
+  cálido #0C0B09, tarjetas #141210 y #1C1915, dorado champaña #C9A46A y texto marfil
+  #EDE8DF. El dorado toma el lugar del rojo: etiquetas, pespuntes, sellos, comillas,
+  círculo del calendario y botón de confirmar. El diseño (sobre, carta, hojas, fotos en
+  blanco y negro) no cambia.
+- Contraste medido: marfil 16.1:1, dorado 8.4:1, gris 6.3:1 sobre el fondo; el texto
+  oscuro sobre el botón dorado 8.4:1. La prueba de contraste de Playwright pasa.
+- Nota de dirección de arte: el "fondo negro de lujo" es una señal genérica en la skill;
+  aquí se justifica porque lo pide la clienta y porque el código de vestimenta es negro.
+- 24 pruebas pasan.
+
 ## Pendiente antes de enviar (miércoles 4 de noviembre)
 
 1. **Número de WhatsApp** que recibe las confirmaciones (`rsvp.telefono` en evento.json).
