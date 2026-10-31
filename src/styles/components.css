@@ -91,10 +91,13 @@ textarea.field__control { min-height: 150px; line-height: 1.5; resize: vertical;
 .field__control[aria-invalid="true"] { border-color: var(--pn-no); }
 .field__hint { font-family: var(--font-sans); font-size: 14px; color: var(--field-label, var(--pn-texto)); }
 .field__hint--error { color: var(--pn-no); }
+.field[hidden] { display: none; }
+/* Flecha del selector con dos triángulos del color del texto (sigue al tema). */
 select.field__control {
   padding-right: 44px; cursor: pointer;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1 1l6 6 6-6' fill='none' stroke='%233E5266' stroke-width='1.5'/%3E%3C/svg%3E");
-  background-repeat: no-repeat; background-position: right 16px center;
+  background-image: linear-gradient(45deg, transparent 50%, var(--pn-texto) 50%), linear-gradient(135deg, var(--pn-texto) 50%, transparent 50%);
+  background-size: 6px 6px; background-repeat: no-repeat;
+  background-position: calc(100% - 24px) 50%, calc(100% - 18px) 50%;
 }
 
 /* Chips: filtros en píldora. ---------------------------------------------- */

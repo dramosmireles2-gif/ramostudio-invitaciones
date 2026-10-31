@@ -12,6 +12,49 @@ import {
 const FILTROS = [['todos', 'Todos'], ['confirmado', 'Confirmados'], ['pend', 'Pendientes'], ['no', 'No asisten'], ['sinabrir', 'No han abierto']];
 const FILTRO_URL = { pendientes: 'pend', confirmados: 'confirmado', 'no-asisten': 'no', 'sin-abrir': 'sinabrir' };
 const GRUPOS = ['Familia de la novia', 'Familia del novio', 'Amigos', 'Trabajo'];
+// Opción del selector de grupo que abre el campo para uno nuevo.
+const NUEVO_GRUPO = '__nuevo';
+
+// Los grupos de siempre más los que la pareja ya creó (salen de sus familias).
+const gruposDe = (familias) => [...new Set([...GRUPOS, ...familias.map((f) => f.grupo).filter(Boolean)])];
+
+// Selector de grupo con "Agregar grupo…" (campo para escribir uno propio).
+function campoGrupo(id, grupos, actual) {
+  return html`<div class="field">
+      <label class="field__label" for="${id}">Grupo</label>
+      <select class="field__control" id="${id}" name="grupo">${grupos.map((g) => crudo(html`<option value="${g}"${crudo(g === actual ? ' selected' : '')}>${g}</option>`))}
+        <option value="${NUEVO_GRUPO}">Agregar grupo…</option></select>
+    </div>
+    <div class="field" data-grupo-nuevo hidden>
+      <label class="field__label" for="${id}-nuevo">Nombre del grupo nuevo</label>
+      <input class="field__control" id="${id}-nuevo" name="grupoNuevo" maxlength="40" placeholder="Padrinos, Vecinos, Compadres…" autocomplete="off">
+      <span class="field__hint field__hint--error" data-error="grupoNuevo" hidden></span>
+    </div>`;
+}
+
+function activarCampoGrupo(form) {
+  const caja = form.querySelector('[data-grupo-nuevo]');
+  form.elements.grupo.addEventListener('change', () => {
+    caja.hidden = form.elements.grupo.value !== NUEVO_GRUPO;
+    if (!caja.hidden) form.elements.grupoNuevo.focus();
+  });
+  form.elements.grupoNuevo.addEventListener('input', () => marcarGrupo(form, null));
+}
+
+function marcarGrupo(form, texto) {
+  const aviso = form.querySelector('[data-error="grupoNuevo"]');
+  form.elements.grupoNuevo.setAttribute('aria-invalid', String(Boolean(texto)));
+  aviso.textContent = texto ?? '';
+  aviso.hidden = !texto;
+}
+
+// El grupo elegido, o null si eligieron "Agregar grupo…" sin escribirlo.
+function leerGrupo(form) {
+  if (form.elements.grupo.value !== NUEVO_GRUPO) return form.elements.grupo.value;
+  const nuevo = form.elements.grupoNuevo.value.trim().replace(/\s+/g, ' ');
+  if (!nuevo) marcarGrupo(form, 'Escriban el nombre del grupo, por ejemplo “Padrinos”.');
+  return nuevo || null;
+}
 // Valor del selector de mesa cuando la familia está repartida en varias mesas.
 const DIVIDIDA = '__dividida';
 
@@ -94,6 +137,7 @@ export async function montar(destino, ctx) {
       </div>
       ${crudo(chips(FILTROS, lista.k, 'Filtrar por respuesta'))}
       <button class="btn btn--full" type="button" data-agregar>Agregar familia</button>
+      ${familias.length > 1 ? crudo('<button class="btn btn--secondary btn--full" type="button" data-asignar-grupo>Asignar grupo a varias</button>') : ''}
       <div data-filas>${crudo(filas())}</div>`;
   }
 
@@ -203,10 +247,7 @@ export async function montar(destino, ctx) {
         <input class="field__control" id="ff-tel" name="telefono" type="tel" inputmode="tel" placeholder="899 123 4567" value="${fam?.telefono ?? ''}" autocomplete="off">
         <span class="field__hint" data-error="telefono" data-ayuda="Para mandarles su enlace personal.">Para mandarles su enlace personal.</span>
       </div>
-      <div class="field">
-        <label class="field__label" for="ff-grupo">Grupo</label>
-        <select class="field__control" id="ff-grupo" name="grupo">${GRUPOS.map((g) => opcion(g, g, grupo))}</select>
-      </div>
+      ${crudo(campoGrupo('ff-grupo', gruposDe(familias), grupo))}
       <button class="btn btn--full btn--lg" type="submit">${fam ? 'Guardar cambios' : 'Agregar a la lista'}</button>`;
 
     const hoja = abrirBottomSheet({ titulo: fam ? 'Editar datos' : 'Agregar familia', contenido: cuerpo });
@@ -225,6 +266,7 @@ export async function montar(destino, ctx) {
     cuerpo.elements.nombre.addEventListener('input', () => marcar('nombre', null));
     cuerpo.elements.telefono.addEventListener('input', () => marcar('telefono', null));
     cuerpo.elements.mesa.addEventListener('change', () => marcar('mesa', null));
+    activarCampoGrupo(cuerpo);
 
     cuerpo.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -239,9 +281,10 @@ export async function montar(destino, ctx) {
         marcar('telefono', 'Escriban los 10 números del celular, sin el 52.');
         error = true;
       }
-      if (error) return;
+      const grupoElegido = leerGrupo(cuerpo);
+      if (error || !grupoElegido) return;
 
-      const datos = { nombre: v.nombre, pasesAsignados: Number(v.pases), telefono: v.telefono.trim(), grupo: v.grupo };
+      const datos = { nombre: v.nombre, pasesAsignados: Number(v.pases), telefono: v.telefono.trim(), grupo: grupoElegido };
       const f = fam ? await data.actualizarFamilia(fam.id, datos) : await data.crearFamilia(evento.id, datos);
       const mesaId = v.mesa || null;
       let sinLugar = null;
@@ -266,6 +309,60 @@ export async function montar(destino, ctx) {
         : fam ? 'Guardamos los cambios.' : 'Listo. Ya pueden mandarles su invitación.');
       if (escritorio || fam) await recargar(f.id);
       else abrir(f.id);
+    });
+  }
+
+  // Un grupo para varias familias a la vez (el de siempre o uno nuevo).
+  function abrirAsignarGrupo() {
+    const cuerpo = document.createElement('form');
+    cuerpo.className = 'familia-form';
+    cuerpo.noValidate = true;
+    cuerpo.innerHTML = html`
+      ${crudo(campoGrupo('ag-grupo', gruposDe(familias), GRUPOS[0]))}
+      <div class="grupo-familias__cabeza">
+        <span class="field__label">Familias</span>
+        <button class="btn btn--quiet btn--flush" type="button" data-todas>Elegir todas</button>
+      </div>
+      <div class="sheet seleccion" role="group" aria-label="Familias">${familias.map((f) => crudo(html`
+        <label class="seleccion__persona">
+          <input type="checkbox" name="familias" value="${f.id}">
+          <span class="seleccion__textos"><span class="persona-mesa__nombre">${f.nombre}</span>
+            <span class="persona-mesa__estado">${f.grupo || 'Sin grupo'}</span></span>
+        </label>`))}</div>
+      <span class="field__hint field__hint--error" data-error="familias" hidden></span>
+      <button class="btn btn--full btn--lg" type="submit" data-aplicar>Elijan las familias</button>`;
+    const hoja = abrirBottomSheet({ titulo: 'Asignar grupo', contenido: cuerpo });
+    activarCampoGrupo(cuerpo);
+
+    const marcadas = () => [...cuerpo.querySelectorAll('[name="familias"]:checked')].map((c) => c.value);
+    const contar = () => {
+      const n = marcadas().length;
+      cuerpo.querySelector('[data-aplicar]').textContent = n ? `Aplicar a ${plural(n, 'familia', 'familias')}` : 'Elijan las familias';
+      cuerpo.querySelector('[data-error="familias"]').hidden = true;
+    };
+    cuerpo.addEventListener('change', (e) => { if (e.target.name === 'familias') contar(); });
+    cuerpo.querySelector('[data-todas]').addEventListener('click', (e) => {
+      const casillas = [...cuerpo.querySelectorAll('[name="familias"]')];
+      const todas = casillas.every((c) => c.checked);
+      for (const c of casillas) c.checked = !todas;
+      e.target.textContent = todas ? 'Elegir todas' : 'Quitar todas';
+      contar();
+    });
+
+    cuerpo.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const ids = marcadas();
+      const grupo = leerGrupo(cuerpo);
+      if (!ids.length) {
+        const aviso = cuerpo.querySelector('[data-error="familias"]');
+        aviso.textContent = 'Elijan al menos una familia.';
+        aviso.hidden = false;
+      }
+      if (!ids.length || !grupo) return;
+      for (const id of ids) await data.actualizarFamilia(id, { grupo });
+      hoja.cerrar();
+      toast(`Listo: ${plural(ids.length, 'familia', 'familias')} en “${grupo}”.`);
+      await recargar();
     });
   }
 
@@ -328,6 +425,7 @@ export async function montar(destino, ctx) {
       lista.k = 'todos';
       pintar();
     } else if (b.hasAttribute('data-agregar')) abrirFormulario(null);
+    else if (b.hasAttribute('data-asignar-grupo')) abrirAsignarGrupo();
     else if (b.hasAttribute('data-volver')) abrir(null);
     else if (b.hasAttribute('data-editar')) abrirFormulario(abierta);
     else if (b.hasAttribute('data-qr')) abrirQR(abierta);

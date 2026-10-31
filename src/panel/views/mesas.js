@@ -77,8 +77,13 @@ export async function montar(destino, ctx) {
     // quienes no asisten pero siguen sentados; al final los lugares libres.
     const asientos = [...m.sentadas].sort((a, b) => ordenEstado[a.estado] - ordenEstado[b.estado]);
     const total = Math.max(m.capacidad, asientos.length);
+    // Con muchos lugares la mesa crece para que no se empalmen (cada lugar
+    // conserva su tamaño); pasando 300 px, los lugares se achican un poco.
+    let lado = tam * 0.165;
+    const separacion = 1.15;
+    tam = Math.max(tam, Math.min(300, Math.ceil((total * lado * separacion) / (2 * Math.PI * 0.4))));
     const orbita = tam * 0.4;
-    const lado = tam * 0.165;
+    lado = Math.max(12, Math.min(lado, (2 * Math.PI * orbita) / total / separacion));
     const corto = textoCapacidad(m.ocupados, m.capacidad, { corto: true });
     let ocupando = 0;
     const lugares = Array.from({ length: total }, (_, k) => {
@@ -96,7 +101,7 @@ export async function montar(destino, ctx) {
       return crudo(html`<button class="mesa-mini__lugar mesa-mini__lugar--${clase}" type="button" style="${estilo}"
         data-persona="${p.id}" aria-label="${p.nombre}, ${p.familia}, ${ESTADO_PERSONA[p.estado]}">${iniciales(p.nombre)}</button>`);
     });
-    return html`<div class="mesa-mini" style="--tam:${tam}px">
+    return html`<div class="mesa-mini${tam > 124 ? ' mesa-mini--grande' : ''}" style="--tam:${tam}px;--lado:${lado.toFixed(1)}px">
       ${lugares}
       <button class="mesa-mini__centro mesa-mini__centro--${corto.estado}" type="button" data-mesa="${m.id}"
         aria-label="${m.nombre}, ${m.ocupados} de ${m.capacidad} lugares. ${m.cap.texto}">

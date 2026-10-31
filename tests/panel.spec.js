@@ -77,3 +77,50 @@ test('el panel lleva la paleta de la invitación y solo ajusta las secciones que
   await abrirSobre(page);
   await expect(page.locator('.vestimenta__detalle')).toHaveText('Todos de negro');
 });
+
+test('grupo propio al agregar una familia y el mismo grupo para varias a la vez', async ({ page }) => {
+  await entrarAlPanel(page);
+  await page.goto('/panel/app.html#invitados');
+  for (const nombre of ['Familia Grupo Uno', 'Familia Grupo Dos']) {
+    await page.getByRole('button', { name: /^Agregar (la primera )?familia$/ }).click();
+    await page.locator('#ff-nombre').fill(nombre);
+    await page.getByRole('button', { name: 'Agregar a la lista' }).click();
+    await page.goto('/panel/app.html#invitados');
+  }
+  await page.getByRole('button', { name: 'Agregar familia' }).click();
+  await page.locator('#ff-nombre').fill('Familia Grupo Tres');
+  await expect(page.locator('[data-grupo-nuevo]')).toBeHidden();
+  await page.locator('#ff-grupo').selectOption('__nuevo');
+  await page.locator('#ff-grupo-nuevo').fill('Padrinos');
+  await page.getByRole('button', { name: 'Agregar a la lista' }).click();
+
+  await page.goto('/panel/app.html#invitados');
+  await page.getByRole('button', { name: 'Asignar grupo a varias' }).click();
+  await page.locator('#ag-grupo').selectOption('Padrinos');
+  await page.locator('label.seleccion__persona', { hasText: 'Familia Grupo Uno' }).click();
+  await page.locator('label.seleccion__persona', { hasText: 'Familia Grupo Dos' }).click();
+  await page.getByRole('button', { name: 'Aplicar a 2 familias' }).click();
+  const grupos = await page.evaluate(async () => {
+    const d = await import('/src/data/index.js');
+    const ev = await d.getEvento('iris-alex');
+    return (await d.getFamilias(ev.id)).filter((f) => f.nombre.startsWith('Familia Grupo')).map((f) => f.grupo);
+  });
+  expect(grupos).toEqual(['Padrinos', 'Padrinos', 'Padrinos']);
+});
+
+test('en el plano, los lugares de una mesa grande no se empalman', async ({ page }) => {
+  await entrarAlPanel(page);
+  await page.evaluate(async () => {
+    const d = await import('/src/data/index.js');
+    const ev = await d.getEvento('iris-alex');
+    await d.crearFamilia(ev.id, { nombre: 'Familia Mesas', pasesAsignados: 2 });
+    for (const capacidad of [10, 20, 30]) await d.crearMesa(ev.id, { nombre: `Mesa de ${capacidad}`, capacidad });
+  });
+  await page.goto('/panel/app.html#mesas');
+  await expect(page.locator('.mesa-mini')).toHaveCount(3);
+  const choques = await page.evaluate(() => [...document.querySelectorAll('.mesa-mini')].reduce((n, mesa) => {
+    const r = [...mesa.querySelectorAll('.mesa-mini__lugar')].map((e) => e.getBoundingClientRect());
+    return n + r.filter((a, i) => { const b = r[(i + 1) % r.length]; return Math.hypot(a.x - b.x, a.y - b.y) < a.width; }).length;
+  }, 0));
+  expect(choques).toBe(0);
+});
