@@ -38,6 +38,8 @@ function crearMusicaYouTube({ youtube, inicio = 0 }) {
   let listo = false;
   const oyentes = new Set();
   const avisar = () => oyentes.forEach((fn) => fn({ silenciada, iniciada, disponible, sonando }));
+  // Sin precarga silenciosa: si el video arranca mudo antes del sello, Chrome
+  // ya no deja quitarle el silencio y quedaría sonando sin sonido.
   const tocar = () => { if (listo && !silenciada) reproductor.playVideo(); };
 
   document.addEventListener('visibilitychange', () => {
@@ -64,7 +66,8 @@ function crearMusicaYouTube({ youtube, inicio = 0 }) {
             onStateChange: (e) => {
               // Al terminar vuelve a empezar, como música de fondo.
               if (e.data === YT.PlayerState.ENDED) { reproductor.seekTo(inicio); tocar(); }
-              sonando = e.data === YT.PlayerState.PLAYING;
+              // "Suena" solo si de verdad se oye (no si quedó en silencio).
+              sonando = e.data === YT.PlayerState.PLAYING && !reproductor.isMuted();
               avisar();
             },
             onError: () => { disponible = false; avisar(); },
