@@ -1,9 +1,11 @@
-// Implementación local del módulo de datos: lee eventos/<slug>/evento.json y
-// guarda los cambios en localStorage. Misma firma que tendrá store.supabase.js.
+// Módulo de datos: lee eventos/<slug>/evento.json y guarda los cambios en
+// localStorage. Los eventos de clientes además se guardan en Supabase
+// (supabase.js; ver "Eventos en Supabase" abajo); el demo es solo local.
 // No importar este archivo desde las pantallas: usar src/data/index.js.
 import { DEMO_EVENT_SLUG, DEMO_LOGIN_CODE } from '../config.js';
 import { generarCodigo, normalizarCodigo } from './codigos.js';
 import { personasDe } from './reglas.js';
+import * as remoto from './supabase.js';
 
 const STORAGE_KEY = 'ramostudio:demo:v7'; // Subir la versión cuando cambie la forma del seed.
 // Versiones anteriores: v3–v5 traen la mesa por familia (familia.mesaId) y a
@@ -199,6 +201,7 @@ function huellaSeed(seed) {
 }
 
 async function cargarEvento(slug) {
+  if (remoto.activo(slug)) return cargarRemoto(slug);
   const s = estado();
   const presente = s.eventos.find((x) => x.slug === slug);
   if (presente && refrescados.has(slug)) return presente;
@@ -217,7 +220,7 @@ async function cargarEvento(slug) {
         s.regalos = [...s.regalos.filter((r) => r.eventoId !== ya.id), ...structuredClone(seed.regalos ?? [])];
       }
       refrescados.add(slug);
-      guardar();
+      guardarLocal();
     } else if (slug === DEMO_EVENT_SLUG && !refrescados.has(slug)) {
       // En la demo los datos se pueden editar desde el panel, pero el diseño
       // no: se trae del evento.json para que una corrección de diseño llegue.
@@ -226,7 +229,7 @@ async function cargarEvento(slug) {
       }
       renombrarFamiliasDemo(s, seed);
       refrescados.add(slug);
-      guardar();
+      guardarLocal();
     }
     return s.eventos.find((x) => x.slug === slug);
   }
@@ -245,21 +248,184 @@ async function cargarEvento(slug) {
   for (const k of COLECCIONES) s[k].push(...(datos[k] ?? []));
   const nuevo = s.eventos.find((x) => x.slug === slug);
   if (nuevo && slug !== DEMO_EVENT_SLUG) nuevo._semilla = huellaSeed(seed);
-  guardar();
+  guardarLocal();
   return nuevo;
 }
 
 // El panel solo conoce el id (lo guarda la sesión): si aún no está, se cargan
-// todos los eventos para encontrarlo.
+// todos los eventos para encontrarlo (o solo el de la sesión de Supabase).
 async function cargarEventoPorId(eventoId) {
   if (!estado().eventos.some((x) => x.id === eventoId)) {
-    await Promise.allSettled(Object.keys(ARCHIVOS).map(cargarEvento));
+    const sesion = await remoto.sesion();
+    if (sesion?.eventoId === eventoId && sesion.slug) await cargarEvento(sesion.slug);
+    else await Promise.allSettled(Object.keys(ARCHIVOS).map(cargarEvento));
   }
   return eventoPorId(eventoId);
 }
 
-function guardar() {
+function guardarLocal() {
   escribirStorage(STORAGE_KEY, memoria);
+}
+
+// Guarda en este navegador y, en los eventos de Supabase, sube lo que cambió.
+async function guardar() {
+  guardarLocal();
+  for (const [eventoId, info] of remotos) await sincronizar(eventoId, info);
+}
+
+// ---------------------------------------------------------------------------
+// Eventos en Supabase (clientes)
+// ---------------------------------------------------------------------------
+
+// El diseño sale del evento.json; de Supabase llega lo que la pareja edita y
+// las familias, mesas, mensajes, actividad y regalos. Este navegador guarda una
+// copia y, al cambiar algo, sube solo las filas distintas a la última versión
+// subida. La pareja escribe en sus tablas; un invitado solo su respuesta,
+// su apertura y sus mensajes (funciones invitado_*).
+// eventoId → { slug, pareja, leido }
+const remotos = new Map();
+// "eventoId|tabla|id" → JSON de la última versión subida (o leída) de la fila.
+const subido = new Map();
+const PAREJA_AL_DIA_MS = 15_000;
+
+const editables = (e) => Object.fromEntries([...CAMPOS_EVENTO, 'fecha'].filter((k) => k in e).map((k) => [k, e[k]]));
+
+function errorRemoto(e) {
+  if (e instanceof DataError) return e;
+  if (!e?.status) return new DataError('sin_conexion', 'No pudimos conectarnos. Revisen su internet e intenten de nuevo.');
+  if (e.status === 401 || e.status === 403) return new DataError('sesion_vencida', 'Su sesión venció. Vuelvan a entrar a su panel.');
+  return new DataError('error_remoto', 'No pudimos guardar el cambio. Intenten de nuevo en un momento.');
+}
+
+async function cargarRemoto(slug, { forzar = false } = {}) {
+  const s = estado();
+  const presente = s.eventos.find((x) => x.slug === slug);
+  if (presente && remotos.has(presente.id) && !forzar) return presente;
+  const seed = await ARCHIVOS[slug]?.();
+  if (!seed) throw new DataError('evento_no_encontrado', 'No encontramos este evento.');
+  const base = structuredClone(seed.eventos[0]);
+  const sesion = await remoto.sesion();
+  const pareja = sesion?.eventoId === base.id;
+  let leido;
+  try {
+    if (pareja) {
+      const r = await remoto.cargarEvento(base.id, sesion.token);
+      leido = { ...r, regalos: r.regalos.length ? r.regalos : null };
+    } else {
+      // Invitación: lo público del evento; la familia del enlace llega aparte.
+      // Si Supabase no responde, la invitación igual se ve (con el evento.json).
+      const r = await remoto.eventoPublico(slug).catch(() => null);
+      leido = { evento: r?.datos ?? {}, familias: [], mesas: [], mensajes: [], actividad: [], regalos: r?.regalos?.length ? r.regalos : null };
+    }
+  } catch (e) {
+    throw errorRemoto(e);
+  }
+
+  const evento = { ...base, ...leido.evento };
+  s.eventos = [...s.eventos.filter((x) => x.id !== base.id && x.slug !== slug), evento];
+  for (const k of [...subido.keys()]) if (k.startsWith(`${base.id}|`)) subido.delete(k);
+  subido.set(`${base.id}|eventos|${base.id}`, JSON.stringify(editables(evento)));
+  for (const t of remoto.TABLAS) {
+    // Sin regalos en Supabase, los del evento.json (la pareja los sube al guardar).
+    const filas = leido[t] ?? (t === 'regalos' ? structuredClone(seed.regalos ?? []) : []);
+    s[t] = [...s[t].filter((x) => x.eventoId !== base.id), ...filas];
+    if (leido[t]) for (const f of filas) subido.set(`${base.id}|${t}|${f.id}`, JSON.stringify(f));
+  }
+  remotos.set(base.id, { slug, pareja, leido: Date.now() });
+  refrescados.add(slug);
+  guardarLocal();
+  return evento;
+}
+
+// La pareja ve lo que los invitados respondieron desde sus teléfonos: si la
+// última lectura tiene más de unos segundos, se vuelve a leer (antes se sube
+// lo pendiente; si no se puede, se queda con lo que tiene).
+async function alDia(eventoId) {
+  const info = remotos.get(eventoId);
+  if (!info?.pareja || Date.now() - info.leido < PAREJA_AL_DIA_MS) return;
+  try {
+    await sincronizar(eventoId, info);
+    await cargarRemoto(info.slug, { forzar: true });
+  } catch { /* sin conexión: se queda con lo que ya tiene */ }
+}
+
+// Invitación: trae de Supabase solo la familia de este enlace.
+async function asegurarFamilia(eventoId, codigo) {
+  const info = remotos.get(eventoId);
+  const c = normalizarCodigo(codigo);
+  if (!info || !c || estado().familias.some((x) => x.eventoId === eventoId && x.codigo === c)) return;
+  let f;
+  try { f = await remoto.familiaInvitado(info.slug, c); } catch (e) { throw errorRemoto(e); }
+  if (!f) return;
+  estado().familias.push(f);
+  subido.set(`${eventoId}|familias|${f.id}`, JSON.stringify(f));
+}
+
+async function sincronizar(eventoId, info) {
+  const s = estado();
+  const clave = (t, id) => `${eventoId}|${t}|${id}`;
+  const cambios = {};
+  const hechos = []; // [clave, json o null si se borró]
+  const ev = s.eventos.find((x) => x.id === eventoId);
+  if (info.pareja && ev) {
+    const j = JSON.stringify(editables(ev));
+    if (subido.get(clave('eventos', eventoId)) !== j) {
+      cambios.eventoDatos = editables(ev);
+      hechos.push([clave('eventos', eventoId), j]);
+    }
+  }
+  // Un invitado solo puede guardar su familia, su actividad y sus mensajes.
+  const tablas = info.pareja ? remoto.TABLAS : ['familias', 'actividad', 'mensajes'];
+  for (const t of tablas) {
+    const filas = s[t].filter((x) => x.eventoId === eventoId);
+    const ids = new Set(filas.map((x) => x.id));
+    const guardarFilas = [];
+    for (const f of filas) {
+      const j = JSON.stringify(f);
+      if (subido.get(clave(t, f.id)) !== j) { guardarFilas.push(f); hechos.push([clave(t, f.id), j]); }
+    }
+    const borrar = [];
+    if (info.pareja) {
+      for (const k of subido.keys()) {
+        const [e, tt, id] = k.split('|');
+        if (e === eventoId && tt === t && !ids.has(id)) { borrar.push(id); hechos.push([k, null]); }
+      }
+    }
+    if (guardarFilas.length || borrar.length) cambios[t] = { guardar: guardarFilas, borrar };
+  }
+  if (!hechos.length) return;
+  try {
+    if (info.pareja) {
+      const sesion = await remoto.sesion();
+      if (!sesion) throw new DataError('sesion_vencida', 'Su sesión venció. Vuelvan a entrar a su panel.');
+      await remoto.subir(eventoId, cambios, sesion.token);
+    } else {
+      await subirInvitado(info.slug, cambios);
+    }
+  } catch (e) {
+    throw errorRemoto(e);
+  }
+  for (const [k, j] of hechos) {
+    if (j === null) subido.delete(k);
+    else subido.set(k, j);
+  }
+}
+
+// Cada familia sube con su código, junto con su actividad y sus mensajes; los
+// mensajes sin familia (invitados sin enlace) van aparte.
+async function subirInvitado(slug, cambios) {
+  const familias = cambios.familias?.guardar ?? [];
+  const actividad = cambios.actividad?.guardar ?? [];
+  const mensajes = cambios.mensajes?.guardar ?? [];
+  const grupos = new Map(); // familiaId (o null) → { familia, actividad, mensajes }
+  const grupo = (id) => grupos.get(id) ?? grupos.set(id, { familia: null, actividad: [], mensajes: [] }).get(id);
+  for (const f of familias) grupo(f.id).familia = f;
+  for (const a of actividad) grupo(a.familiaId ?? null).actividad.push(a);
+  for (const m of mensajes) grupo(m.familiaId ?? null).mensajes.push(m);
+  for (const [familiaId, g] of grupos) {
+    const codigo = g.familia?.codigo ?? estado().familias.find((f) => f.id === familiaId)?.codigo ?? null;
+    await remoto.invitadoGuardar(slug, codigo, g.familia, g.actividad, g.mensajes);
+  }
 }
 
 const copia = (v) => structuredClone(v);
@@ -350,7 +516,7 @@ export async function actualizarEvento(eventoId, cambios) {
     delete e.fechaRelativaDias;
   }
   registrarActividad(eventoId, 'evento', 'Se actualizaron los datos del evento');
-  guardar();
+  await guardar();
   return conFechas(e);
 }
 
@@ -359,10 +525,12 @@ export async function actualizarEvento(eventoId, cambios) {
 // ---------------------------------------------------------------------------
 
 export async function getFamilias(eventoId) {
+  await alDia(eventoId);
   return copia(estado().familias.filter((f) => f.eventoId === eventoId));
 }
 
 export async function getFamiliaPorCodigo(eventoId, codigo) {
+  await asegurarFamilia(eventoId, codigo);
   const c = normalizarCodigo(codigo);
   const f = estado().familias.find((x) => x.eventoId === eventoId && x.codigo === c);
   if (!f) throw new DataError('codigo_invalido', 'Este enlace no corresponde a ninguna invitación.');
@@ -391,7 +559,7 @@ export async function crearFamilia(eventoId, { nombre, pasesAsignados = 1, telef
   ajustarPersonas(f);
   estado().familias.push(f);
   registrarActividad(eventoId, 'familia', 'Se agregó a {familia}', f.id);
-  guardar();
+  await guardar();
   return copia(f);
 }
 
@@ -417,7 +585,7 @@ export async function actualizarFamilia(familiaId, cambios) {
     f.rsvp.pasesConfirmados = Math.min(f.rsvp.pasesConfirmados, f.pasesAsignados);
     ajustarPersonas(f);
   }
-  guardar();
+  await guardar();
   return copia(f);
 }
 
@@ -426,18 +594,19 @@ export async function eliminarFamilia(familiaId) {
   const f = familiaPorId(familiaId);
   s.familias = s.familias.filter((x) => x.id !== familiaId);
   registrarActividad(f.eventoId, 'familia', `Se eliminó a ${f.nombre}`);
-  guardar();
+  await guardar();
 }
 
 // Invalida el enlace anterior de la familia y le da uno nuevo.
 export async function regenerarCodigo(familiaId) {
   const f = familiaPorId(familiaId);
   f.codigo = generarCodigo(codigosExistentes());
-  guardar();
+  await guardar();
   return copia(f);
 }
 
 export async function confirmarAsistencia(eventoId, codigo, { asiste, pasesConfirmados = 0, nota = '' }) {
+  await asegurarFamilia(eventoId, codigo);
   const c = normalizarCodigo(codigo);
   const f = estado().familias.find((x) => x.eventoId === eventoId && x.codigo === c);
   if (!f) throw new DataError('codigo_invalido', 'Este enlace no corresponde a ninguna invitación.');
@@ -464,7 +633,7 @@ export async function confirmarAsistencia(eventoId, codigo, { asiste, pasesConfi
       : `{familia} confirmó ${pases} de ${plural(f.pasesAsignados, 'pase', 'pases')}.`
     : '{familia} respondió que no podrá ir.';
   registrarActividad(eventoId, asiste ? 'confirmacion' : 'no_asiste', texto, f.id);
-  guardar();
+  await guardar();
   return copia(f);
 }
 
@@ -472,9 +641,11 @@ export async function confirmarAsistencia(eventoId, codigo, { asiste, pasesConfi
 // este navegador no la conoce (otro teléfono), se registra aquí para que su
 // confirmación se guarde. Con Supabase solo se busca por código.
 export async function familiaDeEnlace(eventoId, { codigo, nombre, pasesAsignados }) {
+  await asegurarFamilia(eventoId, codigo);
   const c = normalizarCodigo(codigo);
   const existente = estado().familias.find((x) => x.eventoId === eventoId && x.codigo === c);
   if (existente) return copia(existente);
+  if (remotos.has(eventoId)) throw new DataError('codigo_invalido', 'Este enlace no corresponde a ninguna invitación.');
   eventoPorId(eventoId);
   const f = {
     id: nuevoId('fam'), eventoId, nombre, grupo: '', telefono: '', codigo: c,
@@ -483,7 +654,7 @@ export async function familiaDeEnlace(eventoId, { codigo, nombre, pasesAsignados
   };
   ajustarPersonas(f);
   estado().familias.push(f);
-  guardar();
+  await guardar();
   return copia(f);
 }
 
@@ -499,12 +670,13 @@ export async function confirmarSinEnlace(eventoId, { nombre, asiste, pasesConfir
 
 // Se llama cuando un invitado abre su invitación (para la vista de actividad).
 export async function registrarApertura(eventoId, codigo) {
+  await asegurarFamilia(eventoId, codigo);
   const c = normalizarCodigo(codigo);
   const f = estado().familias.find((x) => x.eventoId === eventoId && x.codigo === c);
   if (!f || f.abrioFecha) return; // Solo cuenta la primera vez.
   f.abrioFecha = new Date().toISOString();
   registrarActividad(eventoId, 'apertura', '{familia} abrió su invitación.', f.id);
-  guardar();
+  await guardar();
 }
 
 // ---------------------------------------------------------------------------
@@ -521,6 +693,7 @@ export async function registrarApertura(eventoId, codigo) {
 // evento de la pareja.
 
 export async function getMesas(eventoId) {
+  await alDia(eventoId);
   const personas = estado().familias.filter((f) => f.eventoId === eventoId).flatMap(personasDe);
   return estado().mesas
     .filter((m) => m.eventoId === eventoId)
@@ -544,7 +717,7 @@ export async function crearMesa(eventoId, { nombre, capacidad = 10 }) {
     capacidad: Math.max(1, Number(capacidad) || 10),
   };
   estado().mesas.push(m);
-  guardar();
+  await guardar();
   return copia(m);
 }
 
@@ -552,7 +725,7 @@ export async function actualizarMesa(mesaId, cambios) {
   const m = mesaPorId(mesaId);
   if ('nombre' in cambios) m.nombre = String(cambios.nombre).trim() || m.nombre;
   if ('capacidad' in cambios) m.capacidad = Math.max(1, Number(cambios.capacidad) || m.capacidad);
-  guardar();
+  await guardar();
   return copia(m);
 }
 
@@ -561,7 +734,7 @@ export async function eliminarMesa(mesaId) {
   mesaPorId(mesaId);
   for (const f of s.familias) for (const p of f.personas) if (p.mesaId === mesaId) p.mesaId = null;
   s.mesas = s.mesas.filter((x) => x.id !== mesaId);
-  guardar();
+  await guardar();
 }
 
 // Sienta a varias personas en una mesa (mesaId = null las deja sin mesa). Es
@@ -588,7 +761,7 @@ export async function asignarPersonasMesa(personaIds, mesaId) {
     }
   }
   for (const p of elegidas) real(p).mesaId = mesaId ?? null;
-  guardar();
+  await guardar();
 }
 
 export async function asignarPersonaMesa(personaId, mesaId) {
@@ -611,6 +784,7 @@ export async function asignarMesa(familiaId, mesaId) {
 // ---------------------------------------------------------------------------
 
 export async function getMensajes(eventoId) {
+  await alDia(eventoId);
   const familias = estado().familias;
   // El autor es el nombre actual de la familia, igual que en su ficha.
   return copia(estado().mensajes.filter((m) => m.eventoId === eventoId))
@@ -620,6 +794,7 @@ export async function getMensajes(eventoId) {
 
 export async function enviarMensaje(eventoId, { codigo = null, autor, texto }) {
   eventoPorId(eventoId);
+  if (codigo) await asegurarFamilia(eventoId, codigo);
   const limpio = String(texto ?? '').trim();
   if (!limpio) throw new DataError('mensaje_vacio', 'Escribe tu mensaje.');
   const familia = codigo
@@ -635,7 +810,7 @@ export async function enviarMensaje(eventoId, { codigo = null, autor, texto }) {
   };
   estado().mensajes.push(m);
   registrarActividad(eventoId, 'mensaje', `${familia ? '{familia}' : m.autor} les dejó un mensaje.`, m.familiaId);
-  guardar();
+  await guardar();
   return copia(m);
 }
 
@@ -661,17 +836,18 @@ export async function guardarRegalo(eventoId, { id = null, tipo, titulo, detalle
     r = { id: nuevoId('reg'), eventoId, ...datos };
     estado().regalos.push(r);
   }
-  guardar();
+  await guardar();
   return copia(r);
 }
 
 export async function eliminarRegalo(regaloId) {
   const s = estado();
   s.regalos = s.regalos.filter((x) => x.id !== regaloId);
-  guardar();
+  await guardar();
 }
 
 export async function getActividad(eventoId, { limite = 50 } = {}) {
+  await alDia(eventoId);
   return copia(estado().actividad.filter((a) => a.eventoId === eventoId))
     .map(conNombre)
     .sort((a, b) => b.fecha.localeCompare(a.fecha))
@@ -681,6 +857,7 @@ export async function getActividad(eventoId, { limite = 50 } = {}) {
 // Familias que no han respondido, para los recordatorios por WhatsApp.
 // Primero las que ya abrieron su invitación, luego las que no la han abierto.
 export async function getFamiliasPendientes(eventoId) {
+  await alDia(eventoId);
   const pendientes = estado().familias.filter((f) => f.eventoId === eventoId && f.rsvp.estado === 'pendiente');
   return copia([...pendientes.filter((f) => f.abrioFecha), ...pendientes.filter((f) => !f.abrioFecha)]);
 }
@@ -690,6 +867,7 @@ export async function getFamiliasPendientes(eventoId) {
 // ---------------------------------------------------------------------------
 
 export async function getResumen(eventoId) {
+  await alDia(eventoId);
   const evento = conFechas(eventoPorId(eventoId));
   const familias = estado().familias.filter((f) => f.eventoId === eventoId);
   const por = (estadoRsvp) => familias.filter((f) => f.rsvp.estado === estadoRsvp);
@@ -725,14 +903,49 @@ export async function getResumen(eventoId) {
 }
 
 // ---------------------------------------------------------------------------
-// Sesión del panel (simulada, solo demo)
+// Sesión del panel: código por correo (Supabase) en los eventos de clientes;
+// simulada (código de config.js) en el demo y en las pruebas.
 // ---------------------------------------------------------------------------
 
 const CORREO_VALIDO = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// ¿El código de este evento llega de verdad por correo?
+export function codigoPorCorreo(eventoId) {
+  return remotos.has(eventoId);
+}
+
+// Manda el código de 6 números al correo, si está registrado para este evento.
+export async function enviarCodigo(correo, eventoId) {
+  const limpio = String(correo ?? '').trim().toLowerCase();
+  if (!CORREO_VALIDO.test(limpio)) throw new DataError('correo_invalido', 'Escriban un correo válido.');
+  const info = remotos.get(eventoId);
+  if (!info) return; // Demo: el código es el de config.js.
+  try {
+    if (!(await remoto.correoAutorizado(info.slug, limpio))) {
+      throw new DataError('correo_no_autorizado', 'Este correo no está registrado para esta boda. Revisen que sea el mismo con el que apartaron su invitación.');
+    }
+    await remoto.enviarCodigo(limpio);
+  } catch (e) {
+    if (e.status === 429) throw new DataError('muchos_intentos', 'Ya les mandamos un código hace poco. Esperen un minuto y vuelvan a intentar.');
+    throw errorRemoto(e);
+  }
+}
+
 export async function login(correo, codigo, eventoId) {
   if (!CORREO_VALIDO.test(String(correo ?? '').trim())) {
     throw new DataError('correo_invalido', 'Escribe un correo válido.');
+  }
+  const info = remotos.get(eventoId);
+  if (info) {
+    let s;
+    try {
+      s = await remoto.entrar(correo.trim().toLowerCase(), String(codigo ?? '').trim(), { eventoId, slug: info.slug });
+    } catch (e) {
+      throw e.status ? new DataError('codigo_incorrecto', 'El código no es correcto.') : errorRemoto(e);
+    }
+    // La próxima lectura ya es de la pareja (con todas sus familias).
+    remotos.delete(eventoId);
+    return { correo: s.correo, eventoId };
   }
   if (String(codigo ?? '').trim() !== DEMO_LOGIN_CODE) {
     throw new DataError('codigo_incorrecto', 'El código no es correcto.');
@@ -751,11 +964,23 @@ export async function entrarDemo(eventoId) {
 }
 
 export async function getSesion() {
+  const s = await remoto.sesion();
+  if (s) return { correo: s.correo, eventoId: s.eventoId };
   return leerStorage(SESION_KEY);
 }
 
+// Al salir, la lista de invitados de Supabase no se queda en este navegador.
 export async function logout() {
+  await remoto.salir();
   escribirStorage(SESION_KEY, null);
+  const s = estado();
+  for (const [eventoId, info] of remotos) {
+    if (!info.pareja) continue;
+    for (const t of remoto.TABLAS) s[t] = s[t].filter((x) => x.eventoId !== eventoId);
+    remotos.delete(eventoId);
+    refrescados.delete(info.slug);
+  }
+  guardarLocal();
 }
 
 // Borra los cambios hechos en el evento demo (también los de versiones viejas,
@@ -769,5 +994,5 @@ export async function reiniciarDemo() {
   if (!demo) return;
   s.eventos = s.eventos.filter((x) => x !== demo);
   for (const k of COLECCIONES.slice(1)) s[k] = s[k].filter((x) => x.eventoId !== demo.id);
-  guardar();
+  guardarLocal();
 }

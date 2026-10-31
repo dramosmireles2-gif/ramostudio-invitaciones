@@ -34,7 +34,9 @@ publica.
 
 ## Etapa actual: DEMO + primer cliente
 
-- Sin backend todavía. Supabase se conecta en paralelo (ver punto de respaldo del RSVP).
+- **Supabase** (proyecto `ramostudio`, ver `supabase/README.md`): un solo proyecto para todas
+  las bodas de clientes, cada una aislada por RLS (la pareja solo ve su evento; los invitados
+  solo su familia, por código, con las funciones `invitado_*`). El demo no usa Supabase.
 - **El demo usa solo datos ficticios.** El evento demo es la boda de **Mariana & Diego**
   (`eventos/mariana-diego/`). Su fecha se calcula al cargar como *hoy + 58 días*
   (`fechaRelativaDias`), para que la demo siempre diga "faltan 58 días". En el demo nunca
@@ -44,8 +46,9 @@ publica.
   de datos de invitados en el repo (los captura la pareja desde el panel).
 - Los eventos de `inv.ramosmkt.lat` (ivan-gemima, eunice-edher, …) viven en otro repo y no
   se tocan desde aquí.
-- **Login del panel simulado:** cualquier correo + código `123456`. Es solo para la demo;
-  no construir nada que parezca autenticación real ni guardar contraseñas.
+- **Login del panel:** en el demo, simulado (cualquier correo + `123456`). En los eventos de
+  clientes, código de 6 números al correo (Supabase Auth) para los correos de
+  `evento_admins`. Sin contraseñas. Nunca subir la llave `service_role`.
 
 ## Stack
 
@@ -61,10 +64,11 @@ publica.
    `localStorage` ni (en el futuro) Supabase directamente; siempre importan de
    `src/data/index.js` (`getEvento`, `getFamilias`, `confirmarAsistencia`, `getMesas`,
    `enviarMensaje`, `getRegalos`, `getActividad`, …).
-   - Hoy: `store.local.js` carga `eventos/<slug>/evento.json` por slug (un chunk por
-     evento, con `import.meta.glob`) y guarda los cambios en `localStorage`.
-   - Después: se agrega `store.supabase.js` y `index.js` cambia de implementación **sin
-     tocar las pantallas**.
+   - `store.local.js` carga `eventos/<slug>/evento.json` por slug (un chunk por evento, con
+     `import.meta.glob`) y guarda en `localStorage`. En los eventos de clientes además
+     sube a Supabase solo lo que cambió (`supabase.js`, con fetch, sin librerías); el
+     diseño sigue en `evento.json` y en Supabase va lo que la pareja edita y sus listas.
+   - Pruebas: `npm test` usa `VITE_DATOS=local` y nunca toca Supabase.
    - Todas las funciones son `async` desde ya, para que el cambio no altere su firma.
 2. **Modelo pensado para varias bodas.** Cada evento tiene `id`, `slug`, sus familias,
    pases, mesas, mensajes, regalos y su **tema** (colores, fuentes, monograma). Nada del

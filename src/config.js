@@ -19,6 +19,12 @@ export const baseUrlEvento = (slug) => (slug === DEMO_EVENT_SLUG ? INVITE_BASE_U
 // franja "Estás viendo un demo" con "Reiniciar demo". Los demás eventos usan el login.
 export const DEMO_MODE = true;
 
+// Supabase (proyecto "ramostudio"): datos de los eventos de clientes. La llave
+// es la pública (publishable): las reglas de la base protegen los datos.
+// Nunca poner aquí la llave service_role.
+export const SUPABASE_URL = 'https://aynagxrafuctjbadxpmt.supabase.co';
+export const SUPABASE_KEY = 'sb_publishable_1TAD7P5kuonVHjbIb7aYZQ_zEWCjEuK';
+
 // Login simulado del panel (solo demo): cualquier correo + este código.
 export const DEMO_LOGIN_CODE = '123456';
 

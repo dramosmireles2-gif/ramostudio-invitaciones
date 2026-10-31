@@ -57,6 +57,7 @@ function pasoCorreo() {
         <input class="field__control" id="login-correo" name="correo" type="email" autocomplete="email"
           placeholder="nombre@correo.com" value="${correo}" />
       </div>
+      <p class="t-meta field__hint--error" id="login-error" hidden></p>
       <button class="btn btn--lg btn--full" type="submit" disabled>Mandarme el código por correo</button>
       <div class="login__alterno">
         <button class="btn btn--secondary btn--full" type="button" disabled>Recibirlo por WhatsApp</button>
@@ -68,11 +69,22 @@ function pasoCorreo() {
   const actualizar = () => { enviar.disabled = !CORREO_VALIDO.test(form.correo.value); };
   form.correo.addEventListener('input', actualizar);
   actualizar();
-  form.addEventListener('submit', (e) => {
+  const error = form.querySelector('#login-error');
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (enviar.disabled) return;
     correo = form.correo.value.trim();
-    pasoCodigo();
+    enviar.disabled = true;
+    enviar.textContent = 'Mandando el código…';
+    try {
+      await data.enviarCodigo(correo, evento.id);
+      pasoCodigo();
+    } catch (err) {
+      error.textContent = err.message;
+      error.hidden = false;
+      enviar.textContent = 'Mandarme el código por correo';
+      actualizar();
+    }
   });
 }
 
@@ -90,7 +102,7 @@ function pasoCodigo() {
         <button class="btn btn--quiet btn--flush" type="button" data-reenviar>Mandar otro código</button>
         <button class="btn btn--quiet btn--flush" type="button" data-cambiar>Cambiar correo</button>
       </div>
-      <p class="t-meta login__demo">Demo: el código es ${DEMO_LOGIN_CODE}.</p>
+      ${data.codigoPorCorreo(evento.id) ? '' : crudo(html`<p class="t-meta login__demo">Demo: el código es ${DEMO_LOGIN_CODE}.</p>`)}
     </form>`;
   const form = hoja.querySelector('form');
   const entrar = form.querySelector('[type=submit]');
@@ -106,7 +118,14 @@ function pasoCodigo() {
     entrar.disabled = form.codigo.value.length < 6;
     if (form.codigo.getAttribute('aria-invalid') === 'true') { aviso.hidden = true; form.codigo.removeAttribute('aria-invalid'); }
   });
-  form.querySelector('[data-reenviar]').addEventListener('click', () => decir('Listo, les mandamos un código nuevo a su correo.'));
+  form.querySelector('[data-reenviar]').addEventListener('click', async () => {
+    try {
+      await data.enviarCodigo(correo, evento.id);
+      decir('Listo, les mandamos un código nuevo a su correo.');
+    } catch (err) {
+      decir(err.message, true);
+    }
+  });
   form.querySelector('[data-cambiar]').addEventListener('click', pasoCorreo);
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -114,8 +133,10 @@ function pasoCodigo() {
     try {
       await data.login(correo, form.codigo.value, evento.id);
       location.replace('/panel/app.html');
-    } catch {
-      decir('Ese código no coincide. Revisen el correo más reciente que les mandamos.', true);
+    } catch (err) {
+      decir(err.codigo === 'codigo_incorrecto'
+        ? 'Ese código no coincide o ya venció. Revisen el correo más reciente que les mandamos.'
+        : err.message, true);
     }
   });
   form.codigo.focus();
