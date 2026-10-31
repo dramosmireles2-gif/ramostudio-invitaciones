@@ -47,6 +47,12 @@ export function rutaInvitacion(slug) {
   return `/${encodeURIComponent(slug)}/`;
 }
 
+// Invitación demo abierta como la ve la familia del recorrido (Familia Ramos,
+// código DEMO): de ahí pueden confirmar y luego verlo en el panel.
+export function rutaInvitacionDemo() {
+  return `${rutaInvitacion(DEMO_EVENT_SLUG)}?f=demo`;
+}
+
 // Abre WhatsApp con el mensaje ya escrito; los novios eligen el chat y lo
 // mandan ellos. Con teléfono (10 dígitos de México) abre ese chat directo.
 export function enlaceWhatsApp(texto, telefono = '') {

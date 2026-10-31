@@ -15,10 +15,6 @@
 .entrada__filete { margin: 8px 0 4px; }
 .entrada__botones { display: flex; flex-direction: column; gap: 12px; }
 
-/* "Ver la invitación" todavía no abre: se lee completo, sin la opacidad de disabled. */
-.entrada__pronto:disabled { opacity: 1; border-style: dashed; border-color: var(--line-field); }
-.entrada__pronto { white-space: nowrap; padding: 0 14px; }
-.entrada__pronto .status-tag { height: 24px; padding: 0 10px; font-size: 12px; }
 
 /* Llamado a WhatsApp en una banda pizarra: crema sobre pizarra (7.1:1). */
 .entrada__cta {
