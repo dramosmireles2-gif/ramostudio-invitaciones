@@ -9,7 +9,7 @@
 // es del color de la invitación: no hay salto de oscuro a claro. Unos 2.4 s;
 // sin animación si el invitado pidió reducir movimiento.
 import { fechaInvitacion, fechaNumerica } from '../../lib/fechas.js';
-import { html } from '../../lib/dom.js';
+import { html, crudo } from '../../lib/dom.js';
 
 const DURACION_MS = 2400;
 const PIEZAS = 36;
@@ -35,6 +35,12 @@ const SOLAPA = (clase) => `<svg class="${clase}" viewBox="0 0 100 60" preserveAs
   <path class="sobre__solapa-pespunte" d="M0 29Q50 60 100 29" vector-effect="non-scaling-stroke" />
 </svg>`;
 
+// Pespunte de la bolsa del frente, como el de la solapa: abierto arriba (en U),
+// para no cruzarse con el de la solapa bajo el sello.
+const PESPUNTE_FRENTE = `<svg class="sobre__pespunte" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+  <path d="M4 10V95H96V10" vector-effect="non-scaling-stroke" />
+</svg>`;
+
 export function montar(raiz, { evento, familia, alAbrir }) {
   const nodo = document.createElement('div');
   nodo.className = 'sobre';
@@ -49,8 +55,11 @@ export function montar(raiz, { evento, familia, alAbrir }) {
         <p class="sobre__hoja-fecha">${fechaInvitacion(evento.fecha, evento.zonaHoraria)}</p>
       </div>
       <div class="sobre__frente">
+        ${crudo(PESPUNTE_FRENTE)}
+        <span class="sobre__filete" aria-hidden="true"></span>
         <p class="sobre__nombres">${evento.titulo}</p>
         <p class="sobre__fecha">${fechaNumerica(evento.fecha, { zona: evento.zonaHoraria }).replaceAll('/', ' · ')}</p>
+        ${evento.ciudad ? crudo(html`<p class="sobre__ciudad">${evento.ciudad}</p>`) : ''}
       </div>
       <div class="sobre__solapa"></div>
       <button type="button" class="sobre__sello" aria-label="Abrir la invitación">

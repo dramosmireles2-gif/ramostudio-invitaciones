@@ -120,11 +120,17 @@ body.con-sobre { overflow: hidden; }
 .sobre__frente {
   position: absolute; left: 0; right: 0; bottom: 0; top: 30%; z-index: 2;
   display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding: 0 16px 10%;
-  background: var(--ev-envelope); color: var(--ev-on-band); border-radius: 0 0 8px 8px;
+  background: var(--ev-envelope); color: var(--ev-on-envelope, var(--ev-on-band)); border-radius: 0 0 8px 8px;
   clip-path: polygon(0 0, 50% 22%, 100% 0, 100% 100%, 0 100%);
 }
-.sobre__nombres { font-family: var(--ev-font-script); font-style: var(--ev-nombres-style, normal); font-size: 34px; line-height: 1.1; color: var(--ev-on-band); }
-.sobre__fecha { margin-top: 8px; font-size: 12px; letter-spacing: .26em; color: var(--ev-on-band-2, var(--ev-on-band)); }
+.sobre__pespunte { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.sobre__pespunte path { fill: none; stroke: var(--ev-hilo-sobre, var(--ev-liner-2)); stroke-width: 1.5; stroke-dasharray: 6 5; opacity: .85; }
+/* Filete con rombo (el de la lluvia) entre el sello y los nombres. */
+.sobre__filete { position: relative; width: 62%; height: 1px; margin-bottom: 26px; background: linear-gradient(90deg, transparent, var(--ev-hilo-sobre, var(--ev-liner-2)) 30%, var(--ev-hilo-sobre, var(--ev-liner-2)) 70%, transparent); }
+.sobre__filete::after { content: ""; position: absolute; left: 50%; top: 50%; width: 7px; height: 7px; background: var(--ev-hilo-sobre, var(--ev-liner-2)); transform: translate(-50%, -50%) rotate(45deg); }
+.sobre__nombres { font-family: var(--ev-font-script); font-style: var(--ev-nombres-style, normal); font-size: 42px; line-height: 1.1; color: var(--ev-on-envelope, var(--ev-on-band)); }
+.sobre__fecha { margin-top: 10px; font-size: 13px; letter-spacing: .26em; color: var(--ev-on-envelope-2, var(--ev-on-band-2, var(--ev-on-band))); }
+.sobre__ciudad { margin-top: 14px; font-size: 11px; font-weight: var(--fw-semibold); letter-spacing: .22em; text-transform: uppercase; color: var(--ev-on-envelope-2, var(--ev-on-band-2, var(--ev-on-band))); }
 /* La solapa: gira desde su orilla de arriba; cara con "Para …" y dorso (el interior). */
 .sobre__solapa {
   position: absolute; left: 0; right: 0; top: 0; height: 54%; z-index: 3;
@@ -143,9 +149,9 @@ body.con-sobre { overflow: hidden; }
 .sobre__para { position: absolute; left: 0; right: 0; top: 13%; text-align: center; padding: 0 20px; }
 .sobre__etiqueta {
   font-family: var(--ev-font-data); font-size: 12px; font-weight: var(--fw-semibold);
-  letter-spacing: .22em; text-transform: uppercase; color: var(--ev-on-band-2, var(--ev-on-band));
+  letter-spacing: .22em; text-transform: uppercase; color: var(--ev-on-envelope-2, var(--ev-on-band-2, var(--ev-on-band)));
 }
-.sobre__familia { margin-top: 6px; font-family: var(--ev-font-title); font-size: 23px; line-height: 1.2; color: var(--ev-on-band); }
+.sobre__familia { margin-top: 6px; font-family: var(--ev-font-title); font-size: 23px; line-height: 1.2; color: var(--ev-on-envelope, var(--ev-on-band)); }
 /* El sello, en la punta de la solapa. */
 .sobre__sello {
   position: absolute; left: 50%; top: 37%; z-index: 4; transform: translate(-50%, -50%);

@@ -173,7 +173,7 @@ const refrescados = new Set();
 async function cargarEvento(slug) {
   const s = estado();
   const presente = s.eventos.find((x) => x.slug === slug);
-  if (presente && (slug === DEMO_EVENT_SLUG || refrescados.has(slug))) return presente;
+  if (presente && refrescados.has(slug)) return presente;
   // null: el evento es del otro sitio (demo o clientes) y no se publicó aquí.
   const seed = await ARCHIVOS[slug]?.();
   if (!seed) throw new DataError('evento_no_encontrado', 'No encontramos este evento.');
@@ -183,6 +183,12 @@ async function cargarEvento(slug) {
     if (slug !== DEMO_EVENT_SLUG && !refrescados.has(slug)) {
       s.eventos[s.eventos.indexOf(ya)] = structuredClone(seed.eventos[0]);
       s.regalos = [...s.regalos.filter((r) => r.eventoId !== ya.id), ...structuredClone(seed.regalos ?? [])];
+      refrescados.add(slug);
+      guardar();
+    } else if (slug === DEMO_EVENT_SLUG && !refrescados.has(slug)) {
+      // En la demo los datos se pueden editar desde el panel, pero el tema no:
+      // se trae del evento.json para que una corrección de diseño llegue.
+      ya.tema = structuredClone(seed.eventos[0].tema);
       refrescados.add(slug);
       guardar();
     }
