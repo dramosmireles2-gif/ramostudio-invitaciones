@@ -87,7 +87,7 @@ test('todas las secciones con los datos del brief', async ({ page }) => {
   await page.goto(enlaceFamilia(codigoPrueba(), 'Familia Prueba Datos', 3));
   await abrirSobre(page);
   const secciones = await page.locator('#app > section').evaluateAll((s) => s.map((x) => x.dataset.seccion));
-  expect(secciones).toEqual(['portada', 'cuenta', 'frase', 'cancion', 'evento', 'calendario', 'vestimenta', 'foto', 'rsvp', 'mensajes', 'galeria', 'pie']);
+  expect(secciones).toEqual(['portada', 'cuenta', 'frase', 'evento', 'calendario', 'vestimenta', 'foto', 'rsvp', 'mensajes', 'galeria', 'cancion', 'pie']);
 
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Iris & Alex');
   await expect(page.locator('.portada__fecha')).toHaveText('Viernes 4 de diciembre de 2026');
@@ -259,11 +259,14 @@ test('fondo de sombras: se mueve, casi transparente y no estorba los toques', as
   expect(encima).toBe('Confirmar asistencia');
 });
 
-test('música: el video oficial en YouTube arranca con el sello, se silencia y se recuerda', async ({ page }) => {
+test('música: arranca sola al abrir el sobre (video oficial de YouTube, discreto al final), se silencia y se recuerda', async ({ page }) => {
   await page.goto(`/${SLUG}/`);
   // El reproductor oficial está en "Nuestra canción", a la vista (lo pide YouTube).
   const cancion = page.locator('.cancion');
   await expect(cancion).toContainText('A Thousand Years');
+  // Discreto, al final, al tamaño mínimo que permite YouTube (200 x 200 a la vista).
+  const caja = await cancion.locator('.cancion__marco').boundingBox();
+  expect(Math.round(caja.width)).toBeLessThanOrEqual(216);
   await expect(cancion).toContainText('Christina Perri');
   await expect(cancion.locator('iframe')).toHaveAttribute('src', /youtube-nocookie\.com\/embed\/rtOvBOTyX00/, { timeout: 15_000 });
   // Nunca suena antes del sello y no hay botón.

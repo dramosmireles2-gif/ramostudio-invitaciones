@@ -125,7 +125,6 @@
         "portada",
         "cuenta",
         "frase",
-        "cancion",
         "evento",
         "calendario",
         "vestimenta",
@@ -133,6 +132,7 @@
         "rsvp",
         "mensajes",
         "galeria",
+        "cancion",
         "pie"
       ],
       "creditoFotos": "Dreams Studio by May Torres",

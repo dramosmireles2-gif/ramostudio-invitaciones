@@ -211,6 +211,19 @@ completas. Solo quedan pendientes la base de datos y el dominio.
   aquí se justifica porque lo pide la clienta y porque el código de vestimenta es negro.
 - 24 pruebas pasan.
 
+## Iteración 12 (31 de octubre de 2026): música automática, reproductor discreto
+
+- La clienta no quiere ver el video. El reproductor pasa al final (antes del pie), al
+  tamaño mínimo que permiten las condiciones de YouTube (200 x 200 px, a la vista), con
+  "Música de fondo · A Thousand Years · Christina Perri". Más chico o escondido rompe esas
+  condiciones y YouTube puede dejar de reproducirlo.
+- La música arranca sola al abrir el sobre (comprobado en Chrome con el reproductor fuera
+  de pantalla). En iPhone, Safari puede no dejar que arranque sola desde YouTube: falta
+  probar en un iPhone real.
+- Para quitar el video por completo hace falta un audio con licencia (archivo propio): así
+  suena de fondo sin reproductor y arranca igual en iPhone.
+- 24 pruebas pasan.
+
 ## Pendiente antes de enviar (miércoles 4 de noviembre)
 
 1. **Número de WhatsApp** que recibe las confirmaciones (`rsvp.telefono` en evento.json).
