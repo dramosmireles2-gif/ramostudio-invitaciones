@@ -11,6 +11,7 @@
 // - Se publican solo fotos/ y og.jpg de cada evento, en /eventos/<slug>/.
 //   docs/, _originales/ y evento.json nunca llegan a dist/ (los datos viajan
 //   en el bundle, por import.meta.glob en store.local.js).
+import { createHash } from 'node:crypto';
 import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
@@ -34,20 +35,27 @@ function leerEventos(raiz) {
     });
 }
 
+// Título y texto de la vista previa: qué es, cuándo, dónde y qué hacer.
+function tituloOg(e) {
+  if (e.og?.titulo) return e.og.titulo;
+  const frase = { boda: '¡Nos casamos!', xv: '¡Mis XV años!' }[e.tipo];
+  return frase ? `${e.titulo} · ${frase}` : e.titulo;
+}
+
 function descripcion(e) {
   if (e.og?.descripcion) return e.og.descripcion;
-  const tipo = { boda: 'Boda', xv: 'XV años' }[e.tipo] ?? 'Invitación';
-  if (!e.fecha) return `${tipo} · ${e.ciudad}`;
+  const cierre = 'Abran su invitación y confirmen su asistencia.';
+  if (!e.fecha) return `${e.ciudad}. ${cierre}`;
   const fecha = new Intl.DateTimeFormat('es-MX', {
     weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: e.zonaHoraria,
   }).format(new Date(e.fecha)).replace(',', ''); // "viernes 4 de…", sin coma
-  return `${tipo} · ${fecha} · ${e.ciudad}`;
+  return `${fecha[0].toUpperCase()}${fecha.slice(1)} · ${e.ciudad}. ${cierre}`;
 }
 
 function metas({ slug, carpeta, evento }, baseUrlEvento) {
   const baseUrl = baseUrlEvento(slug);
   const url = `${baseUrl}/${slug}/`;
-  const titulo = evento.og?.titulo ?? evento.titulo;
+  const titulo = tituloOg(evento);
   const lineas = [
     `<title>${escapar(evento.titulo)} · Invitación</title>`,
     `<meta name="ramostudio:evento" content="${escapar(slug)}" />`,
@@ -58,9 +66,13 @@ function metas({ slug, carpeta, evento }, baseUrlEvento) {
     `<meta property="og:description" content="${escapar(descripcion(evento))}" />`,
     `<meta property="og:url" content="${url}" />`,
   ];
-  if (existsSync(join(carpeta, 'og.jpg'))) {
+  const og = join(carpeta, 'og.jpg');
+  if (existsSync(og)) {
+    // ?v= cambia con la imagen: WhatsApp guarda la vista previa por URL y así
+    // toma la nueva en cuanto se publica.
+    const v = createHash('sha1').update(readFileSync(og)).digest('hex').slice(0, 8);
     lineas.push(
-      `<meta property="og:image" content="${baseUrl}/eventos/${slug}/og.jpg" />`,
+      `<meta property="og:image" content="${baseUrl}/eventos/${slug}/og.jpg?v=${v}" />`,
       '<meta property="og:image:type" content="image/jpeg" />',
       '<meta property="og:image:width" content="1200" />',
       '<meta property="og:image:height" content="630" />',

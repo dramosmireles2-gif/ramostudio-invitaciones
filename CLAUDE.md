@@ -121,6 +121,7 @@ eventos/<slug>/            Una carpeta por evento:
   _originales/             Fotos pesadas; en .gitignore, nunca se suben
 scripts/vite-eventos.js    Página /<slug>/ por evento y copia de fotos/ y og.jpg a dist/
 scripts/fotos.mjs          _originales/ → fotos/ (npm run fotos -- <slug>)
+scripts/og.mjs             og.jpg con el diseño del evento (npm run og -- <slug>)
 index.html                 Portada de la demo (enlaces a invitación y panel)
 invitacion/index.html      Invitación (plantilla de /<slug>/; respaldo ?e=<slug>&f=<codigo>)
 panel/index.html           Login simulado
@@ -142,5 +143,7 @@ src/panel/views/           resumen, familias, mesas, mensajes, regalos, activida
 - `npm run build`: compila el sitio demo a `dist/` (lo que se publica en GitHub Pages)
 - `npm run build:clientes`: compila el sitio de clientes a `dist-clientes/`
 - `npm run fotos -- <slug>`: optimiza `eventos/<slug>/_originales/` a `fotos/`
+- `npm run og -- <slug> [--foto <nombre>]`: arma `og.jpg` (vista previa de WhatsApp) con
+  la foto, el sello, los nombres, la fecha y la ciudad del evento
 - `npm test`: pruebas de Playwright (`tests/`) en Android, iPhone y el panel en
   computadora. Correrlas antes de mostrar o publicar una invitación.

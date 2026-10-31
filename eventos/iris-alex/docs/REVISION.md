@@ -239,3 +239,11 @@ completas. Solo quedan pendientes la base de datos y el dominio.
    Google Maps y Waze lleguen al lugar correcto.
 6. Probar el enlace en WhatsApp real (Android y iPhone) cuando esté publicado: vista
    previa, apertura del sobre y botón de confirmar.
+
+## Vista previa de WhatsApp con diseño (31/10/2026)
+
+- La clienta la veía vacía (solo la foto). `og.jpg` ahora sale de `npm run og -- iris-alex`:
+  foto intermedia a la izquierda y, a la derecha, sello I·A, "Nos casamos", nombres en
+  Bodoni itálica, filete con rombo, fecha completa y ciudad. 90 KB.
+- Título "Iris & Alex · ¡Nos casamos!" y texto con fecha, ciudad y "Abran su invitación y
+  confirmen su asistencia". La imagen lleva `?v=<hash>` para que WhatsApp no use la vieja.

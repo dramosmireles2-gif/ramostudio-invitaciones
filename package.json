@@ -8,6 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "fotos": "node scripts/fotos.mjs",
+    "og": "node scripts/og.mjs",
     "build:clientes": "vite build --mode clientes",
     "test": "playwright test"
   },
