@@ -97,6 +97,10 @@ publica.
 - Antes de diseñar o revisar una pantalla, usar la skill `direccion-arte-ramostudio`.
 - Las pantallas se implementan una por una a partir del diseño enviado desde Claude Design.
 - La invitación se diseña primero para celular (la mayoría la abre desde WhatsApp).
+- **El panel se viste con la paleta de su invitación** (`tema.colores` y fuentes, vía
+  `aplicarTemaPanel` → variables `--pn-*`); sin paleta propia queda la marca. Sus ajustes
+  siguen `evento.secciones`: sin `regalos` no hay mesa de regalos; frase, vestimenta y
+  canción se editan en "Datos de su invitación" solo si la invitación las tiene.
 - Textos en español de México.
 - **Cada evento arma su invitación desde `evento.json`:** `secciones` (cuáles y en qué
   orden), `tema` (colores, fuentes, `variables` → `--ev-*`, `portada: "hoja"`, `frase: "cita"`, `vestimenta: "sombrero"`, `fondo: "sombras"`), `fotos` (portada,

@@ -7,13 +7,21 @@ import { salir } from '../auth.js';
 
 export async function montar(destino, { evento, data, demo }) {
   const [familias, mensajes] = await Promise.all([data.getFamilias(evento.id), data.getMensajes(evento.id)]);
+  // Solo lo que su invitación tiene: sin sección de regalos, no hay mesa de
+  // regalos que ajustar; sin mensajes, no hay mensajes que leer.
+  const tiene = (s) => !evento.secciones || evento.secciones.includes(s);
+  const extras = [
+    tiene('frase') && 'su frase',
+    tiene('vestimenta') && 'vestimenta',
+    tiene('cancion') && 'canción',
+  ].filter(Boolean);
   const opciones = [
-    ['mensajes', 'Mensajes de sus invitados', mensajes.length ? plural(mensajes.length, 'mensaje', 'mensajes') : 'Aún no hay mensajes'],
+    tiene('mensajes') && ['mensajes', 'Mensajes de sus invitados', mensajes.length ? plural(mensajes.length, 'mensaje', 'mensajes') : 'Aún no hay mensajes'],
     ['actividad', 'Actividad reciente', familias.length ? 'Quién abrió y quién confirmó' : 'Aquí verán quién abre su invitación'],
-    ['regalos', 'Mesa de regalos', 'Tiendas y cuentas en su invitación'],
-    ['datos-evento', 'Datos del evento', 'Fecha, lugares y fecha límite'],
+    tiene('regalos') && ['regalos', 'Mesa de regalos', 'Tiendas y cuentas en su invitación'],
+    ['datos-evento', 'Datos de su invitación', `Fecha, lugares y fecha límite${extras.length ? `; ${new Intl.ListFormat('es-MX').format(extras)}` : ''}`],
     ['exportar', 'Exportar lista a Excel', 'Para el salón o su coordinadora'],
-  ];
+  ].filter(Boolean);
   const el = document.createElement('div');
   el.className = 'mas';
   el.innerHTML = html`
@@ -21,7 +29,7 @@ export async function montar(destino, { evento, data, demo }) {
       <a class="mas__opcion" href="#${id}"><span class="mas__opcion-titulo">${titulo}</span><span class="t-meta">${sub}</span></a>`))}</nav>
     <a class="btn btn--secondary btn--full" href="${rutaInvitacion(evento.slug)}" target="_blank" rel="noopener">Ver mi invitación</a>
     ${demo ? '' : crudo(html`<button class="btn btn--quiet mas__salir" type="button" data-salir>Cerrar sesión</button>`)}
-    <div class="mas__marca">${crudo(wordmark({ width: 130, tone: 'pizarra', tagline: false }))}</div>`;
+    <div class="mas__marca">${crudo(wordmark({ width: 130, tone: 'tema', tagline: false }))}</div>`;
   // En el demo no hay sesión que cerrar: se entra sin login.
   el.querySelector('[data-salir]')?.addEventListener('click', salir);
   destino.append(el);

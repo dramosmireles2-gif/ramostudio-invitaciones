@@ -20,13 +20,15 @@ const TINTAS = { tinta: '#2B2A28', pizarra: '#3E5266', crema: '#F4EFE9' };
 // Wordmark oficial "ramostudio" reproducido inline (como el SVG del design
 // system) para que use la Playfair Display autoalojada. El lema va en dorado
 // solo a 240px o más.
+// tone "tema": toma el color de texto del panel (--pn-texto), para que se lea
+// también en el panel de un evento con fondo oscuro.
 export function wordmark({ width = 200, tone = 'tinta', tagline = true } = {}) {
-  const tinta = TINTAS[tone] ?? TINTAS.tinta;
+  const tinta = tone === 'tema' ? 'var(--pn-texto)' : (TINTAS[tone] ?? TINTAS.tinta);
   const grande = width >= 240;
   const lema = grande ? '#B79A6B' : tinta;
   return html`<svg class="wordmark" role="img" aria-label="ramostudio, invitaciones digitales"
     viewBox="${tagline ? '430 150 1040 320' : '430 150 1040 210'}" width="${width}">
-    <text x="950" y="265" font-family="Playfair Display" font-size="185" letter-spacing="2" text-anchor="middle" dominant-baseline="central" fill="${tinta}">ramostudio</text>
+    <text x="950" y="265" font-family="Playfair Display" font-size="185" letter-spacing="2" text-anchor="middle" dominant-baseline="central" style="fill: ${tinta}">ramostudio</text>
     ${tagline ? crudo(html`<text x="950" y="440" font-family="Montserrat" font-weight="600" font-size="37" letter-spacing="23" fill="${lema}" text-anchor="middle">INVITACIONES DIGITALES</text>`) : ''}
   </svg>`;
 }

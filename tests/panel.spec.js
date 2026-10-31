@@ -50,3 +50,30 @@ test('el enlace que arma el panel abre la invitación de esa familia', async ({ 
   await abrirSobre(page);
   await expect(page.locator('.rsvp')).toContainText('Tenemos 2 lugares reservados para ustedes.');
 });
+
+test('el panel lleva la paleta de la invitación y solo ajusta las secciones que tiene', async ({ page }) => {
+  await entrarAlPanel(page);
+  // Fondo negro de Iris & Alex (#0C0B09), no el crema de la marca.
+  expect(await page.evaluate(() => getComputedStyle(document.body).backgroundColor)).toBe('rgb(12, 11, 9)');
+
+  await page.goto('/panel/app.html#mas');
+  const opciones = page.locator('.mas__opcion-titulo');
+  await expect(opciones).toContainText(['Mensajes de sus invitados', 'Actividad reciente', 'Datos de su invitación', 'Exportar lista a Excel']);
+  await expect(opciones.filter({ hasText: 'Mesa de regalos' })).toHaveCount(0);
+
+  // Frase, vestimenta y canción se editan y llegan a la invitación.
+  await page.goto('/panel/app.html#datos-evento');
+  await page.locator('#ev-vd').fill('Todos de negro');
+  await page.locator('#ev-mu').fill('no es un link');
+  await page.getByRole('button', { name: 'Guardar cambios' }).click();
+  await expect(page.locator('#ev-mu')).toHaveAttribute('aria-invalid', 'true');
+  await page.locator('#ev-mu').fill('https://www.youtube.com/watch?v=rtOvBOTyX00');
+  await page.getByRole('button', { name: 'Guardar cambios' }).click();
+  await page.reload();
+  await expect(page.locator('#ev-vd')).toHaveValue('Todos de negro');
+  await page.screenshot({ path: `${CAPTURAS}/panel-datos-invitacion.png`, fullPage: true });
+
+  await page.goto('/iris-alex/');
+  await abrirSobre(page);
+  await expect(page.locator('.vestimenta__detalle')).toHaveText('Todos de negro');
+});

@@ -43,8 +43,8 @@ img, svg, video { display: block; max-width: 100%; }
 
 button, input, select, textarea { font: inherit; color: inherit; }
 
-a { color: var(--rs-pizarra); text-decoration: underline; text-decoration-color: var(--rule-color, var(--rs-dorado)); text-underline-offset: 3px; }
-a:hover { color: var(--rs-tinta); }
+a { color: var(--pn-texto); text-decoration: underline; text-decoration-color: var(--rule-color, var(--pn-acento)); text-underline-offset: 3px; }
+a:hover { color: var(--pn-tinta); }
 
 :focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 3px; }
 

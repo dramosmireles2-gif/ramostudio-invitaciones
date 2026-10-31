@@ -40,7 +40,7 @@ app.innerHTML = html`
     </header>
     <section class="sheet login__hoja" aria-live="polite"></section>
     <footer class="login__pie">
-      ${crudo(wordmark({ width: 120, tone: 'pizarra', tagline: false }))}
+      ${crudo(wordmark({ width: 120, tone: 'tema', tagline: false }))}
       <p class="t-meta">¿No les llega el correo? Escríbannos y les ayudamos.</p>
     </footer>
   </div>`;

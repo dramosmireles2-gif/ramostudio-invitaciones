@@ -10,12 +10,23 @@ const DIA = 24 * 60 * 60 * 1000;
 const ERROR_FECHA = 'Escríbanla como día/mes/año, por ejemplo 07/11/2026.';
 const AYUDA_MAPA = 'En Google Maps busquen el lugar, toquen «Compartir» y peguen aquí el link.';
 const medianoche = ({ dia, mes, anio }) => new Date(anio, mes - 1, dia).getTime();
+const AYUDA_FRASE = 'Con sus palabras. Aparece tal cual en su invitación.';
+const AYUDA_CANCION = 'Busquen el video oficial en YouTube, toquen «Compartir» y peguen aquí el link. Suena cuando sus invitados abren el sobre.';
+
+// Id del video de YouTube desde cualquier link (youtu.be, watch?v=, shorts, embed) o el id solo.
+function idYouTube(texto) {
+  const t = String(texto ?? '').trim();
+  if (/^[\w-]{11}$/.test(t)) return t;
+  return t.match(/(?:youtu\.be\/|[?&]v=|\/shorts\/|\/embed\/|\/live\/)([\w-]{11})/)?.[1] ?? null;
+}
 
 export async function montar(destino, ctx) {
   const { data } = ctx;
   const el = subvista(destino, ctx);
   const evento = await data.getEventoPorId(ctx.evento.id);
   const sede = (id) => evento.sedes?.find((s) => s.id === id) ?? {};
+  // Solo se ajusta lo que su invitación muestra (evento.secciones).
+  const tiene = (s) => !evento.secciones || evento.secciones.includes(s);
   const cer = sede('ceremonia');
   const rec = sede('recepcion');
   const zona = { zona: evento.zonaHoraria };
@@ -56,6 +67,19 @@ export async function montar(destino, ctx) {
     ${mapa('rec', rec)}
     <h3 class="t-h2">Confirmaciones</h3>
     ${campo('ev-rsvp', 'fechaLimite', 'Fecha límite para confirmar', limiteInicial, { ayuda: 'Después de esta fecha, la invitación ya no deja confirmar.', extra: fecha })}
+    ${tiene('frase') ? crudo(html`<h3 class="t-h2">Su frase</h3>
+    <div class="field">
+      <label class="field__label" for="ev-frase">Texto que va bajo la portada</label>
+      <textarea class="field__control" id="ev-frase" name="frase" maxlength="600">${evento.frase ?? ''}</textarea>
+      <span class="field__hint" data-ayuda="${AYUDA_FRASE}">${AYUDA_FRASE}</span>
+    </div>`) : ''}
+    ${tiene('vestimenta') ? crudo(html`<h3 class="t-h2">Código de vestimenta</h3>
+    ${campo('ev-vc', 'vestCodigo', 'Código', evento.vestimenta?.codigo, { ayuda: 'Por ejemplo: Formal, Etiqueta, Casual elegante.' })}
+    ${campo('ev-vd', 'vestDetalle', 'Detalle (opcional)', evento.vestimenta?.detalle, { ayuda: 'Por ejemplo: De negro, o Evitar el color blanco.' })}`) : ''}
+    ${tiene('cancion') ? crudo(html`<h3 class="t-h2">Su canción</h3>
+    ${campo('ev-mu', 'musicaLink', 'Link del video oficial en YouTube', evento.musica?.youtube ? `https://youtu.be/${evento.musica.youtube}` : '', { tipo: 'url', ayuda: AYUDA_CANCION })}
+    ${campo('ev-mt', 'musicaTitulo', 'Nombre de la canción', evento.musica?.titulo)}
+    ${campo('ev-ma', 'musicaArtista', 'Artista', evento.musica?.artista)}`) : ''}
     <button class="btn btn--full btn--lg" type="submit">Guardar cambios</button>`;
   el.append(form);
   activarMapas(form);
@@ -110,6 +134,8 @@ export async function montar(destino, ctx) {
       const url = v[`${clave}Mapa`].trim();
       marcar(`${clave}Mapa`, url && !esLinkGoogleMaps(url) ? 'Este link no es de Google Maps. Cópienlo desde «Compartir» en Google Maps.' : null);
     }
+    const video = tiene('cancion') && v.musicaLink.trim() ? idYouTube(v.musicaLink) : null;
+    if (tiene('cancion')) marcar('musicaLink', v.musicaLink.trim() && !video ? 'Este link no es de un video de YouTube. Cópienlo desde «Compartir».' : null);
     if (form.querySelector('[aria-invalid="true"]')) return;
 
     // Si el link trae coordenadas se guardan; si es el mismo link de antes, se conservan.
@@ -130,6 +156,14 @@ export async function montar(destino, ctx) {
       cambios.fecha = new Date(boda.anio, boda.mes - 1, boda.dia, h, m).toISOString();
     }
     cambios.fechaLimiteRsvpDiasAntes = limite ? Math.round((medianoche(boda) - medianoche(limite)) / DIA) : null;
+    if (tiene('frase')) cambios.frase = v.frase.trim() || evento.frase;
+    if (tiene('vestimenta')) {
+      cambios.vestimenta = { ...evento.vestimenta, codigo: v.vestCodigo.trim() || evento.vestimenta?.codigo, detalle: v.vestDetalle.trim() };
+    }
+    if (tiene('cancion')) {
+      const { _nota, ...musica } = evento.musica ?? {};
+      cambios.musica = { ...musica, youtube: video ?? musica.youtube, titulo: v.musicaTitulo.trim(), artista: v.musicaArtista.trim() };
+    }
     await data.actualizarEvento(evento.id, cambios);
     evento.sedes = sedes;
     toast('Guardamos los cambios. Su invitación ya se actualizó.');

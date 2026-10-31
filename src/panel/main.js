@@ -32,7 +32,7 @@ const VISTAS = {
   mensajes: { titulo: 'Mensajes de sus invitados', pestana: 'mas', modulo: mensajes },
   actividad: { titulo: 'Actividad reciente', pestana: 'mas', modulo: actividad },
   regalos: { titulo: 'Mesa de regalos', pestana: 'mas', modulo: regalos },
-  'datos-evento': { titulo: 'Datos del evento', pestana: 'mas', modulo: datosEvento },
+  'datos-evento': { titulo: 'Datos de su invitación', pestana: 'mas', modulo: datosEvento },
   exportar: { titulo: 'Exportar lista a Excel', pestana: 'mas', modulo: exportar },
 };
 const PESTANAS = [['resumen', 'Resumen'], ['invitados', 'Invitados'], ['mesas', 'Mesas'], ['mas', 'Más']];
@@ -57,7 +57,7 @@ document.getElementById('panel').innerHTML = html`
     </div>
     ${crudo(goldRule())}
     <nav class="panel-lateral__nav" aria-label="Secciones del panel">${pestanas('panel-lateral__link')}</nav>
-    <div class="panel-lateral__pie">${crudo(wordmark({ width: 140, tone: 'pizarra', tagline: false }))}</div>
+    <div class="panel-lateral__pie">${crudo(wordmark({ width: 140, tone: 'tema', tagline: false }))}</div>
   </aside>
   <div class="panel-principal">
     <header class="panel-cabeza">

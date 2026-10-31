@@ -13,8 +13,18 @@
   --rs-pizarra-hondo: #33455A; --rs-crema-papel: #FAF7F2; --rs-crema-sombra: #EAE3D9; --rs-polvo-velo: #DCE3E6; --rs-dorado-velo: #E9DFCD;
   --rs-vino: #7A3B34; --rs-vino-velo: #EFDCD6; --rs-salvia: #3F5E4A; --rs-salvia-velo: #DDE6DC;
 
-  --text-strong: var(--rs-tinta); --text-body: var(--rs-pizarra); --text-on-dark: var(--rs-crema); --text-accent-on-dark: var(--rs-dorado);
-  --surface-page: var(--rs-crema); --surface-card: var(--rs-crema-papel); --surface-sunk: var(--rs-crema-sombra); --surface-dark: var(--rs-pizarra); --surface-veil: var(--rs-polvo-velo);
+  /* Roles del panel (--pn-*): por defecto la marca; src/lib/theme.js
+     (aplicarTemaPanel) los cambia por la paleta de la invitación del evento. */
+  --pn-fondo: var(--rs-crema); --pn-papel: var(--rs-crema-papel); --pn-hundido: var(--rs-crema-sombra);
+  --pn-tinta: var(--rs-tinta); --pn-texto: var(--rs-pizarra);
+  --pn-banda: var(--rs-pizarra); --pn-sobre-banda: var(--rs-crema);
+  --pn-activo: var(--rs-pizarra); --pn-activo-hondo: var(--rs-pizarra-hondo); --pn-sobre-activo: var(--rs-crema);
+  --pn-acento: var(--rs-dorado); --pn-acento-velo: var(--rs-dorado-velo);
+  --pn-si: var(--rs-salvia); --pn-no: var(--rs-vino); --pn-no-velo: var(--rs-vino-velo);
+  --pn-velo-oscuro: rgba(43, 42, 40, .42);
+
+  --text-strong: var(--pn-tinta); --text-body: var(--pn-texto); --text-on-dark: var(--rs-crema); --text-accent-on-dark: var(--rs-dorado);
+  --surface-page: var(--pn-fondo); --surface-card: var(--pn-papel); --surface-sunk: var(--pn-hundido); --surface-dark: var(--pn-banda); --surface-veil: var(--rs-polvo-velo);
   --line-gold: var(--rs-dorado); --line-hair: rgba(62, 82, 102, .18); --line-paper: rgba(62, 82, 102, .14); --line-field: rgba(62, 82, 102, .35); --line-strong: var(--rs-pizarra);
   --status-si-fg: var(--rs-salvia); --status-si-bg: var(--rs-salvia-velo);
   --status-no-fg: var(--rs-vino); --status-no-bg: var(--rs-vino-velo);

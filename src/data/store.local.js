@@ -184,11 +184,19 @@ function renombrarFamiliasDemo(s, seed) {
   }
 }
 
-// Eventos reales: los datos del evento (fecha, lugares, tema) y sus regalos
-// mandan desde evento.json en cada carga, para que una corrección llegue a
-// quien ya abrió la invitación. Solo sus familias, mesas, mensajes y
-// actividad quedan en este navegador.
+// Eventos reales: cuando evento.json cambia (una corrección publicada), los
+// datos del evento y sus regalos se vuelven a tomar de ahí, para que llegue a
+// quien ya abrió la invitación. Mientras no cambie, se respeta lo editado en
+// el panel. Sus familias, mesas, mensajes y actividad quedan en este navegador.
 const refrescados = new Set();
+
+// Huella corta del evento.json (para saber si cambió).
+function huellaSeed(seed) {
+  const texto = JSON.stringify([seed.eventos[0], seed.regalos ?? []]);
+  let h = 0;
+  for (let i = 0; i < texto.length; i++) h = (Math.imul(31, h) + texto.charCodeAt(i)) | 0;
+  return (h >>> 0).toString(36);
+}
 
 async function cargarEvento(slug) {
   const s = estado();
@@ -201,8 +209,13 @@ async function cargarEvento(slug) {
   const ya = s.eventos.find((x) => x.slug === slug);
   if (ya) {
     if (slug !== DEMO_EVENT_SLUG && !refrescados.has(slug)) {
-      s.eventos[s.eventos.indexOf(ya)] = structuredClone(seed.eventos[0]);
-      s.regalos = [...s.regalos.filter((r) => r.eventoId !== ya.id), ...structuredClone(seed.regalos ?? [])];
+      // Solo si evento.json cambió desde la última vez: así lo que la pareja
+      // edita en el panel no se pierde al recargar.
+      const huella = huellaSeed(seed);
+      if (ya._semilla !== huella) {
+        s.eventos[s.eventos.indexOf(ya)] = { ...structuredClone(seed.eventos[0]), _semilla: huella };
+        s.regalos = [...s.regalos.filter((r) => r.eventoId !== ya.id), ...structuredClone(seed.regalos ?? [])];
+      }
       refrescados.add(slug);
       guardar();
     } else if (slug === DEMO_EVENT_SLUG && !refrescados.has(slug)) {
@@ -230,8 +243,10 @@ async function cargarEvento(slug) {
     viejo = null;
   } else datos = hidratarSeed(seed);
   for (const k of COLECCIONES) s[k].push(...(datos[k] ?? []));
+  const nuevo = s.eventos.find((x) => x.slug === slug);
+  if (nuevo && slug !== DEMO_EVENT_SLUG) nuevo._semilla = huellaSeed(seed);
   guardar();
-  return s.eventos.find((x) => x.slug === slug);
+  return nuevo;
 }
 
 // El panel solo conoce el id (lo guarda la sesión): si aún no está, se cargan
