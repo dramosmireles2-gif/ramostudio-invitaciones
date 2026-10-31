@@ -82,9 +82,10 @@ body.con-sobre { overflow: hidden; }
 
 /* Sobre ------------------------------------------------------------------- */
 /* Pantalla del sobre: del color de la invitación (sin salto de oscuro a claro al
-   abrir). El sobre es una tarjeta que flota despacio en el centro. */
+   abrir). El sobre es una tarjeta que flota despacio en el centro, sólida: va
+   encima de las sombras y las motas del fondo (z-index 11), que no lo atraviesan. */
 .sobre {
-  position: fixed; inset: 0; z-index: 10; overflow: hidden;
+  position: fixed; inset: 0; z-index: 12; overflow: hidden;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px;
   height: 100vh; height: 100svh; padding: 24px; background: var(--ev-bg);
   perspective: 1200px;
@@ -190,7 +191,7 @@ body.con-sobre { overflow: hidden; }
 
 /* Lluvia al abrir: rombos del acento, puntos y puntadas del hilo. */
 .lluvia {
-  position: fixed; top: -12px; z-index: 12; pointer-events: none; opacity: 0;
+  position: fixed; top: -12px; z-index: 13; pointer-events: none; opacity: 0;
   animation: caer linear forwards;
 }
 .lluvia--rombo { width: 7px; height: 7px; background: var(--ev-accent); transform: rotate(45deg); }
