@@ -5,11 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/revisar-dist.mjs",
     "preview": "vite preview",
     "fotos": "node scripts/fotos.mjs",
     "og": "node scripts/og.mjs",
-    "build:clientes": "vite build --mode clientes",
+    "build:clientes": "vite build --mode clientes && node scripts/revisar-dist.mjs dist-clientes",
     "test": "playwright test",
     "portafolio": "node scripts/portafolio.mjs",
     "og:marca": "node scripts/og-marca.mjs"

@@ -83,6 +83,8 @@ test('portafolio: "Ver cómo se abre" pone el video en el marco', async ({ page 
   const obra = page.locator('.obra').filter({ hasText: 'Eunice & Edher' });
   await obra.getByRole('button', { name: 'Ver cómo se abre' }).click();
   await expect(obra.locator('video')).toHaveAttribute('src', /eunice-edher\/sobre\.mp4/);
+  // Y el video carga de verdad (en el sitio publicado lo revisa también scripts/revisar-dist.mjs).
+  await expect.poll(() => obra.locator('video').evaluate((v) => v.readyState), { timeout: 15_000 }).toBeGreaterThanOrEqual(2);
 });
 
 test('sitemap y robots: solo las páginas de marca', async ({ request }) => {

@@ -30,7 +30,14 @@ const hero = document.querySelector('[data-hero-video]');
 if (hero && !quieto.matches) hero.play().catch(() => {});
 
 // Portafolio: "Ver cómo se abre" cambia la portada por el video del sobre, en
-// el mismo marco, solo cuando la persona lo pide.
+// el mismo marco, solo cuando la persona lo pide. Las rutas van aquí con
+// new URL(…, import.meta.url) para que Vite publique los videos: un atributo
+// data-* no lo procesa y en el sitio publicado daba 404.
+const VIDEOS = {
+  'iris-alex': new URL('../../portafolio/iris-alex/sobre.mp4', import.meta.url).href,
+  'eunice-edher': new URL('../../portafolio/eunice-edher/sobre.mp4', import.meta.url).href,
+  'ivan-gemima': new URL('../../portafolio/ivan-gemima/sobre.mp4', import.meta.url).href,
+};
 for (const boton of document.querySelectorAll('[data-ver-apertura]')) {
   boton.addEventListener('click', () => {
     const marco = boton.closest('.obra').querySelector('[data-obra-video]');
@@ -38,9 +45,12 @@ for (const boton of document.querySelectorAll('[data-ver-apertura]')) {
     if (!video) {
       const img = marco.querySelector('img');
       video = Object.assign(document.createElement('video'), {
-        className: 'cel__pantalla', src: marco.dataset.obraVideo, muted: true, playsInline: true,
+        className: 'cel__pantalla', src: VIDEOS[marco.dataset.obraVideo], muted: true, playsInline: true,
         poster: img.currentSrc, width: 540, height: 1168,
       });
+      // Safari de iPhone respeta los atributos más que las propiedades.
+      video.setAttribute('playsinline', '');
+      video.setAttribute('muted', '');
       video.setAttribute('aria-label', `Así se abre la invitación de ${boton.closest('.obra').querySelector('h3').textContent}`);
       video.addEventListener('ended', () => { boton.textContent = 'Verlo otra vez'; });
       marco.replaceChildren(video);
