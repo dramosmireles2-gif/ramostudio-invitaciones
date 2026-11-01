@@ -4,7 +4,7 @@ import { INVITE_BASE_URL, WHATSAPP_NUMBER, DEMO_EVENT_SLUG, baseUrlEvento } from
 import { origenVisita } from './origen.js';
 
 // Formato: https://<dominio del evento>/<slug>/?f=<codigo>
-// (demo.ramosmkt.lat para el demo; el dominio de clientes para los demás).
+// (ver baseUrlEvento en src/config.js).
 // Cada evento tiene su página en /<slug>/ (con su vista previa de WhatsApp);
 // /invitacion/?e=<slug>&f=<codigo> sigue funcionando como respaldo.
 //

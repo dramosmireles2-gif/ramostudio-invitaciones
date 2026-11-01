@@ -1,13 +1,12 @@
 // Único lugar donde se definen los dominios de las invitaciones.
 // NO usar inv.ramosmkt.lat: pertenece al repo de invitaciones en vivo de clientes.
-// Sitio demo: solo el evento DEMO_EVENT_SLUG.
-export const INVITE_BASE_URL = 'https://demo.ramosmkt.lat';
-// Sitio de clientes: todos los demás eventos, cada uno en /<slug>/.
-// TEMPORAL: mientras se compra el dominio (ramostudio.mx o .com), los eventos de
-// clientes se publican junto al demo en demo.ramosmkt.lat (un solo sitio; ver
-// scripts/vite-eventos.js). Con el dominio comprado, cambiar solo esta línea
-// (p. ej. 'https://ramostudio.mx') y los dos sitios vuelven a separarse.
-export const CLIENTES_BASE_URL = 'https://demo.ramosmkt.lat';
+// Todo se publica en un solo sitio, ramostudio.com.mx: el demo y cada boda en
+// /<slug>/ (ver scripts/vite-eventos.js). Si algún día los clientes van en otro
+// dominio, basta con cambiar CLIENTES_BASE_URL y los dos sitios se separan.
+// Demo: solo el evento DEMO_EVENT_SLUG.
+export const INVITE_BASE_URL = 'https://ramostudio.com.mx';
+// Clientes: todos los demás eventos, cada uno en /<slug>/.
+export const CLIENTES_BASE_URL = 'https://ramostudio.com.mx';
 
 // Evento que abre la demo cuando la URL no trae ?e=
 export const DEMO_EVENT_SLUG = 'mariana-diego';

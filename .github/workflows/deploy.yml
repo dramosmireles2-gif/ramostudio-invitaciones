@@ -1,7 +1,7 @@
-# Publica la demo en GitHub Pages (demo.ramosmkt.lat) en cada push a main.
-# En Settings → Pages, "Source" debe ser "GitHub Actions" y el dominio
-# personalizado demo.ramosmkt.lat (public/CNAME viaja en dist/, pero con
-# Actions el dominio se toma de esa configuración).
+# Publica el sitio (ramostudio.com.mx: demo y bodas de clientes) en GitHub Pages
+# en cada push a main. En Settings → Pages, "Source" debe ser "GitHub Actions" y
+# el dominio personalizado ramostudio.com.mx (public/CNAME viaja en dist/, pero
+# con Actions el dominio se toma de esa configuración).
 name: Deploy a GitHub Pages
 
 on:

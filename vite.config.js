@@ -14,7 +14,7 @@ const dominioEnHtml = {
 };
 
 // Dos sitios desde este repo (ver scripts/vite-eventos.js):
-//   vite build                  → dist/          demo (demo.ramosmkt.lat)
+//   vite build                  → dist/          demo (y hoy también los clientes: un solo sitio)
 //   vite build --mode clientes  → dist-clientes/ eventos reales (CLIENTES_BASE_URL)
 // El sitio de clientes no lleva la portada del demo.
 // Cada sitio usa un dominio propio, así que base es la raíz.

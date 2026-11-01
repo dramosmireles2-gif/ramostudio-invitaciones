@@ -1,7 +1,7 @@
 // Plugin de Vite para las carpetas eventos/<slug>/.
 //
 // - Hay dos sitios desde este mismo repo: `vite build` publica solo el demo
-//   (demo.ramosmkt.lat) y `vite build --mode clientes` todos los demás
+//   (ramostudio.com.mx) y `vite build --mode clientes` todos los demás
 //   eventos (dominio de clientes). Los datos de un evento que no es del sitio
 //   ni siquiera entran al bundle. En dev (`vite`) están todos.
 //

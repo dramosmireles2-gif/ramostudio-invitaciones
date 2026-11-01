@@ -19,16 +19,14 @@ publica.
 
 ## Dominio
 
-- Dos sitios desde **este mismo repo**, cada evento en su carpeta:
-  - **Demo** (`npm run build` → `dist/`): solo `mariana-diego`, en **`demo.ramosmkt.lat`**.
-  - **Clientes** (`npm run build:clientes` → `dist-clientes/`): todos los demás eventos, en
-    `CLIENTES_BASE_URL` (**PENDIENTE**: ramostudio.mx o .com, se compra antes de entregar
-    la primera invitación).
-  - Los datos de un evento nunca entran al sitio del otro (`scripts/vite-eventos.js`).
-  - **TEMPORAL:** mientras no hay dominio, `CLIENTES_BASE_URL` es `demo.ramosmkt.lat` y
-    `npm run build` publica todos los eventos en un solo sitio (Iris & Alex en
-    `demo.ramosmkt.lat/iris-alex/`). Al comprar el dominio, cambiar esa línea; los sitios
-    se separan solos y falta crear el destino de Pages del sitio de clientes.
+- **Un solo sitio: `ramostudio.com.mx`** (comprado en Namecheap el 31/10/2026), publicado
+  desde este repo con GitHub Pages (`npm run build` → `dist/`): el demo en
+  `/mariana-diego/` y cada boda en `/<slug>/` (Iris & Alex en `ramostudio.com.mx/iris-alex/`).
+  `INVITE_BASE_URL` y `CLIENTES_BASE_URL` son el mismo dominio.
+  - Si algún día los clientes van en otro dominio, cambiar `CLIENTES_BASE_URL`: los sitios
+    se separan solos (`npm run build:clientes` → `dist-clientes/`, sin los datos del demo)
+    y falta crear el destino de Pages de ese sitio.
+  - `demo.ramosmkt.lat` era el sitio anterior; ya no se publica desde aquí.
 - **Nunca usar `inv.ramosmkt.lat`**: pertenece a otro repositorio con invitaciones en vivo
   de clientes reales.
 
@@ -136,7 +134,7 @@ invitacion/index.html      Invitación (plantilla de /<slug>/; respaldo ?e=<slug
 panel/index.html           Login simulado
 panel/app.html             Panel de novios
 public/fonts/              Fuentes autoalojadas
-public/CNAME               demo.ramosmkt.lat (GitHub Pages)
+public/CNAME               ramostudio.com.mx (GitHub Pages)
 src/config.js              Dominios (demo y clientes) y constantes de la demo
 src/data/                  ÚNICO acceso a datos (index.js = API, store.local.js)
 src/styles/                tokens.css, base.css, components.css
