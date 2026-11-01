@@ -6,6 +6,17 @@ import { html, crudo } from '../../lib/dom.js';
 
 const POR_CONFIRMAR = /por confirmar/i;
 
+// Lluvia de sobres: tres sobres a una línea, cayendo, con la solapa en
+// pespunte (como el sobre de la apertura) y el del centro con su sello.
+const SOBRE = (x, y, giro, escala, sello) => `<g transform="translate(${x} ${y}) rotate(${giro}) scale(${escala})">
+  <rect class="linea" x="-30" y="-20" width="60" height="40" rx="3"/>
+  <path class="pespunte" d="M-27 -17L0 4L27 -17"/>
+  ${sello ? '<circle class="sello" cx="0" cy="4" r="6"/>' : ''}
+</g>`;
+const LLUVIA = `<svg class="regalos__lluvia" viewBox="0 0 220 110" aria-hidden="true">
+  ${SOBRE(48, 34, -14, 0.62, false)}${SOBRE(110, 60, 6, 1, true)}${SOBRE(176, 28, 16, 0.55, false)}
+</svg>`;
+
 // "Banco: X · Titular: Y · CLABE: 0123…" → [['Banco', 'X'], ['Titular', 'Y'], ['CLABE', '0123…']]
 const datos = (detalle) => String(detalle ?? '').split('·').map((d) => d.trim()).filter(Boolean)
   .map((d) => { const i = d.indexOf(':'); return i === -1 ? ['', d] : [d.slice(0, i).trim(), d.slice(i + 1).trim()]; });
@@ -45,6 +56,7 @@ export async function montar(contenedor, { evento, data }) {
   const tiendas = regalos.filter((r) => r.tipo !== 'transferencia');
   contenedor.className = 'regalos';
   contenedor.innerHTML = html`
+    ${evento.lluviaDeSobres ? crudo(LLUVIA) : ''}
     <h2 class="ev-titulo">${evento.lluviaDeSobres ? 'Lluvia de sobres' : 'Mesa de regalos'}</h2>
     ${evento.lluviaDeSobres && evento.fraseSobres ? crudo(html`<p class="regalos__frase">${evento.fraseSobres}</p>`) : ''}
     ${regalos.length && evento.lluviaDeSobres ? crudo('<p class="regalos__tambien">Si lo prefieren, también pueden hacerlo así:</p>') : ''}

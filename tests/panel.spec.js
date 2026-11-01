@@ -58,8 +58,8 @@ test('el panel lleva la paleta de la invitación y solo ajusta las secciones que
 
   await page.goto('/panel/app.html#mas');
   const opciones = page.locator('.mas__opcion-titulo');
-  await expect(opciones).toContainText(['Mensajes de sus invitados', 'Actividad reciente', 'Datos de su invitación', 'Exportar lista a Excel']);
-  await expect(opciones.filter({ hasText: 'Mesa de regalos' })).toHaveCount(0);
+  // Iris & Alex tiene mensajes y lluvia de sobres (sección regalos): las dos se ajustan aquí.
+  await expect(opciones).toContainText(['Mensajes de sus invitados', 'Actividad reciente', 'Mesa de regalos', 'Datos de su invitación', 'Exportar lista a Excel']);
 
   // Frase, vestimenta y canción se editan y llegan a la invitación.
   await page.goto('/panel/app.html#datos-evento');

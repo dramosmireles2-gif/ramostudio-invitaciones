@@ -87,7 +87,7 @@ test('todas las secciones con los datos del brief', async ({ page }) => {
   await page.goto(enlaceFamilia(codigoPrueba(), 'Familia Prueba Datos', 3));
   await abrirSobre(page);
   const secciones = await page.locator('#app > section').evaluateAll((s) => s.map((x) => x.dataset.seccion));
-  expect(secciones).toEqual(['portada', 'cuenta', 'frase', 'evento', 'calendario', 'vestimenta', 'foto', 'rsvp', 'mensajes', 'galeria', 'cancion', 'pie']);
+  expect(secciones).toEqual(['portada', 'cuenta', 'frase', 'evento', 'calendario', 'vestimenta', 'foto', 'rsvp', 'regalos', 'mensajes', 'galeria', 'cancion', 'pie']);
 
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Iris & Alex');
   await expect(page.locator('.portada__fecha')).toHaveText('Viernes 4 de diciembre de 2026');
@@ -131,8 +131,11 @@ test('todas las secciones con los datos del brief', async ({ page }) => {
   await expect(page.locator('.vestimenta')).toContainText('Formal');
   await expect(page.locator('.vestimenta')).toContainText('De negro');
   await expect(page.locator('.rsvp__limite')).toContainText('viernes 20 de noviembre de 2026');
-  // La clienta quitó la sección de regalos (31/10/2026).
-  await expect(page.locator('.regalos')).toHaveCount(0);
+  // Lluvia de sobres sí; sin transferencia ni tiendas (Amazon, Liverpool) (31/10/2026).
+  await expect(page.locator('.regalos .ev-titulo')).toHaveText('Lluvia de sobres');
+  await expect(page.locator('.regalos__frase')).toContainText('habrá una lluvia de sobres');
+  await expect(page.locator('.regalo')).toHaveCount(0);
+  await expect(page.locator('.regalos')).not.toContainText(/transferencia|CLABE|Liverpool|Amazon/i);
   await expect(page.locator(".galeria img")).toHaveCount(6);
   await expect(page.locator('.pie')).toContainText('Fotos: Dreams Studio by May Torres');
   await sinDesbordeHorizontal(page);

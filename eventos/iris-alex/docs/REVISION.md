@@ -247,3 +247,11 @@ completas. Solo quedan pendientes la base de datos y el dominio.
   Bodoni itálica, filete con rombo, fecha completa y ciudad. 90 KB.
 - Título "Iris & Alex · ¡Nos casamos!" y texto con fecha, ciudad y "Abran su invitación y
   confirmen su asistencia". La imagen lleva `?v=<hash>` para que WhatsApp no use la vieja.
+
+## Lluvia de sobres sin tiendas (31/10/2026)
+
+- La novia sí quiere la lluvia de sobres, sin transferencia ni Amazon ni Liverpool:
+  vuelve la sección `regalos` después de confirmar, solo con su frase; `regalos: []` en
+  evento.json y en Supabase. Encima, tres sobres a una línea con la solapa en pespunte
+  dorado (como el sobre de la apertura y el sombrero de la vestimenta).
+- Pendiente: la frase sigue siendo la propuesta 1 del brief; falta que la pareja la apruebe.

@@ -49,7 +49,7 @@ Solo los dos momentos de arriba. SUPUESTO: no se muestran horas de cena ni baile
 | Dato | Valor | Cómo se muestra |
 |---|---|---|
 | Vestimenta | Formal, negro | "Formal · Negro". Sin script, legible |
-| Regalos | **Sin sección de regalos** (la clienta la quitó el 31/10/2026) | Datos guardados en evento.json por si vuelve |
+| Regalos | **Solo lluvia de sobres** (31/10/2026): sin transferencia ni tiendas (Amazon, Liverpool) | Frase de lluvia de sobres con tres sobres dibujados |
 | Confirmar antes de | Viernes 20 de noviembre de 2026 | Fecha completa, sin script |
 | Niños | Sin restricción | No se escribe ninguna nota de niños |
 | Pases | Por familia | Los asigna la novia desde el panel |

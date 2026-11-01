@@ -130,6 +130,7 @@
         "vestimenta",
         "foto",
         "rsvp",
+        "regalos",
         "mensajes",
         "galeria",
         "cancion",
@@ -234,31 +235,6 @@
   "familias": [],
   "mesas": [],
   "mensajes": [],
-  "regalos": [
-    {
-      "id": "reg_ia_transferencia",
-      "eventoId": "evt_iris_alex",
-      "tipo": "transferencia",
-      "titulo": "Transferencia",
-      "detalle": "Banco: por confirmar · Titular: por confirmar · CLABE: por confirmar",
-      "url": null
-    },
-    {
-      "id": "reg_ia_liverpool",
-      "eventoId": "evt_iris_alex",
-      "tipo": "mesa",
-      "titulo": "Liverpool",
-      "detalle": "Número de evento: por confirmar",
-      "url": null
-    },
-    {
-      "id": "reg_ia_amazon",
-      "eventoId": "evt_iris_alex",
-      "tipo": "lista",
-      "titulo": "Amazon",
-      "detalle": "Lista de bodas: por confirmar",
-      "url": null
-    }
-  ],
+  "regalos": [],
   "actividad": []
 }
