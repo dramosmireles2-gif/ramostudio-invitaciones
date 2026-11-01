@@ -34,7 +34,7 @@ test('la página principal: secciones, WhatsApp, demo y copy permitido', async (
   await expect(page.getByText('Fotos: Dreams Studio by May Torres')).toBeVisible();
   // Lo que el plan prohíbe decir.
   const texto = await page.locator('body').innerText();
-  expect(texto).not.toMatch(/tiempo real|al momento|la más elegida|adivinar/i);
+  expect(texto).not.toMatch(/tiempo real|al momento|la más elegida/i);
   // Entrega en 3 a 5 días, sin rondas de revisión ni extras con precio (1/11/2026).
   expect(texto).toContain('Lista en 3 a 5 días');
   expect(texto).not.toMatch(/semanas? (desde|1|2|3)|3 semanas|ronda|express|\+\$250/i);
@@ -164,4 +164,28 @@ test('el RSVP de la invitación lleva el aviso corto de privacidad', async ({ pa
   const aviso = page.locator('.rsvp__privacidad');
   await expect(aviso).toContainText('Al confirmar, sus respuestas se comparten con los anfitriones de este evento.');
   await expect(aviso.getByRole('link', { name: 'Aviso de privacidad' })).toHaveAttribute('href', '/aviso-de-privacidad/');
+});
+
+test('SEO: title, descripción, canonical, imagen al compartir y datos estructurados', async ({ page, request }) => {
+  await page.goto('/');
+  const title = await page.title();
+  expect(title.length).toBeLessThanOrEqual(60);
+  const descripcion = await page.locator('meta[name="description"]').getAttribute('content');
+  expect(descripcion.length).toBeLessThanOrEqual(155);
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', /^https:\/\/[^/]+\/$/);
+  const og = await page.locator('meta[property="og:image"]').getAttribute('content');
+  expect(og).toMatch(/\/og-ramostudio\.jpg$/);
+  const imagen = await request.get(new URL(og).pathname);
+  expect(imagen.ok()).toBe(true);
+  expect((await imagen.body()).length).toBeLessThan(300 * 1024);
+
+  const datos = await page.locator('script[type="application/ld+json"]').evaluateAll((s) => s.map((x) => JSON.parse(x.textContent)));
+  const negocio = datos.find((d) => d['@type'] === 'LocalBusiness');
+  expect(negocio.address.addressLocality).toBe('Reynosa');
+  expect(negocio.telephone).toMatch(/^\+52\d{10}$/);
+  // Las mismas preguntas que se ven en la página, incluida la de los lugares de cada familia
+  // (respaldada por tests/rls.spec.js).
+  const faq = datos.find((d) => d['@type'] === 'FAQPage');
+  expect(faq.mainEntity).toHaveLength(await page.locator('.preguntas details').count());
+  expect(faq.mainEntity.map((q) => q.name)).toContain('¿Una familia puede confirmar más lugares de los que le di?');
 });

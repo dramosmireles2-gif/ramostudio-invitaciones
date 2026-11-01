@@ -1,6 +1,6 @@
 import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
-import { INVITE_BASE_URL, CLIENTES_BASE_URL, DEMO_EVENT_SLUG, baseUrlEvento } from './src/config.js';
+import { INVITE_BASE_URL, CLIENTES_BASE_URL, DEMO_EVENT_SLUG, WHATSAPP_NUMBER, baseUrlEvento } from './src/config.js';
 import { eventos } from './scripts/vite-eventos.js';
 import { sitio } from './scripts/vite-sitio.js';
 
@@ -28,7 +28,7 @@ export default defineConfig(({ mode }) => {
     plugins: [
       dominioEnHtml,
       eventos({ baseUrlEvento, demoSlug: DEMO_EVENT_SLUG, clientesBaseUrl: CLIENTES_BASE_URL }),
-      sitio({ baseUrl: INVITE_BASE_URL }),
+      sitio({ baseUrl: INVITE_BASE_URL, telefono: WHATSAPP_NUMBER }),
     ],
     build: {
       outDir: clientes ? 'dist-clientes' : 'dist',

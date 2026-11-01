@@ -62,3 +62,10 @@ muestra la invitación abriéndose.
   escritorio; sello de 72 px).
 - En celular, la invitación, el portafolio y los paquetes van en carrusel con puntos (la
   página pasó de 13,781 a 10,991 px de alto a 375).
+
+## Fase E
+- La pregunta "¿Una familia puede confirmar más lugares de los que le di?" se publica:
+  la respaldan las pruebas de `tests/rls.spec.js` (migraciones reales en PGlite).
+- Datos estructurados LocalBusiness (sin calle: negocio de área de servicio) y FAQPage
+  generados en el build desde las preguntas de la página (`scripts/vite-sitio.js`).
+- Vista previa propia `public/og-ramostudio.jpg` (1200x630, 60 KB, `npm run og:marca`).

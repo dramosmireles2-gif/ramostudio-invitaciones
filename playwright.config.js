@@ -3,7 +3,8 @@
 // guardan solo en el navegador de la prueba y nunca tocan Supabase.
 //   android: Chrome de un Android de gama media (Pixel 7).
 //   iphone:  Safari de iPhone (WebKit).
-//   escritorio: el panel de los novios en computadora.
+//   escritorio: el panel de los novios en computadora y la seguridad entre
+//               familias (tests/rls.spec.js: las migraciones en PGlite, sin navegador).
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
@@ -19,8 +20,8 @@ export default defineConfig({
     reuseExistingServer: false,
   },
   projects: [
-    { name: 'android', use: { ...devices['Pixel 7'] }, testIgnore: /panel/ },
-    { name: 'iphone', use: { ...devices['iPhone 13'] }, testIgnore: /panel/ },
-    { name: 'escritorio', use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } }, testMatch: /panel/ },
+    { name: 'android', use: { ...devices['Pixel 7'] }, testIgnore: /panel|rls/ },
+    { name: 'iphone', use: { ...devices['iPhone 13'] }, testIgnore: /panel|rls/ },
+    { name: 'escritorio', use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } }, testMatch: /panel|rls/ },
   ],
 });

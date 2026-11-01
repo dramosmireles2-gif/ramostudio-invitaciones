@@ -164,5 +164,9 @@ src/panel/views/           resumen, familias, mesas, mensajes, regalos, activida
   la foto, el sello, los nombres, la fecha y la ciudad del evento
 - `npm run portafolio [-- <slug>]`: capturas (390x844 a 3x) y video del sobre de cada
   invitación del portafolio de la web en `portafolio/<slug>/` (nunca confirma ni escribe)
+- `npm run og:marca`: arma `public/og-ramostudio.jpg` (vista previa de la web de marca)
 - `npm test`: pruebas de Playwright (`tests/`) en Android, iPhone y el panel en
-  computadora. Correrlas antes de mostrar o publicar una invitación.
+  computadora, más la seguridad entre familias (`tests/rls.spec.js`: las migraciones de
+  `supabase/migrations/` en PGlite, en memoria, sin tocar Supabase). Correrlas antes de
+  mostrar o publicar una invitación. El deploy (`.github/workflows/deploy.yml`) no
+  publica si fallan.
