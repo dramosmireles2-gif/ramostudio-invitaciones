@@ -5,13 +5,20 @@
 //   iphone:  Safari de iPhone (WebKit).
 //   escritorio: el panel de los novios en computadora y la seguridad entre
 //               familias (tests/rls.spec.js: las migraciones en PGlite, sin navegador).
+//
+// En GitHub Actions (CI): cada falla sale como anotación del job (se lee sin
+// iniciar sesión) y cada prueba tiene un reintento, porque la máquina es más
+// lenta y compartida. Lo que falla dos veces bloquea el deploy.
 import { defineConfig, devices } from '@playwright/test';
+
+const ci = !!process.env.CI;
 
 export default defineConfig({
   testDir: 'tests',
   timeout: 60_000,
   fullyParallel: true,
-  reporter: [['list']],
+  retries: ci ? 1 : 0,
+  reporter: ci ? [['list'], ['github']] : [['list']],
   use: { baseURL: 'http://localhost:5199', locale: 'es-MX', timezoneId: 'America/Matamoros' },
   webServer: {
     command: 'npm run dev -- --port 5199 --strictPort',
