@@ -54,7 +54,7 @@ Solo los dos momentos de arriba. SUPUESTO: no se muestran horas de cena ni baile
 | Niños | Sin restricción | No se escribe ninguna nota de niños |
 | Pases | Por familia | Los asigna la novia desde el panel |
 
-### Frase de lluvia de sobres (propuesta, la elige la pareja)
+### Frase de lluvia de sobres (aprobada: la 1, 31/10/2026)
 1. "Su compañía es nuestro mejor regalo. Si desean tener un detalle con nosotros, habrá
    una lluvia de sobres el día de la boda."
 2. "Lo más importante para nosotros es que nos acompañen. Si además quieren

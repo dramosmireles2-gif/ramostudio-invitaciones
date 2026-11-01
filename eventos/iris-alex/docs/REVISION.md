@@ -254,4 +254,4 @@ completas. Solo quedan pendientes la base de datos y el dominio.
   vuelve la sección `regalos` después de confirmar, solo con su frase; `regalos: []` en
   evento.json y en Supabase. Encima, tres sobres a una línea con la solapa en pespunte
   dorado (como el sobre de la apertura y el sombrero de la vestimenta).
-- Pendiente: la frase sigue siendo la propuesta 1 del brief; falta que la pareja la apruebe.
+- Frase aprobada por la novia (31/10/2026): la propuesta 1 del brief.
