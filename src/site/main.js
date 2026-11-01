@@ -2,16 +2,21 @@
 // archivo: wordmark, enlaces de WhatsApp (con ?src=, ver lib/origen.js), las
 // secciones que se apagan por ajuste, los videos y el botón flotante.
 import { WHATSAPP_NUMBER } from '../config.js';
-import { enlaceQuieroLaMia } from '../lib/links.js';
+import { enlaceCotizar } from '../lib/links.js';
 import { wordmark } from '../lib/ui.js';
 import { TESTIMONIOS_VISIBLES } from './ajustes.js';
+import { iniciarAnalitica, medirClics } from './analitica.js';
 
 const quieto = matchMedia('(prefers-reduced-motion: reduce)');
+
+iniciarAnalitica();
+medirClics();
 
 for (const el of document.querySelectorAll('[data-wordmark]')) {
   el.innerHTML = wordmark({ width: 176, tone: 'pizarra', tagline: false });
 }
-for (const a of document.querySelectorAll('[data-whatsapp]')) a.href = enlaceQuieroLaMia();
+// El mensaje lleva el paquete de la tarjeta (data-paquete) y el ?src= de la visita.
+for (const a of document.querySelectorAll('[data-whatsapp]')) a.href = enlaceCotizar(a.dataset.paquete);
 if (!TESTIMONIOS_VISIBLES) document.querySelector('[data-seccion="testimonios"]')?.remove();
 
 // 528148078309 → 814 807 8309 (sin lada de país).

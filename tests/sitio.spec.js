@@ -91,3 +91,57 @@ test('la invitación de muestra no pide ni muestra datos de invitados', async ({
   await expect(page.locator('.muestra')).toBeVisible();
   await sinDesbordeHorizontal(page);
 });
+
+// Texto del mensaje de WhatsApp de un enlace wa.me.
+const mensaje = (href) => decodeURIComponent(new URL(href).searchParams.get('text'));
+
+test('WhatsApp: mensaje de cotización, paquete y ?src= que se mantiene al navegar', async ({ page }) => {
+  await page.goto('/');
+  const general = mensaje(await page.locator('.hero [data-whatsapp]').getAttribute('href'));
+  expect(general).toBe('Hola, RamoStudio. Quiero cotizar una invitación digital.\nMi evento es: \nFecha: \n(Vengo de: web)');
+
+  await page.goto('/?src=ig-bio');
+  const completa = mensaje(await page.locator('[data-paquete="Completa"]').first().getAttribute('href'));
+  expect(completa).toContain('Me interesa el paquete Completa.');
+  expect(completa).toContain('(Vengo de: ig-bio)');
+  // Al pasar a otra página sin ?src=, el origen sigue siendo el de la entrada.
+  await page.goto('/terminos/');
+  expect(mensaje(await page.locator('main [data-whatsapp]').getAttribute('href'))).toContain('(Vengo de: ig-bio)');
+  await page.goto('/');
+  expect(mensaje(await page.locator('.cierre [data-whatsapp]').getAttribute('href'))).toContain('(Vengo de: ig-bio)');
+});
+
+test('medición apagada: sin IDs no se carga Google ni Meta', async ({ page }) => {
+  const terceros = [];
+  page.on('request', (r) => /googletagmanager|google-analytics|facebook\.net|facebook\.com\/tr/.test(r.url()) && terceros.push(r.url()));
+  await page.goto('/');
+  await page.locator('.hero [data-whatsapp]').evaluate((a) => a.addEventListener('click', (e) => e.preventDefault()));
+  await page.locator('.hero [data-whatsapp]').click();
+  await page.waitForTimeout(500);
+  expect(terceros).toEqual([]);
+  expect(await page.evaluate(() => [typeof window.gtag, typeof window.fbq])).toEqual(['undefined', 'undefined']);
+});
+
+test('legales: términos con lo decidido y aviso de privacidad en borrador', async ({ page }) => {
+  await page.goto('/terminos/');
+  const terminos = page.locator('main');
+  await expect(terminos).toContainText('anticipo del 50%');
+  await expect(terminos).toContainText('transferencia y depósito en OXXO');
+  await expect(terminos).toContainText('Hasta 3 meses después de tu evento');
+  await expect(terminos).toContainText('El anticipo no es reembolsable una vez que empezamos el diseño.');
+  await expect(terminos).not.toContainText(/FALTA|PROPUESTA/);
+  await expect(terminos.locator('[data-telefono]')).toHaveText(/^\d{3} \d{3} \d{4}$/);
+
+  await page.goto('/aviso-de-privacidad/');
+  expect(await page.content()).toContain('<!-- BORRADOR: pendiente de revisión legal -->');
+  // Los datos que faltan se ven a propósito; no se inventan.
+  expect(await page.locator('mark.falta').count()).toBeGreaterThan(0);
+  await expect(page.locator('main')).toContainText('Supabase (base de datos, con servidores en Estados Unidos)');
+});
+
+test('el RSVP de la invitación lleva el aviso corto de privacidad', async ({ page }) => {
+  await page.goto(`/${SLUG}/`);
+  const aviso = page.locator('.rsvp__privacidad');
+  await expect(aviso).toContainText('Al confirmar, sus respuestas se comparten con los anfitriones de este evento.');
+  await expect(aviso.getByRole('link', { name: 'Aviso de privacidad' })).toHaveAttribute('href', '/aviso-de-privacidad/');
+});

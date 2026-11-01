@@ -47,6 +47,6 @@ muestra la invitación abriéndose.
   enlace general.
 - La pregunta "¿Una familia puede confirmar más lugares…?" espera la prueba de RLS
   (Fase E).
-- El panel demo dice "se actualiza sola cada vez que alguien responde" (se ve, pequeño,
-  en la captura del panel). El plan pide no prometer actualización automática: conviene
-  cambiar ese texto del panel.
+- ~~El panel demo dice "se actualiza sola cada vez que alguien responde"~~ Corregido en la
+  Fase D: "vuelvan a abrirla para ver las respuestas nuevas" (la captura del panel en
+  portafolio/panel/ se actualiza con `npm run portafolio -- panel web`).

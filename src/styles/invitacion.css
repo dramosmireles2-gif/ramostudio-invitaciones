@@ -413,6 +413,9 @@ body.con-sobre { overflow: hidden; }
 .rsvp__paso:disabled { opacity: .3; cursor: default; }
 .rsvp__numero { font-family: var(--ev-font-title); font-size: 40px; color: var(--ev-text); }
 .rsvp__nota { font-size: 15px; color: var(--ev-text-2); }
+/* Aviso corto de privacidad (docs/web/plan-web.md, sección 7): discreto, pero legible. */
+.rsvp__privacidad { margin-top: 4px; font-size: 14px; line-height: 1.5; color: var(--ev-text-2); text-align: center; }
+.rsvp__privacidad a { color: inherit; text-decoration-color: var(--ev-accent); text-underline-offset: 3px; display: inline-block; padding-block: 4px; }
 .rsvp__gracias { font-family: var(--ev-font-title); font-size: 22px; }
 
 /* Mensajes para los novios ------------------------------------------------- */

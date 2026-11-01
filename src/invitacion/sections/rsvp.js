@@ -9,7 +9,7 @@
 //   los novios con el mensaje ya escrito ("Confirmamos 3 personas de la
 //   familia Hernández."). El invitado solo lo envía.
 import { fechaInvitacion } from '../../lib/fechas.js';
-import { enlaceWhatsApp } from '../../lib/links.js';
+import { enlaceWhatsApp, rutaAvisoPrivacidad } from '../../lib/links.js';
 import { html, crudo } from '../../lib/dom.js';
 
 const MAX_SIN_FAMILIA = 10;
@@ -75,6 +75,7 @@ export function montar(contenedor, { evento, familia, data }) {
       <button type="button" class="btn btn--quiet btn--full" data-no-asiste>No podremos asistir</button>
       ${porWhatsApp ? crudo('<p class="rsvp__nota">Se abre WhatsApp con el mensaje listo. Solo tienen que enviarlo.</p>') : ''}
       <p class="rsvp__gracias" role="status" tabindex="-1" hidden></p>
+      <p class="rsvp__privacidad">Al confirmar, sus respuestas se comparten con los anfitriones de este evento. <a href="${rutaAvisoPrivacidad(evento.slug)}" target="_blank" rel="noopener">Aviso de privacidad</a></p>
     </form>`;
 
   const form = contenedor.querySelector('form');

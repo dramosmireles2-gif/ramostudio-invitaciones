@@ -68,6 +68,27 @@ export function enlaceQuieroLaMia() {
   return enlaceWhatsApp(`Hola, vi el demo (${origenVisita()}) y quiero una invitación así`, WHATSAPP_NUMBER);
 }
 
+// "Cotiza por WhatsApp" de la web de marca: el mensaje de
+// docs/web/contenido-web-fase1.md (sección 4), con el paquete si viene de su
+// tarjeta y el origen de la visita.
+export function enlaceCotizar(paquete = '') {
+  const lineas = [
+    'Hola, RamoStudio. Quiero cotizar una invitación digital.',
+    ...(paquete ? [`Me interesa el paquete ${paquete}.`] : []),
+    'Mi evento es: ',
+    'Fecha: ',
+    `(Vengo de: ${origenVisita()})`,
+  ];
+  return enlaceWhatsApp(lineas.join('\n'), WHATSAPP_NUMBER);
+}
+
+// Aviso de privacidad de RamoStudio, para el aviso corto del RSVP. Relativo si
+// la invitación vive en el mismo dominio que la web; si no, con el dominio.
+export function rutaAvisoPrivacidad(slug) {
+  const ruta = '/aviso-de-privacidad/';
+  return baseUrlEvento(slug) === INVITE_BASE_URL ? ruta : new URL(ruta, INVITE_BASE_URL).toString();
+}
+
 // Para mostrar en textos de ayuda del panel.
 export const FORMATO_ENLACE = `${INVITE_BASE_URL}/<evento>/?f=<código>`;
 

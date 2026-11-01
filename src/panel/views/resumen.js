@@ -38,7 +38,7 @@ export async function montar(contenedor, ctx) {
   const aviso = tema.avisoContraste
     ? crudo(html`<p class="t-body resumen__aviso">El color de su evento no da contraste suficiente para un botón; usamos pizarra y lo dejamos en filetes y sello.</p>`)
     : '';
-  const intro = html`<p class="t-body">${saludo()}. Así va su lista hoy; se actualiza sola cada vez que alguien responde.</p>`;
+  const intro = html`<p class="t-body">${saludo()}. Así va su lista hoy; vuelvan a abrirla para ver las respuestas nuevas.</p>`;
 
   if (escritorio) {
     const recientes = await data.getActividad(evento.id, { limite: 4 });

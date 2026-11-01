@@ -227,7 +227,7 @@ test('todo el texto en color (acento incluido) se lee: contraste AA', async ({ p
       }
       return [245, 244, 240];
     };
-    const sel = '.ev-etiqueta, .field__label, .regalo__datos dt, .rsvp__limite, .portada__lugar, .sede__direccion, .cuenta__texto, .calendario__accion, .btn';
+    const sel = '.ev-etiqueta, .field__label, .regalo__datos dt, .rsvp__limite, .rsvp__privacidad, .portada__lugar, .sede__direccion, .cuenta__texto, .calendario__accion, .btn';
     return [...document.querySelectorAll(sel)].filter((el) => el.offsetParent).map((el) => {
       const [a, b] = [lum(rgb(getComputedStyle(el).color).slice(0, 3)), lum(fondo(el))];
       const r = (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
