@@ -2,6 +2,7 @@ import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 import { INVITE_BASE_URL, CLIENTES_BASE_URL, DEMO_EVENT_SLUG, baseUrlEvento } from './src/config.js';
 import { eventos } from './scripts/vite-eventos.js';
+import { sitio } from './scripts/vite-sitio.js';
 
 // Las metas del HTML (canonical, og:image) necesitan el dominio absoluto:
 // %INVITE_BASE_URL% se cambia por el de src/config.js, el único lugar donde vive.
@@ -24,12 +25,21 @@ export default defineConfig(({ mode }) => {
   const pagina = (ruta) => resolve(import.meta.dirname, ruta);
   return {
     base: '/',
-    plugins: [dominioEnHtml, eventos({ baseUrlEvento, demoSlug: DEMO_EVENT_SLUG, clientesBaseUrl: CLIENTES_BASE_URL })],
+    plugins: [
+      dominioEnHtml,
+      eventos({ baseUrlEvento, demoSlug: DEMO_EVENT_SLUG, clientesBaseUrl: CLIENTES_BASE_URL }),
+      sitio({ baseUrl: INVITE_BASE_URL }),
+    ],
     build: {
       outDir: clientes ? 'dist-clientes' : 'dist',
       rollupOptions: {
         input: {
-          ...(clientes ? {} : { main: pagina('index.html'), demo: pagina('demo/index.html') }),
+          ...(clientes ? {} : {
+            main: pagina('index.html'),
+            demo: pagina('demo/index.html'),
+            terminos: pagina('terminos/index.html'),
+            aviso: pagina('aviso-de-privacidad/index.html'),
+          }),
           invitacion: pagina('invitacion/index.html'),
           login: pagina('panel/index.html'),
           panel: pagina('panel/app.html'),

@@ -4,7 +4,7 @@
  *  - MARCA (fija, --rs-*): panel de novios, sitio y redes.
  *  - EVENTO (variable, --ev-*): sobre e invitación. :root trae el tema por
  *    defecto (marca); src/lib/theme.js escribe encima el tema de cada evento.
- * Las fuentes se declaran con @font-face en base.css (autoalojadas).
+ * Las fuentes se declaran con @font-face en fuentes.css (autoalojadas).
  */
 
 /* Color */

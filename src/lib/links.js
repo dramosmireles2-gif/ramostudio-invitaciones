@@ -73,8 +73,17 @@ export const FORMATO_ENLACE = `${INVITE_BASE_URL}/<evento>/?f=<código>`;
 
 // Lee el evento y ?f= de la URL actual. En /<slug>/ el evento viene en la
 // meta ramostudio:evento de la página; en /invitacion/ y /panel/, en ?e=.
+// ?muestra=1 es la invitación del portafolio (ver src/invitacion/main.js).
 export function leerParametros(search = location.search) {
   const p = new URLSearchParams(search);
   const pagina = document.querySelector('meta[name="ramostudio:evento"]')?.content;
-  return { slug: pagina ?? p.get('e'), codigo: p.get('f'), familia: leerDatosFamilia(p.get('d')) };
+  return {
+    slug: pagina ?? p.get('e'), codigo: p.get('f'), familia: leerDatosFamilia(p.get('d')),
+    muestra: p.get('muestra') === '1',
+  };
+}
+
+// Invitación en modo muestra, para el portafolio de la web de marca.
+export function rutaMuestra(slug) {
+  return `${rutaInvitacion(slug)}?muestra=1`;
 }

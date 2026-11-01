@@ -17,8 +17,12 @@ import { join, resolve } from 'node:path';
 
 const MARCA = '<!-- metas-evento -->';
 const OG_MAX_BYTES = 300 * 1024; // WhatsApp descarta vistas previas más pesadas.
-// Carpetas que ya existen en dist/: un evento no puede llamarse así.
-const RESERVADOS = new Set(['invitacion', 'panel', 'eventos', 'assets', 'fonts', 'demo', 'src']);
+// Carpetas que ya existen en dist/ y páginas de la web de marca (hechas o por
+// hacer, ver docs/web/plan-web.md): un evento no puede llamarse así.
+const RESERVADOS = new Set([
+  'invitacion', 'panel', 'eventos', 'assets', 'fonts', 'demo', 'src',
+  'terminos', 'aviso-de-privacidad', 'portafolio', 'bodas', 'xv-anos',
+]);
 
 const escapar = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 

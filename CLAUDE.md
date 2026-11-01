@@ -131,9 +131,14 @@ eventos/<slug>/            Una carpeta por evento:
 scripts/vite-eventos.js    Página /<slug>/ por evento y copia de fotos/ y og.jpg a dist/
 scripts/fotos.mjs          _originales/ → fotos/ (npm run fotos -- <slug>)
 scripts/og.mjs             og.jpg con el diseño del evento (npm run og -- <slug>)
-index.html                 Página de RamoStudio (provisional hasta hacer el sitio)
+scripts/vite-sitio.js      sitemap.xml y robots.txt (solo páginas de marca)
+docs/web/                  Plan de la web de marca (plan-web.md) y su contenido
+index.html                 Web de RamoStudio (se arma por fases, ver docs/web/plan-web.md)
+terminos/, aviso-de-privacidad/  Legales de la web
+src/site/                  Web de marca: main.js, ajustes.js, site.css (solo tokens y fuentes)
 demo/index.html            Portada del demo (enlaces a invitación y panel)
-invitacion/index.html      Invitación (plantilla de /<slug>/; respaldo ?e=<slug>&f=<codigo>)
+invitacion/index.html      Invitación (plantilla de /<slug>/; respaldo ?e=<slug>&f=<codigo>;
+                           ?muestra=1 = portafolio: sin RSVP, mensajes ni familia)
 panel/index.html           Login simulado
 panel/app.html             Panel de novios
 public/fonts/              Fuentes autoalojadas

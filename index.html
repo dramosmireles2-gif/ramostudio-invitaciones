@@ -18,30 +18,43 @@
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
-    <link rel="stylesheet" href="/src/styles/base.css" />
-    <link rel="stylesheet" href="/src/styles/entrada.css" />
+    <link rel="stylesheet" href="/src/site/site.css" />
   </head>
-  <!-- Página provisional de RamoStudio mientras se hace el sitio (con su brief).
-       El demo vive en /demo/ y cada evento en /<slug>/. -->
-  <body class="entrada">
-    <main class="entrada__columna">
-      <header class="entrada__marca" data-wordmark></header>
+  <!-- Web de RamoStudio (docs/web/plan-web.md). Las secciones con hidden se
+       construyen en la Fase C; hasta entonces solo se ven el hero y el pie. -->
+  <body class="sitio">
+    <header class="sitio__cabeza sitio__columna">
+      <a href="/" aria-label="RamoStudio, inicio" data-wordmark></a>
+    </header>
 
-      <section class="entrada__hoja" aria-labelledby="inicio-titulo">
-        <div class="label">Muy pronto, nuestro sitio</div>
-        <h1 class="entrada__titulo" id="inicio-titulo">Invitaciones digitales para bodas, XV años y eventos</h1>
-        <p class="t-body">Con confirmación de asistencia por familia y un panel para que los anfitriones vean quién viene, acomoden sus mesas y manden recordatorios.</p>
-        <div class="gold-rule gold-rule--ornament entrada__filete" role="separator"><span class="gold-rule__rombo"></span></div>
-        <div class="entrada__botones">
-          <a class="btn btn--lg btn--full" href="/demo/">Ver un ejemplo</a>
-          <a class="btn btn--secondary btn--lg btn--full" href="#" target="_blank" rel="noopener" data-whatsapp>Escríbenos por WhatsApp</a>
+    <main class="sitio__columna">
+      <section class="sitio__hero" data-seccion="hero" aria-labelledby="hero-titulo">
+        <h1 class="sitio__titulo" id="hero-titulo">Tus invitados confirman en un toque. Tú ves quién va, sin preguntar.</h1>
+        <div class="sitio__botones">
+          <a class="sitio__boton" href="/demo/">Prueba el demo</a>
+          <a class="sitio__boton sitio__boton--secundario" href="#" target="_blank" rel="noopener" data-whatsapp>Cotiza por WhatsApp</a>
         </div>
       </section>
 
-      <footer class="entrada__pie">
-        <p class="t-meta">RamoStudio · Invitaciones digitales</p>
-      </footer>
+      <section data-seccion="problema" id="problema" hidden></section>
+      <section data-seccion="como-funciona" id="como-funciona" hidden></section>
+      <section data-seccion="invitacion" id="invitacion" hidden></section>
+      <section data-seccion="panel" id="panel" hidden></section>
+      <section data-seccion="portafolio" id="portafolio" hidden></section>
+      <section data-seccion="paquetes" id="paquetes" hidden></section>
+      <section data-seccion="proceso" id="proceso" hidden></section>
+      <section data-seccion="testimonios" id="testimonios" hidden></section>
+      <section data-seccion="preguntas" id="preguntas" hidden></section>
+      <section data-seccion="contacto" id="contacto" hidden></section>
     </main>
-    <script type="module" src="/src/inicio.js"></script>
+
+    <footer class="sitio__pie sitio__columna">
+      <nav aria-label="Legales">
+        <a href="/terminos/">Términos y condiciones</a>
+        <a href="/aviso-de-privacidad/">Aviso de privacidad</a>
+      </nav>
+      <p>RamoStudio · Hechas en Reynosa, para todo México.</p>
+    </footer>
+    <script type="module" src="/src/site/main.js"></script>
   </body>
 </html>

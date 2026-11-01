@@ -1,0 +1,49 @@
+/* Web de marca de RamoStudio. Separada de la invitación y del panel: comparte
+   solo los tokens de marca (--rs-*) y las fuentes. Celular primero (375px). */
+@import '../styles/tokens.css';
+@import '../styles/fuentes.css';
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; min-height: 100dvh;
+  background: var(--rs-crema); color: var(--rs-pizarra);
+  font-family: var(--font-sans); font-size: var(--fs-body); line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 { font-family: var(--font-serif); font-weight: 400; line-height: var(--lh-snug); color: var(--rs-tinta); margin: 0; }
+p { margin: 0; }
+img, svg, video { display: block; max-width: 100%; }
+:focus-visible { outline: 2px solid var(--rs-pizarra); outline-offset: 3px; }
+
+.sitio__columna { max-width: 1120px; margin: 0 auto; padding: 0 var(--gutter-mobile); }
+
+.sitio__cabeza { padding: var(--sp-5) 0; }
+.sitio__cabeza a { display: inline-block; }
+
+.sitio__hero { padding: var(--sp-7) 0 var(--sp-8); display: flex; flex-direction: column; gap: var(--sp-5); }
+.sitio__titulo { font-size: var(--fs-h1); line-height: var(--lh-tight); text-wrap: balance; max-width: 18ch; }
+.sitio__botones { display: flex; flex-direction: column; gap: var(--sp-3); max-width: 420px; }
+
+.sitio__boton {
+  min-height: var(--tap-min); padding: 0 var(--sp-5); border-radius: var(--radius-pill);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-weight: var(--fw-semibold); font-size: var(--fs-body); text-decoration: none;
+  background: var(--rs-pizarra); color: var(--rs-crema); border: 1.5px solid var(--rs-pizarra);
+}
+.sitio__boton--secundario { background: transparent; color: var(--rs-pizarra); }
+
+.sitio__legal { padding: var(--sp-6) 0 var(--sp-8); max-width: 68ch; display: flex; flex-direction: column; gap: var(--sp-4); }
+
+.sitio__pie { border-top: var(--rule-hair); padding: var(--sp-6) 0 calc(var(--sp-6) + env(safe-area-inset-bottom, 0px)); font-size: var(--fs-small); }
+.sitio__pie nav { display: flex; flex-wrap: wrap; gap: var(--sp-3) var(--sp-5); margin-bottom: var(--sp-3); }
+.sitio__pie a { color: var(--rs-pizarra); text-underline-offset: 3px; }
+
+@media (min-width: 900px) {
+  .sitio__botones { flex-direction: row; }
+  .sitio__titulo { font-size: var(--fs-display); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

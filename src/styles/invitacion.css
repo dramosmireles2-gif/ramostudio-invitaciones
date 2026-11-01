@@ -33,6 +33,15 @@ body.con-sobre { overflow: hidden; }
   background: var(--ev-accent); transform: scaleX(0); transform-origin: 0 50%;
 }
 
+/* Modo muestra (?muestra=1, ver main.js): franja discreta arriba, encima del sobre. */
+.muestra {
+  position: fixed; top: calc(10px + env(safe-area-inset-top, 0px)); left: 50%; transform: translateX(-50%);
+  z-index: 21; pointer-events: none; white-space: nowrap;
+  padding: 5px 14px; border-radius: 999px;
+  background: var(--ev-band); color: var(--ev-on-band);
+  font-family: var(--ev-font-data); font-size: 12px; letter-spacing: .06em;
+}
+
 /* Botón de música (ver musica.js): sello pequeño abajo a la derecha. */
 .musica {
   position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 20;

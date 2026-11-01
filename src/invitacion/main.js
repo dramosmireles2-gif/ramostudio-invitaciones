@@ -24,7 +24,17 @@ import * as pie from './sections/pie.js';
 // Cada evento elige sus secciones y su orden en evento.secciones.
 const SECCIONES = { portada, cuenta, frase, cancion, evento, calendario, vestimenta, foto, rsvp, regalos, galeria, mensajes, pie };
 const POR_DEFECTO = ['portada', 'cuenta', 'evento', 'calendario', 'vestimenta', 'rsvp', 'regalos', 'mensajes', 'pie'];
+// Modo muestra (?muestra=1, portafolio de la web): la misma invitación sin lo
+// que escribe o muestra datos de los invitados.
+const FUERA_DE_MUESTRA = new Set(['rsvp', 'mensajes']);
 const app = document.getElementById('app');
+
+function montarFranjaMuestra() {
+  const franja = document.createElement('p');
+  franja.className = 'muestra';
+  franja.textContent = 'Invitación de muestra · RamoStudio';
+  document.body.append(franja);
+}
 
 // La familia del enlace personal (?f=, con &d= en eventos reales). Un código
 // que no se encuentra no rompe la invitación: se ve la versión general.
@@ -42,15 +52,17 @@ async function buscarFamilia(ev, codigo, enlace) {
 }
 
 async function iniciar() {
-  const { slug, codigo, familia: enlace } = leerParametros();
+  const { slug, codigo, familia: enlace, muestra } = leerParametros();
   const ev = await data.getEvento(slug || DEMO_EVENT_SLUG);
   aplicarTema(ev.tema);
   montarFondo(ev.tema);
   document.title = `${ev.titulo} · Invitación`;
 
-  const familia = await buscarFamilia(ev, codigo, enlace);
+  // En muestra no se busca familia: tampoco se registra la apertura.
+  const familia = muestra ? null : await buscarFamilia(ev, codigo, enlace);
   const musica = crearMusica(ev.musica ?? {});
-  const ctx = { evento: ev, familia, musica, data };
+  const ctx = { evento: ev, familia, musica, data, muestra };
+  if (muestra) montarFranjaMuestra();
 
   // Las secciones se montan desde el principio, debajo del sobre: así el sobre
   // se abre sobre la invitación ya lista y el reproductor de la canción ya
@@ -59,7 +71,7 @@ async function iniciar() {
   app.innerHTML = '';
   for (const nombre of ev.secciones ?? POR_DEFECTO) {
     const s = SECCIONES[nombre];
-    if (!s) continue;
+    if (!s || (muestra && FUERA_DE_MUESTRA.has(nombre))) continue;
     const nodo = document.createElement('section');
     nodo.dataset.seccion = nombre;
     app.append(nodo);

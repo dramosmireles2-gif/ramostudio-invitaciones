@@ -49,8 +49,9 @@ function mesa(r) {
   </article>`;
 }
 
-export async function montar(contenedor, { evento, data }) {
-  const regalos = await data.getRegalos(evento.id);
+export async function montar(contenedor, { evento, data, muestra }) {
+  // En la invitación de muestra (portafolio público) no van cuentas de banco.
+  const regalos = (await data.getRegalos(evento.id)).filter((r) => !(muestra && r.tipo === 'transferencia'));
   if (!evento.lluviaDeSobres && !regalos.length) return contenedor.remove();
   const cuentas = regalos.filter((r) => r.tipo === 'transferencia');
   const tiendas = regalos.filter((r) => r.tipo !== 'transferencia');
