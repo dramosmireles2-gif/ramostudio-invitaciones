@@ -20,8 +20,10 @@ publica.
 ## Dominio
 
 - **Un solo sitio: `ramostudio.com.mx`** (comprado en Namecheap el 31/10/2026), publicado
-  desde este repo con GitHub Pages (`npm run build` → `dist/`): el demo en
-  `/mariana-diego/` y cada boda en `/<slug>/` (Iris & Alex en `ramostudio.com.mx/iris-alex/`).
+  desde este repo con GitHub Pages (`npm run build` → `dist/`): en la raíz la página web
+  de RamoStudio (hoy provisional, `index.html`; el sitio completo se hará aquí mismo), la
+  portada del demo en `/demo/` (`demo/index.html`), su invitación en `/mariana-diego/` y
+  cada boda en `/<slug>/` (Iris & Alex en `ramostudio.com.mx/iris-alex/`).
   `INVITE_BASE_URL` y `CLIENTES_BASE_URL` son el mismo dominio.
   - Si algún día los clientes van en otro dominio, cambiar `CLIENTES_BASE_URL`: los sitios
     se separan solos (`npm run build:clientes` → `dist-clientes/`, sin los datos del demo)
@@ -129,7 +131,8 @@ eventos/<slug>/            Una carpeta por evento:
 scripts/vite-eventos.js    Página /<slug>/ por evento y copia de fotos/ y og.jpg a dist/
 scripts/fotos.mjs          _originales/ → fotos/ (npm run fotos -- <slug>)
 scripts/og.mjs             og.jpg con el diseño del evento (npm run og -- <slug>)
-index.html                 Portada de la demo (enlaces a invitación y panel)
+index.html                 Página de RamoStudio (provisional hasta hacer el sitio)
+demo/index.html            Portada del demo (enlaces a invitación y panel)
 invitacion/index.html      Invitación (plantilla de /<slug>/; respaldo ?e=<slug>&f=<codigo>)
 panel/index.html           Login simulado
 panel/app.html             Panel de novios

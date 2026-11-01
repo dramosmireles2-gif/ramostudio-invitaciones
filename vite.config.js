@@ -16,7 +16,8 @@ const dominioEnHtml = {
 // Dos sitios desde este repo (ver scripts/vite-eventos.js):
 //   vite build                  → dist/          demo (y hoy también los clientes: un solo sitio)
 //   vite build --mode clientes  → dist-clientes/ eventos reales (CLIENTES_BASE_URL)
-// El sitio de clientes no lleva la portada del demo.
+// La raíz es la página de RamoStudio y /demo/ la portada del demo; el sitio de
+// clientes (si algún día va aparte) no lleva ninguna de las dos.
 // Cada sitio usa un dominio propio, así que base es la raíz.
 export default defineConfig(({ mode }) => {
   const clientes = mode === 'clientes';
@@ -28,7 +29,7 @@ export default defineConfig(({ mode }) => {
       outDir: clientes ? 'dist-clientes' : 'dist',
       rollupOptions: {
         input: {
-          ...(clientes ? {} : { main: pagina('index.html') }),
+          ...(clientes ? {} : { main: pagina('index.html'), demo: pagina('demo/index.html') }),
           invitacion: pagina('invitacion/index.html'),
           login: pagina('panel/index.html'),
           panel: pagina('panel/app.html'),

@@ -4,50 +4,44 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#F4EFE9" />
-    <title>Así se ve tu invitación digital · RamoStudio</title>
-    <meta name="description" content="Mira por dentro una invitación digital de RamoStudio: el panel con el que los novios ven quién confirmó, acomodan sus mesas y mandan recordatorios por WhatsApp. Demo con datos de ejemplo." />
+    <title>RamoStudio · Invitaciones digitales</title>
+    <meta name="description" content="RamoStudio: invitaciones digitales para bodas, XV años y eventos, con confirmación de asistencia y panel para los anfitriones." />
     <link rel="canonical" href="%INVITE_BASE_URL%/" />
-    <!-- Vista previa al compartir el enlace (WhatsApp, Facebook). La imagen pesa menos de 300 KB. -->
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_MX" />
     <meta property="og:site_name" content="RamoStudio" />
-    <meta property="og:title" content="Así se ve tu invitación digital · RamoStudio" />
-    <meta property="og:description" content="Entra al panel de los novios: confirmaciones, mesas y recordatorios por WhatsApp. Demo con datos de ejemplo." />
+    <meta property="og:title" content="RamoStudio · Invitaciones digitales" />
+    <meta property="og:description" content="Invitaciones digitales para bodas, XV años y eventos. Mira un ejemplo." />
     <meta property="og:url" content="%INVITE_BASE_URL%/" />
     <meta property="og:image" content="%INVITE_BASE_URL%/eventos/%DEMO_EVENT_SLUG%/og.jpg" />
     <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="RamoStudio · Así se ve tu invitación digital" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="stylesheet" href="/src/styles/base.css" />
     <link rel="stylesheet" href="/src/styles/entrada.css" />
   </head>
+  <!-- Página provisional de RamoStudio mientras se hace el sitio (con su brief).
+       El demo vive en /demo/ y cada evento en /<slug>/. -->
   <body class="entrada">
     <main class="entrada__columna">
       <header class="entrada__marca" data-wordmark></header>
 
-      <section class="entrada__hoja" aria-labelledby="entrada-titulo">
-        <div class="label">Demo · Datos de ejemplo</div>
-        <h1 class="entrada__titulo" id="entrada-titulo">Así se ve tu invitación digital</h1>
-        <p class="t-body">Abre la invitación como la recibiría una familia y entra al panel con el que los novios ven quién ya confirmó, acomodan sus mesas y mandan recordatorios por WhatsApp. Puedes mover lo que quieras: nada es real.</p>
+      <section class="entrada__hoja" aria-labelledby="inicio-titulo">
+        <div class="label">Muy pronto, nuestro sitio</div>
+        <h1 class="entrada__titulo" id="inicio-titulo">Invitaciones digitales para bodas, XV años y eventos</h1>
+        <p class="t-body">Con confirmación de asistencia por familia y un panel para que los anfitriones vean quién viene, acomoden sus mesas y manden recordatorios.</p>
         <div class="gold-rule gold-rule--ornament entrada__filete" role="separator"><span class="gold-rule__rombo"></span></div>
         <div class="entrada__botones">
-          <a class="btn btn--lg btn--full" href="/panel/" data-panel>Ver el panel de los novios</a>
-          <a class="btn btn--secondary btn--lg btn--full" href="#" data-invitacion>Ver la invitación</a>
+          <a class="btn btn--lg btn--full" href="/demo/">Ver un ejemplo</a>
+          <a class="btn btn--secondary btn--lg btn--full" href="#" target="_blank" rel="noopener" data-whatsapp>Escríbenos por WhatsApp</a>
         </div>
       </section>
 
-      <section class="entrada__cta" aria-labelledby="entrada-cta">
-        <h2 class="entrada__cta-titulo" id="entrada-cta">¿Te casas o preparas unos XV?</h2>
-        <p class="entrada__cta-texto">Escríbenos por WhatsApp y te contamos cómo hacemos la tuya.</p>
-        <a class="btn btn--lg btn--full entrada__whatsapp" href="#" target="_blank" rel="noopener" data-whatsapp>Quiero la mía</a>
-      </section>
-
       <footer class="entrada__pie">
-        <p class="t-meta">RamoStudio · Invitaciones digitales para bodas, XV años y eventos.</p>
+        <p class="t-meta">RamoStudio · Invitaciones digitales</p>
       </footer>
     </main>
-    <script type="module" src="/src/home.js"></script>
+    <script type="module" src="/src/inicio.js"></script>
   </body>
 </html>

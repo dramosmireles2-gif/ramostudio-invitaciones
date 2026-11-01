@@ -1,4 +1,4 @@
-/* Página de entrada de la demo (raíz del sitio). Celular primero. */
+/* Páginas de entrada (raíz de RamoStudio y portada del demo en /demo/). Celular primero. */
 .entrada__columna {
   min-height: 100vh; min-height: 100svh;
   max-width: 480px; margin: 0 auto;
