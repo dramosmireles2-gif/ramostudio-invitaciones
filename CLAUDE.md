@@ -132,6 +132,8 @@ scripts/vite-eventos.js    Página /<slug>/ por evento y copia de fotos/ y og.jp
 scripts/fotos.mjs          _originales/ → fotos/ (npm run fotos -- <slug>)
 scripts/og.mjs             og.jpg con el diseño del evento (npm run og -- <slug>)
 scripts/vite-sitio.js      sitemap.xml y robots.txt (solo páginas de marca)
+scripts/portafolio.mjs     Material del portafolio (npm run portafolio)
+portafolio/<slug>/         Capturas, video del sobre e info.json de cada invitación del portafolio
 docs/web/                  Plan de la web de marca (plan-web.md) y su contenido
 index.html                 Web de RamoStudio (se arma por fases, ver docs/web/plan-web.md)
 terminos/, aviso-de-privacidad/  Legales de la web
@@ -160,5 +162,7 @@ src/panel/views/           resumen, familias, mesas, mensajes, regalos, activida
 - `npm run fotos -- <slug>`: optimiza `eventos/<slug>/_originales/` a `fotos/`
 - `npm run og -- <slug> [--foto <nombre>]`: arma `og.jpg` (vista previa de WhatsApp) con
   la foto, el sello, los nombres, la fecha y la ciudad del evento
+- `npm run portafolio [-- <slug>]`: capturas (390x844 a 3x) y video del sobre de cada
+  invitación del portafolio de la web en `portafolio/<slug>/` (nunca confirma ni escribe)
 - `npm test`: pruebas de Playwright (`tests/`) en Android, iPhone y el panel en
   computadora. Correrlas antes de mostrar o publicar una invitación.
