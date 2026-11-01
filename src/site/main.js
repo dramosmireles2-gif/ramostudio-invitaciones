@@ -50,6 +50,37 @@ for (const boton of document.querySelectorAll('[data-ver-apertura]')) {
   });
 }
 
+// Carruseles (solo en celular, ver .carrusel en site.css): un punto por pieza,
+// marcado el que está a la vista; tocarlo lleva a esa pieza.
+for (const carrusel of document.querySelectorAll('[data-carrusel]')) {
+  const piezas = [...carrusel.children];
+  const puntos = document.createElement('div');
+  puntos.className = 'carrusel__puntos';
+  puntos.setAttribute('role', 'group');
+  puntos.setAttribute('aria-label', `${carrusel.getAttribute('aria-label') ?? 'Carrusel'}: elegir`);
+  const botones = piezas.map((pieza, i) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'carrusel__punto';
+    b.setAttribute('aria-label', `Ver ${pieza.querySelector('h3')?.textContent ?? i + 1}`);
+    b.setAttribute('aria-current', String(i === 0));
+    b.addEventListener('click', () => carrusel.scrollTo({
+      left: pieza.offsetLeft - piezas[0].offsetLeft, behavior: quieto.matches ? 'auto' : 'smooth',
+    }));
+    puntos.append(b);
+    return b;
+  });
+  carrusel.after(puntos);
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entradas) => {
+      for (const e of entradas) {
+        if (e.isIntersecting) botones.forEach((b, i) => b.setAttribute('aria-current', String(piezas[i] === e.target)));
+      }
+    }, { root: carrusel, threshold: 0.6 });
+    for (const p of piezas) io.observe(p);
+  }
+}
+
 // Botón flotante: se esconde mientras se ve otro botón de WhatsApp (no lo tapa)
 // o el hero (que ya tiene los suyos).
 const flotante = document.querySelector('[data-flotante]');

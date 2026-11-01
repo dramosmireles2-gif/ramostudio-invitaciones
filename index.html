@@ -46,7 +46,7 @@
             <a class="boton" href="/demo/" data-demo>Prueba el demo</a>
             <a class="boton boton--contorno" href="#" target="_blank" rel="noopener" data-whatsapp>Cotiza por WhatsApp</a>
           </div>
-          <p class="hero__confianza">Desde $800 MXN <span aria-hidden="true">·</span> Lista en 3 semanas <span aria-hidden="true">·</span> Para bodas, XV años y más</p>
+          <p class="hero__confianza">Desde $800 MXN <span aria-hidden="true">·</span> Lista en 3 a 5 días <span aria-hidden="true">·</span> Para bodas, XV años y más</p>
         </div>
         <div class="hero__pieza">
           <div class="cel cel--hero">
@@ -104,7 +104,7 @@
           <h2 id="invitacion-titulo">Lo que ven tus invitados</h2>
           <p class="bajada">La abren desde WhatsApp, sin descargar nada.</p>
         </div>
-        <ul class="galeria-cel" aria-label="Pantallas de una invitación de ejemplo">
+        <ul class="galeria-cel carrusel" data-carrusel aria-label="Pantallas de una invitación de ejemplo">
           <li class="galeria-cel__item">
             <div class="cel">
               <picture>
@@ -197,7 +197,7 @@
         <p class="etiqueta"><span>05</span> Portafolio</p>
         <h2 id="portafolio-titulo">Invitaciones reales</h2>
         <p class="bajada">Cada una diseñada para su pareja, con su lugar, sus colores y sus fotos.</p>
-        <ul class="portafolio__lista">
+        <ul class="portafolio__lista carrusel" data-carrusel aria-label="Invitaciones del portafolio">
           <li class="obra">
             <div class="cel" data-obra-video="/portafolio/iris-alex/sobre.mp4">
               <picture>
@@ -252,8 +252,8 @@
           <h2 id="paquetes-titulo">Elige tu invitación</h2>
           <p class="bajada">Todos incluyen confirmación por familia y tu panel. Precio fijo, sin letras chiquitas.</p>
 
-          <!-- Celular: tres hojas. Escritorio: la tabla de abajo. -->
-          <div class="paquetes__hojas">
+          <!-- Celular: tres hojas en carrusel. Escritorio: la tabla de abajo. -->
+          <div class="paquetes__hojas carrusel" data-carrusel aria-label="Paquetes">
             <article class="hoja paquete" aria-labelledby="p-esencial">
               <h3 id="p-esencial">Esencial</h3>
               <p class="paquete__precio">$800 <span>MXN</span></p>
@@ -265,7 +265,7 @@
                 <li>Confirmación por familia con número de pases y enlace propio</li>
                 <li>Panel con confirmaciones y recordatorios por WhatsApp</li>
               </ul>
-              <p class="paquete__datos">1 ronda de revisión · Lista en 3 semanas</p>
+              <p class="paquete__datos">Lista en 3 a 5 días</p>
               <a class="boton boton--contorno" href="#" target="_blank" rel="noopener" data-whatsapp data-paquete="Esencial">Cotiza la Esencial</a>
             </article>
             <article class="hoja paquete paquete--destacado" aria-labelledby="p-completa">
@@ -277,7 +277,7 @@
                 <li>Música, galería de fotos y mensajes para los novios</li>
                 <li>Mesas persona por persona, grupos y exportar a Excel</li>
               </ul>
-              <p class="paquete__datos">2 rondas de revisión · Lista en 3 semanas</p>
+              <p class="paquete__datos">Lista en 3 a 5 días</p>
               <a class="boton boton--crema" href="#" target="_blank" rel="noopener" data-whatsapp data-paquete="Completa">Cotiza la Completa</a>
             </article>
             <article class="hoja paquete" aria-labelledby="p-premium">
@@ -287,7 +287,7 @@
               <ul class="paquete__incluye">
                 <li>Diseño 100% a medida: apertura, paleta, tipografía y monograma propios, hechos solo para tu evento</li>
               </ul>
-              <p class="paquete__datos">3 rondas de revisión · Lista en 3 semanas</p>
+              <p class="paquete__datos">Lista en 3 a 5 días</p>
               <a class="boton boton--contorno" href="#" target="_blank" rel="noopener" data-whatsapp data-paquete="Premium">Cotiza la Premium</a>
             </article>
           </div>
@@ -313,8 +313,7 @@
                 <tr><th scope="row">Música, galería de fotos y mensajes para los novios</th><td><span aria-label="No incluye">—</span></td><td class="col-destacada">✓</td><td>✓</td></tr>
                 <tr><th scope="row">Mesas persona por persona, grupos y exportar a Excel</th><td><span aria-label="No incluye">—</span></td><td class="col-destacada">✓</td><td>✓</td></tr>
                 <tr><th scope="row">Diseño 100% a medida: apertura, paleta, tipografía y monograma propios</th><td><span aria-label="No incluye">—</span></td><td class="col-destacada"><span aria-label="No incluye">—</span></td><td>✓</td></tr>
-                <tr><th scope="row">Rondas de revisión</th><td>1</td><td class="col-destacada">2</td><td>3</td></tr>
-                <tr><th scope="row">Tiempo de entrega</th><td>3 semanas</td><td class="col-destacada">3 semanas</td><td>3 semanas</td></tr>
+                <tr><th scope="row">Tiempo de entrega</th><td>3 a 5 días</td><td class="col-destacada">3 a 5 días</td><td>3 a 5 días</td></tr>
               </tbody>
               <tfoot>
                 <tr>
@@ -328,12 +327,7 @@
           </div>
 
           <div class="extras">
-            <h3>Extras</h3>
-            <dl class="extras__lista">
-              <div><dt>Entrega express, en menos de 1 semana</dt><dd>+$250</dd></div>
-              <div><dt>Página de “Gracias” después del evento, con foto y mensaje</dt><dd>+$250</dd></div>
-              <div><dt>Cambio de un dato después de la entrega (hora, dirección, frase o foto)</dt><dd>$100</dd></div>
-            </dl>
+            <p class="extras__cambio">Cambio de un dato después de la entrega (hora, dirección, frase o foto): con costo extra.</p>
             <p class="extras__nota">Sin límite de invitados. Tu invitación sigue en línea 3 meses después de tu evento.</p>
             <p class="extras__distinto">¿Necesitas algo distinto? <a href="#" target="_blank" rel="noopener" data-whatsapp>Escríbenos y lo armamos</a>.</p>
           </div>
@@ -344,13 +338,12 @@
       <section class="seccion columna proceso" id="proceso" data-seccion="proceso" aria-labelledby="proceso-titulo">
         <p class="etiqueta"><span>07</span> Proceso y tiempos</p>
         <h2 id="proceso-titulo">Cuándo pedirla</h2>
-        <p class="proceso__texto">Tu invitación queda lista en <strong>3 semanas</strong> desde que nos mandas todo. Te recomendamos contratarla <strong>6 a 8 semanas antes de tu evento</strong>, para que tus invitados la tengan con tiempo y tú alcances a ver las confirmaciones.</p>
+        <p class="proceso__texto">Tu invitación queda lista en <strong>3 a 5 días</strong> desde que nos mandas todo. Lo ideal es que tus invitados la reciban <strong>6 a 8 semanas antes de tu evento</strong>, para que la tengan con tiempo y tú alcances a ver las confirmaciones.</p>
         <ol class="regla">
-          <li><span class="regla__semana">Semana 1</span> Nos mandas datos y fotos; te enseñamos la primera versión.</li>
-          <li><span class="regla__semana">Semana 2</span> Revisas y nos pides cambios (1, 2 o 3 rondas, según tu paquete).</li>
-          <li><span class="regla__semana">Semana 3</span> La aprobamos, te damos tu panel y empiezas a compartirla.</li>
+          <li><span class="regla__semana">Día 1</span> Nos mandas tus datos y fotos por WhatsApp.</li>
+          <li><span class="regla__semana">Días 2 y 3</span> Te enseñamos la primera versión, la revisas y nos pides cambios.</li>
+          <li><span class="regla__semana">Días 4 y 5</span> La aprobamos, te damos tu panel y empiezas a compartirla.</li>
         </ol>
-        <p class="proceso__tarde"><strong>¿Vas tarde?</strong> Tenemos entrega express en menos de una semana, según agenda.</p>
       </section>
 
       <!-- 9. Testimonios: apagado por ajuste (src/site/ajustes.js) hasta tener testimonios reales con permiso. -->
@@ -379,11 +372,11 @@
           </details>
           <details>
             <summary>¿Qué pasa si cambia la hora o el lugar?</summary>
-            <p>Durante tus rondas de revisión, los cambios van incluidos. Después de la entrega, cada cambio de dato cuesta $100 y todos tus invitados ven la versión nueva en el mismo enlace.</p>
+            <p>Antes de aprobarla, los cambios van incluidos. Después de la entrega, cada cambio de dato tiene un costo extra y todos tus invitados ven la versión nueva en el mismo enlace.</p>
           </details>
           <details>
             <summary>¿Cuánto tarda?</summary>
-            <p>3 semanas desde que nos mandas tus datos y fotos. Si tu evento está cerca, pregunta por la entrega express en menos de una semana.</p>
+            <p>De 3 a 5 días desde que nos mandas tus datos y fotos.</p>
           </details>
           <details>
             <summary>¿Cuánto tiempo sigue en línea?</summary>

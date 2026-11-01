@@ -39,7 +39,7 @@ en las pruebas.
 
 ## Secciones
 1. **Hero.** Celular: wordmark, H1, subtítulo, dos botones (pizarra lleno / contorno),
-   línea de confianza "Desde $800 MXN · Lista en 3 semanas · Para bodas, XV años y más",
+   línea de confianza "Desde $800 MXN · Lista en 3 a 5 días · Para bodas, XV años y más",
    y debajo el celular con el **video del sobre** (demo, en loop, sin sonido, poster).
    Escritorio: texto 7 columnas, celular 5.
 2. **El problema.** El título grande como cita ("¿Cuántos van? Nadie sabe."), el párrafo y
@@ -58,7 +58,7 @@ en las pruebas.
    "La que más recomendamos" en crema. Escritorio: tabla con la columna Completa en pizarra.
    ✓ y — tipográficos (no íconos). Extras y "¿Necesitas algo distinto?" debajo. En Premium
    se explica "a medida": apertura, paleta, tipografía y monograma propios.
-8. **Proceso y tiempos.** Línea de 3 semanas como regla con marcas (Semana 1, 2, 3) y la
+8. **Proceso y tiempos.** Línea de 3 a 5 días como regla con marcas (Día 1, Días 2 y 3, Días 4 y 5) y la
    recomendación de 6 a 8 semanas; "¿Vas tarde?" con express.
 9. **Testimonios.** Componente listo, apagado (`TESTIMONIOS_VISIBLES = false`).
 10. **Preguntas frecuentes.** `<details>` nativos (teclado y lector de pantalla sin JS),

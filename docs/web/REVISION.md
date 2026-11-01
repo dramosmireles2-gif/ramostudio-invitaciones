@@ -50,3 +50,15 @@ muestra la invitación abriéndose.
 - ~~El panel demo dice "se actualiza sola cada vez que alguien responde"~~ Corregido en la
   Fase D: "vuelvan a abrirla para ver las respuestas nuevas" (la captura del panel en
   portafolio/panel/ se actualiza con `npm run portafolio -- panel web`).
+
+## Cambios de David (1 de noviembre de 2026)
+- Entrega en **3 a 5 días** (antes 3 semanas): hero, tarjetas y tabla de paquetes,
+  proceso (Día 1 · Días 2 y 3 · Días 4 y 5), preguntas frecuentes y términos. Sin entrega
+  express.
+- Paquetes sin rondas de revisión. Sin extras: debajo de los paquetes solo "Cambio de un
+  dato después de la entrega (hora, dirección, frase o foto): con costo extra". Los
+  términos siguen diciendo $100 por cambio.
+- Banda "Cuéntanos de tu evento" más compacta (48 px arriba y abajo en celular, 72 px en
+  escritorio; sello de 72 px).
+- En celular, la invitación, el portafolio y los paquetes van en carrusel con puntos (la
+  página pasó de 13,781 a 10,991 px de alto a 375).

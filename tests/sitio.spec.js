@@ -35,6 +35,10 @@ test('la página principal: secciones, WhatsApp, demo y copy permitido', async (
   // Lo que el plan prohíbe decir.
   const texto = await page.locator('body').innerText();
   expect(texto).not.toMatch(/tiempo real|al momento|la más elegida|adivinar/i);
+  // Entrega en 3 a 5 días, sin rondas de revisión ni extras con precio (1/11/2026).
+  expect(texto).toContain('Lista en 3 a 5 días');
+  expect(texto).not.toMatch(/semanas? (desde|1|2|3)|3 semanas|ronda|express|\+\$250/i);
+  await expect(page.locator('.extras__cambio')).toContainText('con costo extra');
   // Las imágenes debajo del hero cargan diferidas y con medidas (sin saltos).
   for (const img of await page.locator('main img').all()) {
     await expect(img).toHaveAttribute('loading', 'lazy');
@@ -59,6 +63,19 @@ test('el botón flotante no tapa los otros botones de WhatsApp', async ({ page }
   await expect(flotante).not.toHaveAttribute('data-oculto');
   await page.locator('.cierre .boton').scrollIntoViewIfNeeded();
   await expect(flotante).toHaveAttribute('data-oculto', '');
+});
+
+test('en celular, la invitación, el portafolio y los paquetes van en carrusel con puntos', async ({ page }) => {
+  await page.goto('/');
+  const paquetes = page.locator('.paquetes__hojas');
+  await expect(paquetes).toHaveCSS('overflow-x', 'auto');
+  const puntos = page.locator('.paquetes__hojas + .carrusel__puntos button');
+  await expect(puntos).toHaveCount(3);
+  await expect(page.locator('.carrusel__puntos')).toHaveCount(3);
+  await puntos.nth(1).click();
+  await expect(puntos.nth(1)).toHaveAttribute('aria-current', 'true');
+  await expect.poll(() => paquetes.evaluate((c) => c.scrollLeft)).toBeGreaterThan(100);
+  await sinDesbordeHorizontal(page);
 });
 
 test('portafolio: "Ver cómo se abre" pone el video en el marco', async ({ page }) => {
