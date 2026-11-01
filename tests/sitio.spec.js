@@ -134,9 +134,12 @@ test('legales: términos con lo decidido y aviso de privacidad en borrador', asy
 
   await page.goto('/aviso-de-privacidad/');
   expect(await page.content()).toContain('<!-- BORRADOR: pendiente de revisión legal -->');
-  // Los datos que faltan se ven a propósito; no se inventan.
-  expect(await page.locator('mark.falta').count()).toBeGreaterThan(0);
-  await expect(page.locator('main')).toContainText('Supabase (base de datos, con servidores en Estados Unidos)');
+  const aviso = page.locator('main');
+  await expect(aviso).not.toContainText(/FALTA|PROPUESTA/);
+  await expect(aviso).toContainText('David Eduardo Ramos Mireles');
+  await expect(aviso).toContainText('Última actualización: 1 de noviembre de 2026.');
+  await expect(aviso.getByRole('link', { name: 'ramostudiomx@gmail.com' }).first()).toHaveAttribute('href', 'mailto:ramostudiomx@gmail.com');
+  await expect(aviso).toContainText('Supabase (base de datos, con servidores en Estados Unidos)');
 });
 
 test('el RSVP de la invitación lleva el aviso corto de privacidad', async ({ page }) => {

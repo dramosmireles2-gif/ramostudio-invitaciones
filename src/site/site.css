@@ -313,10 +313,7 @@ a { color: inherit; text-underline-offset: 4px; text-decoration-thickness: 1px; 
 .legal__intro { font-size: 18px; }
 .legal__lista { display: grid; gap: 8px; padding-left: 20px; list-style: disc; }
 .legal__lista li::marker { color: var(--rs-pizarra); }
-.legal a { text-decoration-color: var(--rs-dorado); }
-/* Dato pendiente del aviso de privacidad: visible a propósito hasta resolverlo. */
-.falta { background: var(--rs-vino-velo); color: var(--rs-vino); padding: 0 4px; border-radius: 3px; }
-@media (min-width: 900px) { .legal h1 { font-size: 52px; } .legal h2 { font-size: 28px; } }
+.legal a { text-decoration-color: var(--rs-dorado); }@media (min-width: 900px) { .legal h1 { font-size: 52px; } .legal h2 { font-size: 28px; } }
 .pie--legal { border-top: var(--rule-hair); padding-bottom: calc(56px + env(safe-area-inset-bottom, 0px)); }
 .pie--legal .pie__legal { display: flex; flex-wrap: wrap; gap: 0 24px; }
 
