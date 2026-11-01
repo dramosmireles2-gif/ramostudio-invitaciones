@@ -1,6 +1,6 @@
 // La invitación de Iris & Alex en celular (Android y iPhone).
 import { test, expect } from '@playwright/test';
-import { SLUG, enlaceFamilia, codigoPrueba, abrirSobre, sinDesbordeHorizontal } from './ayudas.js';
+import { SLUG, enlaceFamilia, codigoPrueba, abrirSobre, sinDesbordeHorizontal, simularYouTube } from './ayudas.js';
 
 const CAPTURAS = 'test-results/capturas';
 
@@ -277,6 +277,7 @@ test('fondo de sombras: se mueve, casi transparente y no estorba los toques', as
 });
 
 test('música: arranca sola al abrir el sobre (video oficial de YouTube al final), se silencia y se recuerda', async ({ page }) => {
+  await simularYouTube(page);
   await page.goto(`/${SLUG}/`);
   // El reproductor oficial está en "Nuestra canción", a la vista (lo pide YouTube).
   const cancion = page.locator('.cancion');
@@ -289,11 +290,15 @@ test('música: arranca sola al abrir el sobre (video oficial de YouTube al final
   await expect(cancion.locator('iframe')).toHaveAttribute('src', /youtube-nocookie\.com\/embed\/rtOvBOTyX00/, { timeout: 15_000 });
   // Nunca suena antes del sello y no hay botón.
   await expect(page.locator('.musica')).toHaveCount(0);
+  expect(await page.evaluate(() => window.__youtube.play)).toBe(0);
   await abrirSobre(page);
+  // El toque del sello pidió reproducir.
+  expect(await page.evaluate(() => window.__youtube.play)).toBeGreaterThan(0);
   const boton = page.getByRole('button', { name: 'Silenciar música' });
   await expect(boton).toBeVisible();
   await boton.click();
   await expect(page.getByRole('button', { name: 'Activar música' })).toHaveAttribute('aria-pressed', 'false');
+  expect(await page.evaluate(() => window.__youtube.pause)).toBeGreaterThan(0);
   // La elección se respeta en la siguiente visita.
   await page.reload();
   await abrirSobre(page);

@@ -33,6 +33,37 @@ export async function entrarAlPanel(page) {
   await page.waitForURL('**/panel/app.html**');
 }
 
+// Reproductor de YouTube simulado: la prueba no depende de que YouTube deje
+// reproducir desde la máquina de pruebas (en GitHub Actions lo bloquea y el
+// botón de música se esconde, como debe ser si el video no está disponible).
+// Imita lo que usa src/invitacion/sections/musica.js y cuenta en
+// window.__youtube cuántas veces se pidió reproducir y pausar.
+const YOUTUBE_SIMULADO = `
+  window.__youtube = { play: 0, pause: 0 };
+  window.YT = {
+    PlayerState: { ENDED: 0, PLAYING: 1, PAUSED: 2 },
+    Player: class {
+      constructor(lugar, o) {
+        const f = document.createElement('iframe');
+        f.src = o.host + '/embed/' + o.videoId;
+        lugar.replaceWith(f);
+        this.o = o;
+        setTimeout(() => o.events.onReady({ target: this }), 50);
+      }
+      playVideo() { window.__youtube.play++; setTimeout(() => this.o.events.onStateChange({ data: 1 })); }
+      pauseVideo() { window.__youtube.pause++; setTimeout(() => this.o.events.onStateChange({ data: 2 })); }
+      seekTo() {}
+      isMuted() { return false; }
+    },
+  };
+  window.onYouTubeIframeAPIReady?.();
+`;
+
+export async function simularYouTube(page) {
+  await page.route('https://www.youtube.com/iframe_api', (r) => r.fulfill({ contentType: 'text/javascript', body: YOUTUBE_SIMULADO }));
+  await page.route(/youtube-nocookie\.com\/embed\//, (r) => r.fulfill({ contentType: 'text/html', body: '<!doctype html><title>Video</title>' }));
+}
+
 // Nada más ancho que la pantalla (sin scroll horizontal).
 export async function sinDesbordeHorizontal(page) {
   const ancho = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
