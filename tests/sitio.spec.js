@@ -181,6 +181,12 @@ test('SEO: title, descripción, canonical, imagen al compartir y datos estructur
   expect(imagen.ok()).toBe(true);
   expect((await imagen.body()).length).toBeLessThan(300 * 1024);
 
+  // Icono de la pestaña (sello "rs") y el de iPhone.
+  for (const sel of ['link[rel="icon"][sizes="32x32"]', 'link[rel="apple-touch-icon"]']) {
+    const href = await page.locator(sel).getAttribute('href');
+    expect((await request.get(href)).headers()['content-type'], sel).toContain('image/png');
+  }
+
   const datos = await page.locator('script[type="application/ld+json"]').evaluateAll((s) => s.map((x) => JSON.parse(x.textContent)));
   const negocio = datos.find((d) => d['@type'] === 'LocalBusiness');
   expect(negocio.address.addressLocality).toBe('Reynosa');

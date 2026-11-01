@@ -12,7 +12,8 @@
     "build:clientes": "vite build --mode clientes && node scripts/revisar-dist.mjs dist-clientes",
     "test": "playwright test",
     "portafolio": "node scripts/portafolio.mjs",
-    "og:marca": "node scripts/og-marca.mjs"
+    "og:marca": "node scripts/og-marca.mjs",
+    "iconos": "node scripts/iconos.mjs"
   },
   "devDependencies": {
     "@electric-sql/pglite": "^0.5.14",
