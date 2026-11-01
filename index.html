@@ -4,57 +4,449 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#F4EFE9" />
-    <title>RamoStudio · Invitaciones digitales</title>
-    <meta name="description" content="RamoStudio: invitaciones digitales para bodas, XV años y eventos, con confirmación de asistencia y panel para los anfitriones." />
+    <title>Invitaciones digitales con confirmación · RamoStudio</title>
+    <meta name="description" content="Invitaciones digitales para bodas y XV años con confirmación por familia y un panel para ver quién va. Hechas en Reynosa. Desde $800. Prueba el demo." />
     <link rel="canonical" href="%INVITE_BASE_URL%/" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_MX" />
     <meta property="og:site_name" content="RamoStudio" />
-    <meta property="og:title" content="RamoStudio · Invitaciones digitales" />
-    <meta property="og:description" content="Invitaciones digitales para bodas, XV años y eventos. Mira un ejemplo." />
+    <meta property="og:title" content="Invitaciones digitales con confirmación · RamoStudio" />
+    <meta property="og:description" content="Tus invitados confirman en un toque. Tú ves quién va, sin preguntar. Prueba el demo." />
     <meta property="og:url" content="%INVITE_BASE_URL%/" />
     <meta property="og:image" content="%INVITE_BASE_URL%/eventos/%DEMO_EVENT_SLUG%/og.jpg" />
     <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preload" href="/fonts/PlayfairDisplay-Regular.ttf" as="font" type="font/ttf" crossorigin />
     <link rel="stylesheet" href="/src/site/site.css" />
   </head>
-  <!-- Web de RamoStudio (docs/web/plan-web.md). Las secciones con hidden se
-       construyen en la Fase C; hasta entonces solo se ven el hero y el pie. -->
+  <!-- Web de RamoStudio. Diseño: docs/web/DESIGN.md · textos: docs/web/contenido-web-fase1.md -->
   <body class="sitio">
-    <header class="sitio__cabeza sitio__columna">
-      <a href="/" aria-label="RamoStudio, inicio" data-wordmark></a>
+    <a class="saltar" href="#contenido">Saltar al contenido</a>
+
+    <header class="cabeza">
+      <div class="columna cabeza__fila">
+        <a href="/" class="cabeza__marca" aria-label="RamoStudio, inicio" data-wordmark></a>
+        <nav class="cabeza__nav" aria-label="Secciones">
+          <a href="#paquetes">Paquetes</a>
+          <a href="#preguntas">Preguntas</a>
+          <a href="/demo/">Demo</a>
+        </nav>
+      </div>
     </header>
 
-    <main class="sitio__columna">
-      <section class="sitio__hero" data-seccion="hero" aria-labelledby="hero-titulo">
-        <h1 class="sitio__titulo" id="hero-titulo">Tus invitados confirman en un toque. Tú ves quién va, sin preguntar.</h1>
-        <div class="sitio__botones">
-          <a class="sitio__boton" href="/demo/">Prueba el demo</a>
-          <a class="sitio__boton sitio__boton--secundario" href="#" target="_blank" rel="noopener" data-whatsapp>Cotiza por WhatsApp</a>
+    <main id="contenido">
+      <!-- 1. Hero -->
+      <section class="hero columna" data-seccion="hero" aria-labelledby="hero-titulo">
+        <div class="hero__texto">
+          <h1 class="hero__titulo" id="hero-titulo">Tus invitados confirman en un toque. <em>Tú ves quién va,</em> sin preguntar.</h1>
+          <p class="hero__sub">Invitaciones digitales para bodas y XV años, con confirmación por familia y un panel donde ves cuántos van, sin perseguir a nadie. Hechas en Reynosa.</p>
+          <div class="botones">
+            <a class="boton" href="/demo/" data-demo>Prueba el demo</a>
+            <a class="boton boton--contorno" href="#" target="_blank" rel="noopener" data-whatsapp>Cotiza por WhatsApp</a>
+          </div>
+          <p class="hero__confianza">Desde $800 MXN <span aria-hidden="true">·</span> Lista en 3 semanas <span aria-hidden="true">·</span> Para bodas, XV años y más</p>
+        </div>
+        <div class="hero__pieza">
+          <div class="cel cel--hero">
+            <video class="cel__pantalla" muted loop playsinline preload="metadata" width="540" height="1168"
+              poster="/portafolio/mariana-diego/sobre-poster.jpg" aria-label="Una invitación de ejemplo: el sobre se abre al tocar el sello" data-hero-video>
+              <source src="/portafolio/mariana-diego/sobre.mp4" type="video/mp4" />
+            </video>
+          </div>
+          <p class="pieza__nota">Demo: Mariana &amp; Diego, datos de ejemplo.</p>
         </div>
       </section>
 
-      <section data-seccion="problema" id="problema" hidden></section>
-      <section data-seccion="como-funciona" id="como-funciona" hidden></section>
-      <section data-seccion="invitacion" id="invitacion" hidden></section>
-      <section data-seccion="panel" id="panel" hidden></section>
-      <section data-seccion="portafolio" id="portafolio" hidden></section>
-      <section data-seccion="paquetes" id="paquetes" hidden></section>
-      <section data-seccion="proceso" id="proceso" hidden></section>
-      <section data-seccion="testimonios" id="testimonios" hidden></section>
-      <section data-seccion="preguntas" id="preguntas" hidden></section>
-      <section data-seccion="contacto" id="contacto" hidden></section>
+      <!-- 2. El problema -->
+      <section class="seccion columna problema" id="problema" data-seccion="problema" aria-labelledby="problema-titulo">
+        <p class="etiqueta"><span>01</span> El problema</p>
+        <h2 class="problema__titulo" id="problema-titulo">¿Cuántos van? <em>Nadie sabe.</em></h2>
+        <p class="problema__texto">Mandas la invitación, unos contestan con un pulgar arriba, otros “ahí te aviso” y la mitad no dice nada. A dos semanas, el salón te pide el número final.</p>
+        <ol class="lista-filete problema__dolores">
+          <li><strong>Persigues confirmaciones uno por uno.</strong> Mensajes, llamadas y la tía que “ya le había dicho a tu mamá”.</li>
+          <li><strong>No sabes cuántos platillos pagar.</strong> Y cada lugar vacío o de más sale de tu bolsa.</li>
+          <li><strong>Los datos se pierden en el chat.</strong> La dirección, la hora y el código de vestimenta, enterrados entre stickers.</li>
+        </ol>
+      </section>
+
+      <!-- 3. Cómo funciona -->
+      <section class="seccion columna pasos" id="como-funciona" data-seccion="como-funciona" aria-labelledby="pasos-titulo">
+        <p class="etiqueta"><span>02</span> Cómo funciona</p>
+        <h2 id="pasos-titulo">Así de fácil</h2>
+        <ol class="pasos__lista">
+          <li class="paso">
+            <span class="paso__num" aria-hidden="true">1</span>
+            <h3>Nos mandas tus datos y fotos.</h3>
+            <p>Por WhatsApp: fecha, lugares, horarios y tus fotos favoritas.</p>
+          </li>
+          <li class="paso">
+            <span class="paso__num" aria-hidden="true">2</span>
+            <h3>Diseñamos tu invitación.</h3>
+            <p>La revisas, nos pides cambios y la aprobamos juntos.</p>
+          </li>
+          <li class="paso">
+            <span class="paso__num" aria-hidden="true">3</span>
+            <h3>Tus invitados confirman y tú lo ves.</h3>
+            <p>Cada familia recibe su enlace, confirma cuántos van y aparece en tu panel.</p>
+          </li>
+        </ol>
+        <div class="botones">
+          <a class="boton" href="#" target="_blank" rel="noopener" data-whatsapp>Cotiza por WhatsApp</a>
+        </div>
+      </section>
+
+      <!-- 4. La invitación -->
+      <section class="seccion invitacion" id="invitacion" data-seccion="invitacion" aria-labelledby="invitacion-titulo">
+        <div class="columna">
+          <p class="etiqueta"><span>03</span> La invitación</p>
+          <h2 id="invitacion-titulo">Lo que ven tus invitados</h2>
+          <p class="bajada">La abren desde WhatsApp, sin descargar nada.</p>
+        </div>
+        <ul class="galeria-cel" aria-label="Pantallas de una invitación de ejemplo">
+          <li class="galeria-cel__item">
+            <div class="cel">
+              <picture>
+                <source srcset="/portafolio/mariana-diego/01-sobre-600.avif" type="image/avif" />
+                <source srcset="/portafolio/mariana-diego/01-sobre-600.webp" type="image/webp" />
+                <img class="cel__pantalla" src="/portafolio/mariana-diego/01-sobre-600.jpg" width="600" height="1298" loading="lazy" alt="El sobre cerrado, con el sello y el nombre de la familia invitada" />
+              </picture>
+            </div>
+            <h3>El sobre</h3>
+            <p>Se abre con un toque al sello, como una invitación de papel. La música empieza solo cuando lo tocan, nunca de golpe.</p>
+          </li>
+          <li class="galeria-cel__item">
+            <div class="cel">
+              <picture>
+                <source srcset="/portafolio/mariana-diego/02-portada-600.avif" type="image/avif" />
+                <source srcset="/portafolio/mariana-diego/02-portada-600.webp" type="image/webp" />
+                <img class="cel__pantalla" src="/portafolio/mariana-diego/02-portada-600.jpg" width="600" height="1298" loading="lazy" alt="La portada con la foto de la pareja, sus nombres y la fecha" />
+              </picture>
+            </div>
+            <h3>La portada</h3>
+            <p>Su foto, sus nombres y cuántos días faltan.</p>
+          </li>
+          <li class="galeria-cel__item">
+            <div class="cel">
+              <picture>
+                <source srcset="/portafolio/mariana-diego/04-confirmacion-600.avif" type="image/avif" />
+                <source srcset="/portafolio/mariana-diego/04-confirmacion-600.webp" type="image/webp" />
+                <img class="cel__pantalla" src="/portafolio/mariana-diego/04-confirmacion-600.jpg" width="600" height="1298" loading="lazy" alt="La confirmación de asistencia de una familia, con sus lugares reservados" />
+              </picture>
+            </div>
+            <h3>La confirmación</h3>
+            <p>Cada familia ve sus pases y confirma en segundos.</p>
+          </li>
+          <li class="galeria-cel__item">
+            <div class="cel">
+              <picture>
+                <source srcset="/portafolio/mariana-diego/03-seccion-600.avif" type="image/avif" />
+                <source srcset="/portafolio/mariana-diego/03-seccion-600.webp" type="image/webp" />
+                <img class="cel__pantalla" src="/portafolio/mariana-diego/03-seccion-600.jpg" width="600" height="1298" loading="lazy" alt="Ceremonia y recepción, con botones para llegar con Google Maps o Waze" />
+              </picture>
+            </div>
+            <h3>Los mapas</h3>
+            <p>Un toque y llegan con Google Maps o Waze. Y agregan la fecha a su calendario para que no se les olvide.</p>
+          </li>
+        </ul>
+        <div class="columna botones">
+          <a class="boton" href="/demo/" data-demo>Prueba el demo</a>
+        </div>
+      </section>
+
+      <!-- 5. El panel -->
+      <section class="seccion panel" id="panel" data-seccion="panel" aria-labelledby="panel-titulo">
+        <div class="columna panel__rejilla">
+          <div class="panel__texto">
+            <p class="etiqueta"><span>04</span> El panel</p>
+            <h2 id="panel-titulo">Tu lista de invitados, <em>por fin</em> en orden</h2>
+            <p class="bajada">Lo que ninguna invitación en papel te da: saber quién va sin preguntar.</p>
+            <ul class="lista-filete">
+              <li><strong>Quién confirmó y quién falta.</strong> En cuanto una familia responde, lo ves en tu panel.</li>
+              <li><strong>Recordatorios en un toque.</strong> Le mandas un mensaje amable por WhatsApp solo a quien no ha contestado.</li>
+              <li><strong>Mesas persona por persona.</strong> Sientas a cada invitado y agrupas por familia, amigos o trabajo.</li>
+              <li><strong>Tu lista en Excel.</strong> Para el salón, el banquete o tu planner.</li>
+            </ul>
+            <div class="botones">
+              <a class="boton" href="/panel/" data-panel-demo>Pruébalo tú</a>
+            </div>
+            <p class="nota">Es un demo con datos de ejemplo. Lo que muevas solo se ve en tu celular.</p>
+          </div>
+          <div class="panel__piezas">
+            <div class="cel">
+              <picture>
+                <source srcset="/portafolio/panel/01-resumen-600.avif" type="image/avif" />
+                <source srcset="/portafolio/panel/01-resumen-600.webp" type="image/webp" />
+                <img class="cel__pantalla" src="/portafolio/panel/01-resumen-600.jpg" width="600" height="1298" loading="lazy" alt="Resumen del panel: personas confirmadas, pendientes y que no asisten" />
+              </picture>
+            </div>
+            <div class="cel">
+              <picture>
+                <source srcset="/portafolio/panel/02-familias-600.avif" type="image/avif" />
+                <source srcset="/portafolio/panel/02-familias-600.webp" type="image/webp" />
+                <img class="cel__pantalla" src="/portafolio/panel/02-familias-600.jpg" width="600" height="1298" loading="lazy" alt="Lista de familias invitadas con sus pases y si ya confirmaron" />
+              </picture>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Portafolio -->
+      <section class="seccion columna portafolio" id="portafolio" data-seccion="portafolio" aria-labelledby="portafolio-titulo">
+        <p class="etiqueta"><span>05</span> Portafolio</p>
+        <h2 id="portafolio-titulo">Invitaciones reales</h2>
+        <p class="bajada">Cada una diseñada para su pareja, con su lugar, sus colores y sus fotos.</p>
+        <ul class="portafolio__lista">
+          <li class="obra">
+            <div class="cel" data-obra-video="/portafolio/iris-alex/sobre.mp4">
+              <picture>
+                <source srcset="/portafolio/iris-alex/02-portada-600.avif" type="image/avif" />
+                <source srcset="/portafolio/iris-alex/02-portada-600.webp" type="image/webp" />
+                <img class="cel__pantalla" src="/portafolio/iris-alex/02-portada-600.jpg" width="600" height="1298" loading="lazy" alt="Portada de la invitación de Iris y Alex, en blanco y negro con sombreros vaqueros" />
+              </picture>
+            </div>
+            <h3>Iris &amp; Alex</h3>
+            <p class="obra__datos">Boda · Reynosa · Diciembre 2026</p>
+            <p class="obra__credito">Fotos: Dreams Studio by May Torres</p>
+            <div class="obra__acciones">
+              <button type="button" class="enlace" data-ver-apertura>Ver cómo se abre</button>
+              <a class="enlace" href="/iris-alex/?muestra=1" target="_blank" rel="noopener">Ver invitación</a>
+            </div>
+          </li>
+          <li class="obra">
+            <div class="cel" data-obra-video="/portafolio/eunice-edher/sobre.mp4">
+              <picture>
+                <source srcset="/portafolio/eunice-edher/02-portada-600.avif" type="image/avif" />
+                <source srcset="/portafolio/eunice-edher/02-portada-600.webp" type="image/webp" />
+                <img class="cel__pantalla" src="/portafolio/eunice-edher/02-portada-600.jpg" width="600" height="1298" loading="lazy" alt="Portada de la invitación de Eunice y Edher, con luces navideñas" />
+              </picture>
+            </div>
+            <h3>Eunice &amp; Edher</h3>
+            <p class="obra__datos">Boda · Córdoba, Veracruz · Diciembre 2026</p>
+            <div class="obra__acciones">
+              <button type="button" class="enlace" data-ver-apertura>Ver cómo se abre</button>
+            </div>
+          </li>
+          <li class="obra">
+            <div class="cel" data-obra-video="/portafolio/ivan-gemima/sobre.mp4">
+              <picture>
+                <source srcset="/portafolio/ivan-gemima/02-portada-600.avif" type="image/avif" />
+                <source srcset="/portafolio/ivan-gemima/02-portada-600.webp" type="image/webp" />
+                <img class="cel__pantalla" src="/portafolio/ivan-gemima/02-portada-600.jpg" width="600" height="1298" loading="lazy" alt="Portada de la invitación de Iván y Gemima, en blanco y negro detrás de un velo" />
+              </picture>
+            </div>
+            <h3>Iván &amp; Gemima</h3>
+            <p class="obra__datos">Boda · San Nicolás de los Garza · Agosto 2026</p>
+            <div class="obra__acciones">
+              <button type="button" class="enlace" data-ver-apertura>Ver cómo se abre</button>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <!-- 7. Paquetes -->
+      <section class="seccion paquetes" id="paquetes" data-seccion="paquetes" aria-labelledby="paquetes-titulo">
+        <div class="columna">
+          <p class="etiqueta"><span>06</span> Paquetes</p>
+          <h2 id="paquetes-titulo">Elige tu invitación</h2>
+          <p class="bajada">Todos incluyen confirmación por familia y tu panel. Precio fijo, sin letras chiquitas.</p>
+
+          <!-- Celular: tres hojas. Escritorio: la tabla de abajo. -->
+          <div class="paquetes__hojas">
+            <article class="hoja paquete" aria-labelledby="p-esencial">
+              <h3 id="p-esencial">Esencial</h3>
+              <p class="paquete__precio">$800 <span>MXN</span></p>
+              <ul class="paquete__incluye">
+                <li>Sobre animado con sello y portada con su foto</li>
+                <li>Fecha, cuenta regresiva y “agregar al calendario”</li>
+                <li>Ceremonia y recepción con mapa, Google Maps y Waze</li>
+                <li>Código de vestimenta y mesa de regalos o lluvia de sobres</li>
+                <li>Confirmación por familia con número de pases y enlace propio</li>
+                <li>Panel con confirmaciones y recordatorios por WhatsApp</li>
+              </ul>
+              <p class="paquete__datos">1 ronda de revisión · Lista en 3 semanas</p>
+              <a class="boton boton--contorno" href="#" target="_blank" rel="noopener" data-whatsapp data-paquete="Esencial">Cotiza la Esencial</a>
+            </article>
+            <article class="hoja paquete paquete--destacado" aria-labelledby="p-completa">
+              <p class="paquete__sello">La que más recomendamos</p>
+              <h3 id="p-completa">Completa</h3>
+              <p class="paquete__precio">$1,200 <span>MXN</span></p>
+              <p class="paquete__base">Todo lo de la Esencial, más:</p>
+              <ul class="paquete__incluye">
+                <li>Música, galería de fotos y mensajes para los novios</li>
+                <li>Mesas persona por persona, grupos y exportar a Excel</li>
+              </ul>
+              <p class="paquete__datos">2 rondas de revisión · Lista en 3 semanas</p>
+              <a class="boton boton--crema" href="#" target="_blank" rel="noopener" data-whatsapp data-paquete="Completa">Cotiza la Completa</a>
+            </article>
+            <article class="hoja paquete" aria-labelledby="p-premium">
+              <h3 id="p-premium">Premium</h3>
+              <p class="paquete__precio">$1,700 <span>MXN</span></p>
+              <p class="paquete__base">Todo lo de la Completa, más:</p>
+              <ul class="paquete__incluye">
+                <li>Diseño 100% a medida: apertura, paleta, tipografía y monograma propios, hechos solo para tu evento</li>
+              </ul>
+              <p class="paquete__datos">3 rondas de revisión · Lista en 3 semanas</p>
+              <a class="boton boton--contorno" href="#" target="_blank" rel="noopener" data-whatsapp data-paquete="Premium">Cotiza la Premium</a>
+            </article>
+          </div>
+
+          <div class="paquetes__tabla">
+            <table>
+              <caption class="sr-only">Qué incluye cada paquete</caption>
+              <thead>
+                <tr>
+                  <td></td>
+                  <th scope="col">Esencial<span class="tabla__precio">$800 MXN</span></th>
+                  <th scope="col" class="col-destacada"><span class="tabla__sello">La que más recomendamos</span>Completa<span class="tabla__precio">$1,200 MXN</span></th>
+                  <th scope="col">Premium<span class="tabla__precio">$1,700 MXN</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">Sobre animado con sello y portada con su foto</th><td>✓</td><td class="col-destacada">✓</td><td>✓</td></tr>
+                <tr><th scope="row">Fecha, cuenta regresiva y “agregar al calendario”</th><td>✓</td><td class="col-destacada">✓</td><td>✓</td></tr>
+                <tr><th scope="row">Ceremonia y recepción con mapa, Google Maps y Waze</th><td>✓</td><td class="col-destacada">✓</td><td>✓</td></tr>
+                <tr><th scope="row">Código de vestimenta y mesa de regalos o lluvia de sobres</th><td>✓</td><td class="col-destacada">✓</td><td>✓</td></tr>
+                <tr><th scope="row">Confirmación por familia con número de pases y enlace propio</th><td>✓</td><td class="col-destacada">✓</td><td>✓</td></tr>
+                <tr><th scope="row">Panel con confirmaciones y recordatorios por WhatsApp</th><td>✓</td><td class="col-destacada">✓</td><td>✓</td></tr>
+                <tr><th scope="row">Música, galería de fotos y mensajes para los novios</th><td><span aria-label="No incluye">—</span></td><td class="col-destacada">✓</td><td>✓</td></tr>
+                <tr><th scope="row">Mesas persona por persona, grupos y exportar a Excel</th><td><span aria-label="No incluye">—</span></td><td class="col-destacada">✓</td><td>✓</td></tr>
+                <tr><th scope="row">Diseño 100% a medida: apertura, paleta, tipografía y monograma propios</th><td><span aria-label="No incluye">—</span></td><td class="col-destacada"><span aria-label="No incluye">—</span></td><td>✓</td></tr>
+                <tr><th scope="row">Rondas de revisión</th><td>1</td><td class="col-destacada">2</td><td>3</td></tr>
+                <tr><th scope="row">Tiempo de entrega</th><td>3 semanas</td><td class="col-destacada">3 semanas</td><td>3 semanas</td></tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td></td>
+                  <td><a class="boton boton--contorno" href="#" target="_blank" rel="noopener" data-whatsapp data-paquete="Esencial">Cotiza la Esencial</a></td>
+                  <td class="col-destacada"><a class="boton boton--crema" href="#" target="_blank" rel="noopener" data-whatsapp data-paquete="Completa">Cotiza la Completa</a></td>
+                  <td><a class="boton boton--contorno" href="#" target="_blank" rel="noopener" data-whatsapp data-paquete="Premium">Cotiza la Premium</a></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+
+          <div class="extras">
+            <h3>Extras</h3>
+            <dl class="extras__lista">
+              <div><dt>Entrega express, en menos de 1 semana</dt><dd>+$250</dd></div>
+              <div><dt>Página de “Gracias” después del evento, con foto y mensaje</dt><dd>+$250</dd></div>
+              <div><dt>Cambio de un dato después de la entrega (hora, dirección, frase o foto)</dt><dd>$100</dd></div>
+            </dl>
+            <p class="extras__nota">Sin límite de invitados. Tu invitación sigue en línea 3 meses después de tu evento.</p>
+            <p class="extras__distinto">¿Necesitas algo distinto? <a href="#" target="_blank" rel="noopener" data-whatsapp>Escríbenos y lo armamos</a>.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. Proceso y tiempos -->
+      <section class="seccion columna proceso" id="proceso" data-seccion="proceso" aria-labelledby="proceso-titulo">
+        <p class="etiqueta"><span>07</span> Proceso y tiempos</p>
+        <h2 id="proceso-titulo">Cuándo pedirla</h2>
+        <p class="proceso__texto">Tu invitación queda lista en <strong>3 semanas</strong> desde que nos mandas todo. Te recomendamos contratarla <strong>6 a 8 semanas antes de tu evento</strong>, para que tus invitados la tengan con tiempo y tú alcances a ver las confirmaciones.</p>
+        <ol class="regla">
+          <li><span class="regla__semana">Semana 1</span> Nos mandas datos y fotos; te enseñamos la primera versión.</li>
+          <li><span class="regla__semana">Semana 2</span> Revisas y nos pides cambios (1, 2 o 3 rondas, según tu paquete).</li>
+          <li><span class="regla__semana">Semana 3</span> La aprobamos, te damos tu panel y empiezas a compartirla.</li>
+        </ol>
+        <p class="proceso__tarde"><strong>¿Vas tarde?</strong> Tenemos entrega express en menos de una semana, según agenda.</p>
+      </section>
+
+      <!-- 9. Testimonios: apagado por ajuste (src/site/ajustes.js) hasta tener testimonios reales con permiso. -->
+      <section class="seccion columna testimonios" id="testimonios" data-seccion="testimonios" aria-labelledby="testimonios-titulo" hidden>
+        <p class="etiqueta">Testimonios</p>
+        <h2 id="testimonios-titulo">Lo que dicen las parejas</h2>
+        <ul class="testimonios__lista" data-testimonios></ul>
+      </section>
+
+      <!-- 10. Preguntas frecuentes -->
+      <section class="seccion columna preguntas" id="preguntas" data-seccion="preguntas" aria-labelledby="preguntas-titulo">
+        <p class="etiqueta"><span>08</span> Preguntas frecuentes</p>
+        <h2 id="preguntas-titulo">Lo que todos preguntan</h2>
+        <div class="preguntas__lista">
+          <details>
+            <summary>¿Mis invitados mayores sabrán usarla?</summary>
+            <p>Sí. Les llega como un enlace de WhatsApp, lo abren y tocan el sello. No descargan nada ni crean cuenta. Para confirmar solo eligen cuántos van.</p>
+          </details>
+          <details>
+            <summary>¿Por qué no mandar un PDF?</summary>
+            <p>El PDF no te dice quién va. Con la invitación digital cada familia confirma en su enlace y tú ves el total en tu panel, sin contar mensajes.</p>
+          </details>
+          <details>
+            <summary>¿Cómo sé quién confirmó?</summary>
+            <p>En tu panel ves quién dijo que sí, quién no y quién falta. A los que no han contestado les mandas un recordatorio por WhatsApp en un toque.</p>
+          </details>
+          <details>
+            <summary>¿Qué pasa si cambia la hora o el lugar?</summary>
+            <p>Durante tus rondas de revisión, los cambios van incluidos. Después de la entrega, cada cambio de dato cuesta $100 y todos tus invitados ven la versión nueva en el mismo enlace.</p>
+          </details>
+          <details>
+            <summary>¿Cuánto tarda?</summary>
+            <p>3 semanas desde que nos mandas tus datos y fotos. Si tu evento está cerca, pregunta por la entrega express en menos de una semana.</p>
+          </details>
+          <details>
+            <summary>¿Cuánto tiempo sigue en línea?</summary>
+            <p>Hasta 3 meses después de tu evento, para que tus invitados vuelvan a verla.</p>
+          </details>
+          <details>
+            <summary>¿Sirve para XV años, baby shower u otro evento?</summary>
+            <p>Sí. La hacemos para bodas, XV años, baby showers y cualquier celebración con invitados que confirman.</p>
+          </details>
+          <details>
+            <summary>¿Hay límite de invitados?</summary>
+            <p>No. Agregas a todas las familias que quieras desde tu panel.</p>
+          </details>
+          <details>
+            <summary>¿Cómo se paga?</summary>
+            <p>Apartas con un anticipo del 50% y el resto lo pagas al aprobar tu invitación, antes de recibir tu panel. Aceptamos transferencia y depósito en OXXO. El anticipo no se reembolsa una vez que empezamos el diseño.</p>
+          </details>
+        </div>
+      </section>
+
+      <!-- 11. CTA final -->
+      <section class="cierre" id="contacto" data-seccion="contacto" aria-labelledby="cierre-titulo">
+        <div class="columna cierre__contenido">
+          <svg class="cierre__sello" viewBox="54 54 972 972" width="96" height="96" aria-hidden="true">
+            <circle cx="540" cy="540" r="486" fill="none" stroke="#B79A6B" stroke-width="8"/>
+            <circle cx="540" cy="540" r="470" fill="none" stroke="#B79A6B" stroke-width="3" opacity="0.55"/>
+            <text x="540" y="500" font-family="Playfair Display" font-style="italic" font-weight="500" font-size="430" fill="#F4EFE9" text-anchor="middle" dominant-baseline="central">rs</text>
+            <line x1="430" y1="770" x2="650" y2="770" stroke="#B79A6B" stroke-width="3"/>
+            <text x="540" y="855" font-family="Montserrat" font-weight="600" font-size="46" letter-spacing="18" fill="#B79A6B" text-anchor="middle">RAMOSTUDIO</text>
+          </svg>
+          <h2 id="cierre-titulo">Cuéntanos de tu evento</h2>
+          <p>Dinos la fecha y qué celebras. Te respondemos por WhatsApp con precio y tiempos.</p>
+          <div class="botones">
+            <a class="boton boton--crema" href="#" target="_blank" rel="noopener" data-whatsapp>Cotiza por WhatsApp</a>
+          </div>
+          <p class="cierre__demo">¿Todavía no te decides? <a href="/demo/" data-demo>Prueba el demo</a></p>
+        </div>
+      </section>
     </main>
 
-    <footer class="sitio__pie sitio__columna">
-      <nav aria-label="Legales">
-        <a href="/terminos/">Términos y condiciones</a>
-        <a href="/aviso-de-privacidad/">Aviso de privacidad</a>
-      </nav>
-      <p>RamoStudio · Hechas en Reynosa, para todo México.</p>
+    <footer class="pie">
+      <div class="columna pie__rejilla">
+        <div class="pie__marca">
+          <span data-wordmark></span>
+          <p>Invitaciones digitales para bodas, XV años y eventos.</p>
+          <p>Hechas en Reynosa, para todo México.</p>
+        </div>
+        <ul class="pie__contacto">
+          <li><a href="#" target="_blank" rel="noopener" data-whatsapp>WhatsApp <span data-telefono></span></a></li>
+          <li><a href="https://www.instagram.com/ramostudio.mx/" target="_blank" rel="noopener">Instagram @ramostudio.mx</a></li>
+        </ul>
+        <nav class="pie__legal" aria-label="Legales">
+          <a href="/aviso-de-privacidad/">Aviso de privacidad</a>
+          <a href="/terminos/">Términos y condiciones</a>
+          <p>© 2026 RamoStudio</p>
+        </nav>
+      </div>
     </footer>
+
+    <a class="flotante" href="#" target="_blank" rel="noopener" data-whatsapp data-flotante aria-label="Cotiza por WhatsApp">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2l-.4-.3Z"/></svg>
+      <span>Cotiza</span>
+    </a>
     <script type="module" src="/src/site/main.js"></script>
   </body>
 </html>

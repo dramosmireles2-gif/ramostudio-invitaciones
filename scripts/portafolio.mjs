@@ -6,6 +6,8 @@
 //                     .avif .webp .jpg   (capturas)
 //   portafolio/<slug>/sobre.mp4 + sobre-poster.avif/.webp/.jpg (4-6 s, < 1 MB)
 //   portafolio/<slug>/info.json          (título, enlace de muestra, crédito)
+//   portafolio/<slug>/<nombre>-600.*     (versión de 600 px para la web)
+//   portafolio/panel/                    (resumen y familias del panel demo)
 //
 // Reglas (no se negocian):
 // - Nunca se confirma asistencia ni se deja mensaje: solo se ven las pantallas.
@@ -15,7 +17,7 @@
 //   navegador bloquea cualquier escritura a Firestore por si acaso.
 // - La mesa de regalos del repo viejo trae la CLABE real: no se captura.
 import { spawn } from 'node:child_process';
-import { createReadStream, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { createReadStream, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { createServer } from 'node:http';
 import { tmpdir } from 'node:os';
 import { extname, join, resolve } from 'node:path';
@@ -43,6 +45,7 @@ const NUEVA = {
   confirmacion: (page) => page.locator('[data-seccion="rsvp"]'),
 };
 const VIEJA = {
+  viejo: true,
   abrir: async (page) => {
     await page.locator('#envelope-screen').click();
     await page.locator('#invitation.show').waitFor({ timeout: 10_000 });
@@ -52,6 +55,13 @@ const VIEJA = {
 };
 
 const INVITACIONES = {
+  // Demo (datos ficticios): video del hero y capturas de "La invitación" en la
+  // web, abierta como la Familia Ramos del recorrido del demo.
+  'mariana-diego': {
+    ...NUEVA,
+    url: `http://localhost:${PUERTO_VITE}/mariana-diego/?f=demo`,
+    info: { titulo: 'Mariana & Diego', tipo: 'boda', enlace: '/demo/', creditoFotos: null, demo: true },
+  },
   'iris-alex': {
     ...NUEVA,
     url: `http://localhost:${PUERTO_VITE}/iris-alex/`,
@@ -112,11 +122,35 @@ async function llevarArriba(page, locator) {
   await page.waitForTimeout(1800);
 }
 
-function recortarVideo(webm, desde, destino) {
-  for (const crf of [26, 28, 30, 32, 34]) {
+// Graba la pantalla mientras corre `accion` con el screencast de Chromium, a
+// 2x (recordVideo de Playwright graba a 1x y deja el resto del cuadro en gris).
+// Los cuadros llegan solo cuando algo cambia: cada uno dura hasta el siguiente.
+async function grabar(page, dir, accion) {
+  mkdirSync(dir, { recursive: true });
+  const cdp = await page.context().newCDPSession(page);
+  const cuadros = [];
+  cdp.on('Page.screencastFrame', ({ data, metadata, sessionId }) => {
+    const archivo = join(dir, `c${String(cuadros.length).padStart(4, '0')}.jpg`);
+    writeFileSync(archivo, Buffer.from(data, 'base64'));
+    cuadros.push({ archivo, t: metadata.timestamp });
+    cdp.send('Page.screencastFrameAck', { sessionId }).catch(() => {});
+  });
+  await cdp.send('Page.startScreencast', { format: 'jpeg', quality: 90, maxWidth: 780, maxHeight: 1688 });
+  const inicio = Date.now() / 1000;
+  await accion();
+  const fin = Date.now() / 1000;
+  await cdp.send('Page.stopScreencast');
+  const lista = cuadros.map((c, i) => `file '${c.archivo.replaceAll('\\', '/')}'\nduration ${((cuadros[i + 1]?.t ?? fin) - Math.max(c.t, i ? 0 : inicio)).toFixed(4)}`);
+  const txt = join(dir, 'lista.txt');
+  writeFileSync(txt, `${lista.join('\n')}\nfile '${cuadros.at(-1).archivo.replaceAll('\\', '/')}'\n`);
+  return txt;
+}
+
+function recortarVideo(lista, destino) {
+  for (const crf of [24, 26, 28, 30, 32, 34]) {
     execFileSync(ffmpeg, [
-      '-y', '-loglevel', 'error', '-ss', desde.toFixed(2), '-i', webm, '-t', '5',
-      '-vf', 'scale=540:-2,fps=30', '-c:v', 'libx264', '-crf', String(crf), '-preset', 'slow',
+      '-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', lista, '-t', '5',
+      '-vf', 'fps=30,scale=540:1168,setsar=1', '-c:v', 'libx264', '-crf', String(crf), '-preset', 'slow',
       '-pix_fmt', 'yuv420p', '-an', '-movflags', '+faststart', destino,
     ]);
     if (statSync(destino).size < VIDEO_MAX_BYTES) return crf;
@@ -156,17 +190,17 @@ async function capturar(browser, slug, inv, temporal) {
   for (const [nombre, png] of tomas) await guardarImagen(png, join(carpeta, nombre));
 
   // 2. Video del sobre: 1 s antes del toque y 4 s de apertura.
-  const vctx = await contexto(browser, { recordVideo: { dir: temporal, size: { width: 780, height: 1688 } } });
-  const inicio = Date.now();
+  const vctx = await contexto(browser);
   const vpage = await vctx.newPage();
   await vpage.goto(inv.url, { waitUntil: 'load' });
   await vpage.waitForTimeout(3000);
-  const toque = (Date.now() - inicio) / 1000;
-  await inv.abrir(vpage);
-  await vpage.waitForTimeout(4000);
-  const webm = await vpage.video().path();
+  const lista = await grabar(vpage, join(temporal, slug), async () => {
+    await vpage.waitForTimeout(1000);
+    await inv.abrir(vpage);
+    await vpage.waitForTimeout(4000);
+  });
   await vctx.close();
-  const crf = recortarVideo(webm, Math.max(0, toque - 1), join(carpeta, 'sobre.mp4'));
+  const crf = recortarVideo(lista, join(carpeta, 'sobre.mp4'));
   const poster = join(temporal, `${slug}-poster.png`);
   execFileSync(ffmpeg, ['-y', '-loglevel', 'error', '-i', join(carpeta, 'sobre.mp4'), '-frames:v', '1', poster]);
   await guardarImagen(poster, join(carpeta, 'sobre-poster'));
@@ -176,15 +210,52 @@ async function capturar(browser, slug, inv, temporal) {
   console.log(`✓ ${slug}: 4 capturas, sobre.mp4 ${kb} KB (crf ${crf})`);
 }
 
-const pedidos = process.argv.slice(2).length ? process.argv.slice(2) : Object.keys(INVITACIONES);
-for (const s of pedidos) if (!INVITACIONES[s]) throw new Error(`No conozco "${s}". Opciones: ${Object.keys(INVITACIONES).join(', ')}`);
+// Panel del demo (datos ficticios), para la sección "El panel" de la web.
+async function capturarPanel(browser) {
+  const carpeta = join(RAIZ, 'portafolio', 'panel');
+  mkdirSync(carpeta, { recursive: true });
+  const ctx = await contexto(browser);
+  const page = await ctx.newPage();
+  for (const [nombre, vista] of [['01-resumen', 'resumen'], ['02-familias', 'invitados']]) {
+    await page.goto(`http://localhost:${PUERTO_VITE}/panel/app.html#${vista}`, { waitUntil: 'load' });
+    await page.waitForTimeout(2500);
+    await guardarImagen(await page.screenshot(), join(carpeta, nombre));
+  }
+  await ctx.close();
+  console.log('✓ panel: 2 capturas');
+}
+
+// Versión para la web (600 px de ancho: el marco de celular mide ~300 px en
+// pantalla): <nombre>-600.avif/.webp/.jpg junto a cada captura.
+async function versionesWeb() {
+  const raiz = join(RAIZ, 'portafolio');
+  for (const carpeta of readdirSync(raiz)) {
+    for (const f of readdirSync(join(raiz, carpeta)).filter((n) => /^(\d\d-[a-z-]+|sobre-poster)\.webp$/.test(n))) {
+      const png = await sharp(join(raiz, carpeta, f)).resize(600).png().toBuffer();
+      await guardarImagen(png, join(raiz, carpeta, f.replace('.webp', '-600')));
+    }
+  }
+  console.log('✓ versiones de 600 px para la web');
+}
+
+const TODOS = [...Object.keys(INVITACIONES), 'panel'];
+const pedidos = process.argv.slice(2).length ? process.argv.slice(2) : TODOS;
+if (pedidos.length === 1 && pedidos[0] === 'web') {
+  await versionesWeb();
+  process.exit(0);
+}
+for (const s of pedidos) if (!TODOS.includes(s)) throw new Error(`No conozco "${s}". Opciones: ${TODOS.join(', ')}, web`);
 
 const temporal = mkdtempSync(join(tmpdir(), 'portafolio-'));
-const vite = pedidos.includes('iris-alex') ? await levantarVite() : null;
-const viejo = pedidos.some((s) => s !== 'iris-alex') ? await servirRepoViejo() : null;
+const vite = pedidos.some((s) => s === 'panel' || !INVITACIONES[s].viejo) ? await levantarVite() : null;
+const viejo = pedidos.some((s) => INVITACIONES[s]?.viejo) ? await servirRepoViejo() : null;
 const browser = await chromium.launch();
 try {
-  for (const slug of pedidos) await capturar(browser, slug, INVITACIONES[slug], temporal);
+  for (const slug of pedidos) {
+    if (slug === 'panel') await capturarPanel(browser);
+    else await capturar(browser, slug, INVITACIONES[slug], temporal);
+  }
+  await versionesWeb();
 } finally {
   await browser.close();
   viejo?.close();
