@@ -1,9 +1,9 @@
 // Conexión con Supabase para los eventos de clientes (el demo sigue local).
 // Sin librerías: Auth y la API REST de Supabase con fetch.
 //
-// - La pareja entra con un código de 6 números a su correo (Supabase Auth) y,
-//   con su sesión, lee y guarda directo en las tablas; las reglas (RLS) solo le
-//   dejan ver su evento (ver supabase/migrations/).
+// - La pareja entra con la contraseña de su boda (Supabase Auth) y, con su
+//   sesión, lee y guarda directo en las tablas; las reglas (RLS) solo le dejan
+//   ver su evento (ver supabase/migrations/).
 // - Los invitados no tienen sesión: usan las funciones invitado_* con el
 //   código de su familia.
 // No importar desde las pantallas: store.local.js lo usa por dentro.
@@ -73,14 +73,14 @@ const conTokens = (base, t) => ({
   expira: Date.now() + (t.expires_in ?? 3600) * 1000,
 });
 
-export const correoAutorizado = (slug, correo) => rpc('correo_autorizado', { p_slug: slug, p_correo: correo });
+// Cada evento tiene un usuario del panel (lo damos de alta nosotros, ver
+// supabase/README.md) con este correo interno, que nunca recibe correos.
+export const correoPanel = (slug) => `${slug}@paneles.ramostudio.mx`;
 
-export const enviarCodigo = (correo) =>
-  pedir('/auth/v1/otp', { metodo: 'POST', cuerpo: { email: correo, create_user: true } });
-
-// Cambia el código del correo por una sesión de este evento.
-export async function entrar(correo, codigo, { eventoId, slug }) {
-  const t = await pedir('/auth/v1/verify', { metodo: 'POST', cuerpo: { type: 'email', email: correo, token: codigo } });
+// Cambia la contraseña de la boda por una sesión de este evento.
+export async function entrar(contrasena, { eventoId, slug }) {
+  const correo = correoPanel(slug);
+  const t = await pedir('/auth/v1/token?grant_type=password', { metodo: 'POST', cuerpo: { email: correo, password: contrasena } });
   const sesion = conTokens({ correo, eventoId, slug }, t);
   guardarSesion(sesion);
   return sesion;

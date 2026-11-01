@@ -31,6 +31,6 @@ export async function montar(destino, { evento, data, demo }) {
     ${demo ? '' : crudo(html`<button class="btn btn--quiet mas__salir" type="button" data-salir>Cerrar sesión</button>`)}
     <div class="mas__marca">${crudo(wordmark({ width: 130, tone: 'tema', tagline: false }))}</div>`;
   // En el demo no hay sesión que cerrar: se entra sin login.
-  el.querySelector('[data-salir]')?.addEventListener('click', salir);
+  el.querySelector('[data-salir]')?.addEventListener('click', () => salir(evento.slug));
   destino.append(el);
 }

@@ -29,6 +29,8 @@ const tema = aplicarTemaPanel(evento.tema);
 const CORREO_VALIDO = /\S+@\S+\.\S+/;
 
 let correo = '';
+// Eventos de clientes: solo la contraseña de la boda. Demo y pruebas: correo y código.
+const conContrasena = data.entraConContrasena(evento.id);
 
 app.innerHTML = html`
   <div class="login">
@@ -41,7 +43,7 @@ app.innerHTML = html`
     <section class="sheet login__hoja" aria-live="polite"></section>
     <footer class="login__pie">
       ${crudo(wordmark({ width: 120, tone: 'tema', tagline: false }))}
-      <p class="t-meta">¿No les llega el correo? Escríbannos y les ayudamos.</p>
+      <p class="t-meta">${conContrasena ? '¿No tienen su contraseña a la mano? Escríbannos y se la recordamos.' : '¿No les llega el correo? Escríbannos y les ayudamos.'}</p>
     </footer>
   </div>`;
 
@@ -57,7 +59,6 @@ function pasoCorreo() {
         <input class="field__control" id="login-correo" name="correo" type="email" autocomplete="email"
           placeholder="nombre@correo.com" value="${correo}" />
       </div>
-      <p class="t-meta field__hint--error" id="login-error" hidden></p>
       <button class="btn btn--lg btn--full" type="submit" disabled>Mandarme el código por correo</button>
       <div class="login__alterno">
         <button class="btn btn--secondary btn--full" type="button" disabled>Recibirlo por WhatsApp</button>
@@ -69,23 +70,59 @@ function pasoCorreo() {
   const actualizar = () => { enviar.disabled = !CORREO_VALIDO.test(form.correo.value); };
   form.correo.addEventListener('input', actualizar);
   actualizar();
-  const error = form.querySelector('#login-error');
-  form.addEventListener('submit', async (e) => {
+  form.addEventListener('submit', (e) => {
     e.preventDefault();
     if (enviar.disabled) return;
     correo = form.correo.value.trim();
-    enviar.disabled = true;
-    enviar.textContent = 'Mandando el código…';
+    pasoCodigo();
+  });
+}
+
+// La contraseña de la boda. El campo de usuario oculto (el nombre del evento)
+// sirve para que el celular ofrezca guardar la contraseña.
+function pasoContrasena() {
+  hoja.innerHTML = html`
+    <form class="login__form" novalidate>
+      <h2 class="t-h2">Entren a su panel</h2>
+      <p class="t-body">Escriban la contraseña de su boda. Ya dentro, este teléfono la recuerda hasta que cierren sesión.</p>
+      <input type="text" name="usuario" autocomplete="username" value="${evento.slug}" hidden />
+      <div class="field">
+        <label class="field__label" for="login-contrasena">Contraseña</label>
+        <input class="field__control" id="login-contrasena" name="contrasena" type="password" autocomplete="current-password"
+          autocapitalize="none" spellcheck="false" placeholder="Palabra-Palabra-00" aria-describedby="login-aviso" />
+        <label class="login__mostrar t-meta"><input type="checkbox" data-mostrar /> Mostrar la contraseña</label>
+      </div>
+      <p class="t-meta field__hint--error" id="login-aviso" hidden></p>
+      <button class="btn btn--lg btn--full" type="submit" disabled>Entrar a mi panel</button>
+    </form>`;
+  const form = hoja.querySelector('form');
+  const entrar = form.querySelector('[type=submit]');
+  const aviso = form.querySelector('#login-aviso');
+  form.contrasena.addEventListener('input', () => {
+    entrar.disabled = !form.contrasena.value.trim();
+    aviso.hidden = true;
+    form.contrasena.removeAttribute('aria-invalid');
+  });
+  form.querySelector('[data-mostrar]').addEventListener('change', (e) => {
+    form.contrasena.type = e.target.checked ? 'text' : 'password';
+  });
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (entrar.disabled) return;
+    entrar.disabled = true;
+    entrar.textContent = 'Entrando…';
     try {
-      await data.enviarCodigo(correo, evento.id);
-      pasoCodigo();
+      await data.entrarConContrasena(evento.id, form.contrasena.value);
+      location.replace('/panel/app.html');
     } catch (err) {
-      error.textContent = err.message;
-      error.hidden = false;
-      enviar.textContent = 'Mandarme el código por correo';
-      actualizar();
+      aviso.textContent = err.message;
+      aviso.hidden = false;
+      form.contrasena.setAttribute('aria-invalid', 'true');
+      entrar.textContent = 'Entrar a mi panel';
+      entrar.disabled = false;
     }
   });
+  form.contrasena.focus();
 }
 
 function pasoCodigo() {
@@ -102,7 +139,7 @@ function pasoCodigo() {
         <button class="btn btn--quiet btn--flush" type="button" data-reenviar>Mandar otro código</button>
         <button class="btn btn--quiet btn--flush" type="button" data-cambiar>Cambiar correo</button>
       </div>
-      ${data.codigoPorCorreo(evento.id) ? '' : crudo(html`<p class="t-meta login__demo">Demo: el código es ${DEMO_LOGIN_CODE}.</p>`)}
+      <p class="t-meta login__demo">Demo: el código es ${DEMO_LOGIN_CODE}.</p>
     </form>`;
   const form = hoja.querySelector('form');
   const entrar = form.querySelector('[type=submit]');
@@ -118,14 +155,7 @@ function pasoCodigo() {
     entrar.disabled = form.codigo.value.length < 6;
     if (form.codigo.getAttribute('aria-invalid') === 'true') { aviso.hidden = true; form.codigo.removeAttribute('aria-invalid'); }
   });
-  form.querySelector('[data-reenviar]').addEventListener('click', async () => {
-    try {
-      await data.enviarCodigo(correo, evento.id);
-      decir('Listo, les mandamos un código nuevo a su correo.');
-    } catch (err) {
-      decir(err.message, true);
-    }
-  });
+  form.querySelector('[data-reenviar]').addEventListener('click', () => decir('Listo, les mandamos un código nuevo a su correo.'));
   form.querySelector('[data-cambiar]').addEventListener('click', pasoCorreo);
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -135,11 +165,12 @@ function pasoCodigo() {
       location.replace('/panel/app.html');
     } catch (err) {
       decir(err.codigo === 'codigo_incorrecto'
-        ? 'Ese código no coincide o ya venció. Revisen el correo más reciente que les mandamos.'
+        ? 'Ese código no coincide. Revisen el correo más reciente que les mandamos.'
         : err.message, true);
     }
   });
   form.codigo.focus();
 }
 
-pasoCorreo();
+if (conContrasena) pasoContrasena();
+else pasoCorreo();

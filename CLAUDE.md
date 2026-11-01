@@ -47,8 +47,9 @@ publica.
 - Los eventos de `inv.ramosmkt.lat` (ivan-gemima, eunice-edher, …) viven en otro repo y no
   se tocan desde aquí.
 - **Login del panel:** en el demo, simulado (cualquier correo + `123456`). En los eventos de
-  clientes, código de 6 números al correo (Supabase Auth) para los correos de
-  `evento_admins`. Sin contraseñas. Nunca subir la llave `service_role`.
+  clientes, **solo la contraseña de la boda** (un usuario de Supabase Auth por evento, ver
+  `supabase/README.md`); la sesión se queda en el aparato hasta "Cerrar sesión". Nunca
+  subir contraseñas ni la llave `service_role` al repo.
 
 ## Stack
 

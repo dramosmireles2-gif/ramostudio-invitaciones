@@ -16,6 +16,8 @@
 .login__alterno { display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--line-paper); padding-top: 14px; }
 .login__pronto { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .login__codigo-label { font-size: var(--fs-label); }
+.login__mostrar { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; cursor: pointer; }
+.login__mostrar input { width: 20px; height: 20px; accent-color: var(--pn-activo); }
 .login__codigo {
   width: 100%; min-height: 64px; text-align: center;
   font-family: var(--font-serif); font-size: 34px; letter-spacing: .4em; padding: 0 0 0 .4em;

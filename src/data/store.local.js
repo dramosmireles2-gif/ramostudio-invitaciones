@@ -255,7 +255,10 @@ async function cargarEvento(slug) {
 // El panel solo conoce el id (lo guarda la sesión): si aún no está, se cargan
 // todos los eventos para encontrarlo (o solo el de la sesión de Supabase).
 async function cargarEventoPorId(eventoId) {
-  if (!estado().eventos.some((x) => x.id === eventoId)) {
+  const ya = estado().eventos.find((x) => x.id === eventoId);
+  // Un evento de Supabase guardado en este navegador se vuelve a leer de allá.
+  if (ya && remoto.activo(ya.slug) && !remotos.has(eventoId)) await cargarEvento(ya.slug);
+  else if (!ya) {
     const sesion = await remoto.sesion();
     if (sesion?.eventoId === eventoId && sesion.slug) await cargarEvento(sesion.slug);
     else await Promise.allSettled(Object.keys(ARCHIVOS).map(cargarEvento));
@@ -903,49 +906,38 @@ export async function getResumen(eventoId) {
 }
 
 // ---------------------------------------------------------------------------
-// Sesión del panel: código por correo (Supabase) en los eventos de clientes;
-// simulada (código de config.js) en el demo y en las pruebas.
+// Sesión del panel: contraseña de la boda (Supabase) en los eventos de
+// clientes; simulada (correo + código de config.js) en el demo y en las pruebas.
+// La sesión se queda en ese teléfono o computadora hasta "Cerrar sesión".
 // ---------------------------------------------------------------------------
 
 const CORREO_VALIDO = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-// ¿El código de este evento llega de verdad por correo?
-export function codigoPorCorreo(eventoId) {
+// ¿Este evento entra con la contraseña de la boda (Supabase)?
+export function entraConContrasena(eventoId) {
   return remotos.has(eventoId);
 }
 
-// Manda el código de 6 números al correo, si está registrado para este evento.
-export async function enviarCodigo(correo, eventoId) {
-  const limpio = String(correo ?? '').trim().toLowerCase();
-  if (!CORREO_VALIDO.test(limpio)) throw new DataError('correo_invalido', 'Escriban un correo válido.');
+export async function entrarConContrasena(eventoId, contrasena) {
   const info = remotos.get(eventoId);
-  if (!info) return; // Demo: el código es el de config.js.
+  const limpia = String(contrasena ?? '').trim();
+  if (!info) throw new DataError('evento_no_encontrado', 'No encontramos este evento.');
+  if (!limpia) throw new DataError('contrasena_requerida', 'Escriban la contraseña de su boda.');
   try {
-    if (!(await remoto.correoAutorizado(info.slug, limpio))) {
-      throw new DataError('correo_no_autorizado', 'Este correo no está registrado para esta boda. Revisen que sea el mismo con el que apartaron su invitación.');
-    }
-    await remoto.enviarCodigo(limpio);
+    await remoto.entrar(limpia, { eventoId, slug: info.slug });
   } catch (e) {
-    if (e.status === 429) throw new DataError('muchos_intentos', 'Ya les mandamos un código hace poco. Esperen un minuto y vuelvan a intentar.');
+    if (e.status === 400) throw new DataError('contrasena_incorrecta', 'Esa no es la contraseña de su boda. Revisen mayúsculas y guiones.');
+    if (e.status === 429) throw new DataError('muchos_intentos', 'Demasiados intentos seguidos. Esperen unos minutos y vuelvan a probar.');
     throw errorRemoto(e);
   }
+  // La próxima lectura ya es de la pareja (con todas sus familias).
+  remotos.delete(eventoId);
+  return { eventoId };
 }
 
 export async function login(correo, codigo, eventoId) {
   if (!CORREO_VALIDO.test(String(correo ?? '').trim())) {
     throw new DataError('correo_invalido', 'Escribe un correo válido.');
-  }
-  const info = remotos.get(eventoId);
-  if (info) {
-    let s;
-    try {
-      s = await remoto.entrar(correo.trim().toLowerCase(), String(codigo ?? '').trim(), { eventoId, slug: info.slug });
-    } catch (e) {
-      throw e.status ? new DataError('codigo_incorrecto', 'El código no es correcto.') : errorRemoto(e);
-    }
-    // La próxima lectura ya es de la pareja (con todas sus familias).
-    remotos.delete(eventoId);
-    return { correo: s.correo, eventoId };
   }
   if (String(codigo ?? '').trim() !== DEMO_LOGIN_CODE) {
     throw new DataError('codigo_incorrecto', 'El código no es correcto.');
